@@ -1,0 +1,7 @@
+# Documentation static site generator
+mkdocs ~= 1.2.3
+mkdocs-git-revision-date-localized-plugin ~= 0.11.0
+
+# Add your custom theme if not inside a theme_dir
+# (https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes)
+mkdocs-material ~= 8.0

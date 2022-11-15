@@ -1,0 +1,65 @@
+# Replace the text below to customize your site
+site_name: IoT Team NL Documentation Page
+site_description: Documentation for IoT 2022-2023-sep-jan Team - Team NL
+site_author: IoT 2022-2023-sep-jan Team - Team NL
+copyright: Copyright 2022 MIT | IoT 2022-2023-sep-jan Team - Team NL
+
+site_url: https://localhost:9000/
+  
+theme:
+  name: material
+  palette:
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: lime
+      accent: pink
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      accent: pink
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+  font:
+    # See available fonts at https://fonts.google.com/
+    text: Arial
+    code: Ubuntu Mono  
+  # logo: images/iot_car.svg
+  # favicon: images/iot_car.svg
+  features:
+    - navigation.instant 
+    - content.code.annotate 
+nav:
+    - 'index.md'
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      fallback_to_build_date: true
+      # Read more: https://timvink.github.io/mkdocs-git-revision-date-localized-plugin/options/#enabled
+      enabled: !ENV [ENABLED_GIT_REVISION_DATE, False]
+
+markdown_extensions:
+  - extra
+  - smarty
+  - admonition
+  - pymdownx.keys
+  - codehilite:
+      guess_lang: true
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.details  
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
