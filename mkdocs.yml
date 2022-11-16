@@ -37,6 +37,7 @@ theme:
 nav:
     - 'index.md'
     - 'Samenwerkingscontract.md'
+    - 'EersteIdee.md'
 
 plugins:
   - search
