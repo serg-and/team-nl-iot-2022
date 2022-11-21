@@ -37,6 +37,9 @@ theme:
 nav:
     - 'index.md'
     - 'Samenwerkingscontract.md'
+    - planning:
+      - 'Event-planning.md'
+      - 'Algemenen-planning.md'
     - 'EersteIdee.md'
 
 plugins:
