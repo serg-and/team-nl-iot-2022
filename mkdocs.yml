@@ -41,7 +41,7 @@ nav:
       - 'Event-planning.md'
       - 'Algemenen-planning.md'
     - 'EersteIdee.md'
-
+    - 'ToDoList.md'
 plugins:
   - search
   - git-revision-date-localized:
