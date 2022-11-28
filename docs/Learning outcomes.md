@@ -1,0 +1,2 @@
+Joint flutter app upload in Android studio
+Each team member installed the package flutter. As a next step, we all downloaded Android studio. In this we are going to build the application. Berkan created an application, in which we can collectively sit on the app.  Each team member added the application on a local disk on their laptop. Then in File at open, we added the application. Now everyone can work on the application.

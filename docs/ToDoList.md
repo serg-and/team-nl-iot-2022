@@ -1,7 +1,7 @@
 Todo
 
 Week 2
-Samenwerkingscontract 
+[] Samenwerkingscontract 
 In het samenwerkingscontract missen er nog een aantal onderwerpen. Deze onderwerpen staan op DLO. Het samenwerkingscontract moet ook in DLO ingeleverd worden. 
 
 Project event planning
