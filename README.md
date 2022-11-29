@@ -4,10 +4,19 @@
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Steps to getting the flutter project running
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
+|#|Description|
+|-|-|
+|1|Chose a destination where you would like the project folder to be. Navigate to the place in your terminal |
+|2|Run the command: ```git clone "https://gitlab.fdmci.hva.nl/IoT/2022-2023-sep-jan/group-project/team-nl-beachvolley-data-collection.git"```|
+|3|When the project is cloned you can open it in the IDE of your choice. In this exmaple we will use Android studio|
+|4|[Download](https://developer.android.com/studio) and install Android studio. You can click thru the Android studio install wizard without changing anything|
+|5|[Download](https://docs.flutter.dev/get-started/install) Flutter. Follow all the steps provided on the [website](https://docs.flutter.dev/get-started/install) of flutter to install it|
+|6|Open the /src/flutter/app folder in the cloned project in android studio|
+|7|Make sure you installed the flutter plugin in Android studio. You can do this by going to File > Settings > Plugins and search for flutter in the plugins. You can install the flutter plugin. If needed restart your Android Studio|
+|8|Chose which device you want to run the app in. This can be on an emulator or in the web|
+|9|Now you are ready to click the green start button. The app will start up in chosen device or browser|
 ## Add your files
 
 - [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
