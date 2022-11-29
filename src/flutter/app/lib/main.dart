@@ -40,8 +40,9 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
   final navigatorKey = GlobalKey<NavigatorState>();
+  final String title;
 
-  CustomAppBar({ Key? key }) : preferredSize = Size.fromHeight(50.0),
+  CustomAppBar(this.title, { Key? key }) : preferredSize = Size.fromHeight(50.0),
         super(key: key);
 
   @override
@@ -60,8 +61,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               )
             ],
             onSelected: (result) {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const Settings()));
+              if (title != "Settings") {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => const Settings()));
+              }
             }
         )
       ],

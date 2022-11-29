@@ -7,7 +7,7 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar("Settings"),
       body: Center(
         child: Text('Settings'),
       ),
