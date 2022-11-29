@@ -32,7 +32,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -40,6 +39,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_native_splash: ^2.2.15
+
+# Run the following commands to generate splash screen or to update it.
+# 1) flutter clean
+# 2) flutter pub get
+# 3) flutter pub run flutter_native_splash:create
+# For more info about this package check the following link https://pub.dev/packages/flutter_native_splash#3-set-up-app-initialization-optional
+flutter_native_splash:
+  background_image: "assets/splashscreen/splash_background.png"
+  image: "assets/splashscreen/splash_image.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
