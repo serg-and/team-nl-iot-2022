@@ -18,4 +18,3 @@ flutter_icons:
   ios: true
   image_path: "assets/Images/Sens_TeamNL.jpg"
 
-Translated with www.DeepL.com/Translator (free version)
