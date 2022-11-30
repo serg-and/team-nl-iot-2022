@@ -37,11 +37,12 @@ theme:
 nav:
     - 'index.md'
     - 'Samenwerkingscontract.md'
-    - planning:
+    - Planning:
       - 'Event-planning.md'
       - 'Algemenen-planning.md'
     - 'EersteIdee.md'
     - 'ToDoList.md'
+    - 'Bluetooth.md'
 plugins:
   - search
   - git-revision-date-localized:
