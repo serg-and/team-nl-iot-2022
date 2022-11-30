@@ -17,3 +17,6 @@ Hieronder staan verschillende opties voor de Bluetooth functionaliteiten.
 |4|Geen library|Met Flutter kan je zelf ook verbindingen uitlezen met Bluetooth. Dit gaat echter heel diep en zorgt voor veel boiler plate code in het project.|
 
 ## Conclusie
+Uiteindelijk zijn wij tot een conclusie gekomen om de bluetooth library flutter_blue_plus te gebruiken. Dit is een library die aan al onze eisen voldoet. Het heeft alle functionaliteiten die wij nodig hebben.
+
+Tijdens dit onderzoek hebben wij ook bevindingen kunnen maken op het gebied van data visualisatie. Tugberk Akdogan's library is open source. In zijn code kunnen wij zien hoe hij live data van een MoveSense visualiseerd. Sinds zijn code open source is kunnen we alle code inzien en een idee krijgen over hoe wij live data van een movesense sensor kunnen visualiseren. [Klik hier](https://github.com/petri-lipponen-movesense/mdsflutter) om naar de github pagina te gaan
