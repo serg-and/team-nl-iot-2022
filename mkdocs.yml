@@ -43,6 +43,8 @@ nav:
     - 'EersteIdee.md'
     - 'ToDoList.md'
     - 'Bluetooth.md'
+    - Code Documentation:
+      - 'Nextjs-Web-Application.md'
 plugins:
   - search
   - git-revision-date-localized:
