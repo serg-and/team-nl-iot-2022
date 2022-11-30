@@ -3,7 +3,15 @@ Onze app gaat veel communiceren door middel van Bluetooth met sensors. Dit is ee
 
 ## Eisen
 
-Wat moet het allemaal kunnen?
+Hieronder staan de eisen waaraan de library moet voldoen. 
+
+|#|Beschrijving|
+|-|-|
+|1|De library moet Bluetooth Low Enegery (BLE) ondersteunen aangezien de Movesense sensor met BLE werkt.| 
+|2|Het moet mogelijk zijn om voor bluetooth devices te zoeken.| 
+|3|Het moet mogelijk zijn om te connecten met een bluetooth device.| 
+|4|Het moet mogelijk zijn om te communiceren door middel van bluetooth| 
+
 
 ## Opties
 
