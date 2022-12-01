@@ -1,5 +1,6 @@
 import 'package:app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:dashboard/widgets/planing_grid.dart';
 
 class Bluetooth extends StatelessWidget {
   const Bluetooth({super.key});
@@ -8,8 +9,8 @@ class Bluetooth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar("Bluetooth"),
-      body: Center(
-        child: Text('Bluetooth'),
+      body: Container(
+        child: PlaningGrid(),
       ),
     ); //
   }
