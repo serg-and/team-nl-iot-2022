@@ -1,7 +1,14 @@
-import { Anchor, Box, Footer, Grommet, Text } from "grommet";
-import NavBar from "./NavBar";
+import { useSupabaseClient, useSession } from '@supabase/auth-helpers-react'
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
+import { Anchor, Box, Footer, Grommet, Text } from 'grommet'
+import NavBar from './NavBar'
 
 export default function Layout({ children }) {
+  const session = useSession()
+  const supabase = useSupabaseClient()
+
+  if (!session) return <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme="dark" />
+
   return (
     <Grommet full>
       <NavBar />
