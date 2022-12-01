@@ -1,3 +1,4 @@
+import 'package:app/HeartbeatData.dart';
 import 'package:app/home_page.dart';
 import 'package:app/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -58,12 +59,19 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               const PopupMenuItem(
                   value: "Settings",
                   child: Text("Settings")
+              ),
+              const PopupMenuItem(
+                  value: "HeartBeatData",
+                  child: Text('HeartBeatData')
               )
             ],
             onSelected: (result) {
-              if (title != "Settings") {
+              if (result == "Settings") {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => const Settings()));
+              }else{
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => const HeartBeatData()));
               }
             }
         )
