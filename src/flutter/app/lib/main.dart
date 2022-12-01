@@ -71,7 +71,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                     .push(MaterialPageRoute(builder: (context) => const Settings()));
               }else{
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => const HeartBeatData()));
+                    .push(MaterialPageRoute(builder: (context) => const HeartBeatPage()));
               }
             }
         )
