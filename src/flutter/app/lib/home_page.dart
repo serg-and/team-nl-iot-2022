@@ -22,20 +22,27 @@ class _MyHomePageState extends State<Home> {
       body: Center(
         child: Text("Homepage"),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.accessibility_sharp), label: "Current Session"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.history), label: "Sessions History"),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.white,
-        backgroundColor: Colors.deepOrange,
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(35.0),
+            color: Colors.black, // put the color here
+        ),
+        child: BottomNavigationBar(
+            elevation: 0.0,
+            currentIndex: _selectedIndex,
+            backgroundColor: Colors.transparent,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Colors.deepOrange,
+            onTap: _onItemTapped,
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.accessibility_sharp),
+                  label: "Current Session"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.history), label: "Sessions History"),
+            ]), // don't forget to put it
       ),
     );
   }
