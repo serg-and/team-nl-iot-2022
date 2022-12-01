@@ -1,3 +1,4 @@
+import 'package:app/bluetooth_page.dart';
 import 'package:app/home_page.dart';
 import 'package:app/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,25 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
   final navigatorKey = GlobalKey<NavigatorState>();
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  static List<Widget> _widgetOptions = <Widget>[
+    Home(),
+    Bluetooth(),
+  ];
 
   // This widget is the root of your application.
   @override
@@ -30,7 +47,34 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-          body: Home()
+          bottomNavigationBar: Container(
+            margin: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(32.0),
+              color: Colors.black, // put the color here
+            ),
+            child: BottomNavigationBar(
+                elevation: 0.0,
+                currentIndex: _selectedIndex,
+                backgroundColor: Colors.transparent,
+                unselectedItemColor: Colors.white,
+                selectedItemColor: Colors.deepOrange,
+                showUnselectedLabels: false,
+                onTap: _onItemTapped,
+                type: BottomNavigationBarType.fixed,
+                items: [
+                  BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+                  BottomNavigationBarItem(icon: Icon(Icons.bluetooth), label: "Bluetooth"),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.accessibility_sharp),
+                      label: "Session"),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.history), label: "History"),
+                ]), // don't forget to put it
+          ),
+          body: Center(
+            child: _widgetOptions[_selectedIndex],
+          )
       ),
     );
   }
