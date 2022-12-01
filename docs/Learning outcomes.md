@@ -18,3 +18,5 @@ flutter_icons:
   ios: true
   image_path: "assets/Images/Sens_TeamNL.jpg"
 
+Navigation bar (Rosario)
+In the home.page.dart there is a navigation bar built in, where there are three buttons to navigate to. There are home, current session and sessions history buttons created, which are represented by an icon. For formatting purposes I have given the items the color white. When a button is selected it turns black and the background of the bar is orange. 
