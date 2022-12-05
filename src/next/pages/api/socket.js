@@ -1,19 +1,26 @@
 import { Server } from 'socket.io'
 import { startSession } from '../../core/sessions.mjs'
 
+// This function handles socket connections for the server.
 export default function SocketHandler (req, res) {
+  // Check if the server has a socket.io instance.
   if (!res.socket.server.io) {
+    // Create a new socket.io instance for the server.
     const io = new Server(res.socket.server)
     res.socket.server.io = io
 
-    io.on('connection', socket => {
+    // Listen for new connections.
+    io.on('connection', async (socket) => {
       console.log('connection started')
 
-      const [sendMessage, kill_process] = startSession()
+      // Start a new session and get functions to control it.
+      const { sendMessage, endSession } = await startSession()
 
+      // Listen for 'data-point' messages from the client.
       socket.on('data-point', msg => sendMessage(msg))
 
-      socket.on('disconnect', () => kill_process())
+      // Listen for disconnect events from the client.
+      socket.on('disconnect', () => endSession())
     })
   }
   res.end()

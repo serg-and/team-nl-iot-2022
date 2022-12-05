@@ -1,24 +1,41 @@
-import fileinput
+import sys
+# import fileinput
 import json
-from script import main
+from importlib.machinery import SourceFileLoader
 
 
+# parses JSON-encoded data from the standard input stream
 def parse_data(string):
     return json.loads(string.rstrip())
 
 
-def save_data_point(name, value, timestamp):
-    print(f"saved {name}={value} at {timestamp}", flush=True, end='')
+# saves a value at a given timestamp
+def save_value(value, timestamp):
+    save_msg = {
+        'type': 'save',
+        'value': value,
+        'timestamp': timestamp
+    }
+    print(json.dumps(save_msg), flush=True, end='')
 
 
-main(fileinput.input, parse_data, save_data_point)
+# Get the script path from the command line
+if len(sys.argv) < 2:
+    print('Usage: python start_script.py <script path>')
+    sys.exit(1)
+script_path = sys.argv[1]
 
+# Load the user-provided script as a module
+script = SourceFileLoader('script', script_path).load_module('script')
 
-# for line in fileinput.input():
-#     string = line.rstrip()
-
-#     serialized = json.dumps({
-#         'message': string
-#     })
-
-#     print(serialized, flush=True, end='')
+# Try running the script's main function
+try:
+    script.main(sys.stdin, parse_data, save_value)
+# If an exception is raised, print the error message to stdout
+except Exception as e:
+    error_msg = {
+        'type': 'error',
+        'error': 'Error occured during execution of script',
+        'stacktrace': e.with_traceback()
+    }
+    print(json.dumps(error_msg), flush=True, end='')
