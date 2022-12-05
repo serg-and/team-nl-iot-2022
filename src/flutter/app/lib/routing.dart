@@ -1,6 +1,4 @@
-import 'package:app/HeartbeatData.dart';
-import 'package:app/bluetooth_page.dart';
-import 'package:app/sessions.history.dart';
+import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:flutter/material.dart';
 
 import 'data.dart';
@@ -21,8 +19,6 @@ class _RoutingState extends State<Routing> {
   List routing = [
     Home(),
     const Bluetooth(),
-     HeartBeatData(),
-    const History(),
   ];
   @override
   Widget build(BuildContext context) {
