@@ -1,3 +1,4 @@
+import 'package:app/HeartbeatData.dart';
 import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ class Home extends StatefulWidget {
 
 class _MyHomePageState extends State<Home> {
   int _selectedIndex = 0;
+  final List<Widget> _pages = [Home(), HeartBeatPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,11 +26,13 @@ class _MyHomePageState extends State<Home> {
       ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(24),
+
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(35.0),
             color: Colors.black, // put the color here
         ),
         child: BottomNavigationBar(
+
             elevation: 0.0,
             currentIndex: _selectedIndex,
             backgroundColor: Colors.transparent,
