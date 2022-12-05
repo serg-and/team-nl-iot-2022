@@ -32,18 +32,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fl_chart: ^0.55.2
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  dashboard:
-    git:
-      url: https://github.com/vishwas-kr/Dashboard_App_UI
-      ref: master
   flutter_blue_plus: ^1.3.1
   ionicons: ^0.2.1
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_launcher_icons: "^0.11.0"
