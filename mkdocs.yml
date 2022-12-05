@@ -43,6 +43,7 @@ nav:
     - 'EersteIdee.md'
     - 'ToDoList.md'
     - 'Bluetooth.md'
+    - 'Learning outcomes.md'
     - Code Documentation:
       - 'Nextjs-Web-Application.md'
 plugins:
