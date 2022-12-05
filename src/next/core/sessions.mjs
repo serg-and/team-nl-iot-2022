@@ -32,8 +32,8 @@ export async function startSession() {
     child.stdout.on('data', data => {
       try {
         const parsed = JSON.parse(data)
-        if (parsed.type === 'save')
-          appendValueToOutput(output.id, parsed)
+        if (parsed.type === 'save' && parsed.value && parsed.timestamp)
+          appendValueToOutput(output.id, { value: parsed.value, timestamp: parsed.timestamp })
         if (parsed.type === 'error')
           console.log(data.error)
       } catch {
