@@ -21,7 +21,7 @@ class _RoutingState extends State<Routing> {
   List routing = [
     Home(),
     const Bluetooth(),
-     HeartBeatData(),
+    const HeartBeatPage(),
     const History(),
   ];
   @override
