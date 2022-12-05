@@ -59,7 +59,7 @@ flutter_icons:
 # For more info about this package check the following link https://pub.dev/packages/flutter_native_splash#3-set-up-app-initialization-optional
 flutter_native_splash:
   background_image: "assets/splashscreen/splash_background.png"
-  image: "assets/splashscreen/splash_image.png"
+  image: "assets/splashscreen/splash_image_new.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
