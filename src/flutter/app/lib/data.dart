@@ -14,7 +14,7 @@ List bottomBar = [
     color: Colors.white,
   ),
   const Icon(
-    Icons.bluetooth,
+    Icons.history,
     color: Colors.white,
   ),
   const Icon(
