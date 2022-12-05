@@ -1,4 +1,5 @@
 import 'package:app/bluetooth_page.dart';
+import 'package:app/sessions.history.dart';
 import 'package:flutter/material.dart';
 
 import 'data.dart';
@@ -19,6 +20,7 @@ class _RoutingState extends State<Routing> {
   List routing = [
     Home(),
     const Bluetooth(),
+    const History(),
   ];
   @override
   Widget build(BuildContext context) {
