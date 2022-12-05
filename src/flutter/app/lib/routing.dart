@@ -1,4 +1,4 @@
-import 'package:app/bluetooth_page.dart';
+import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:flutter/material.dart';
 
 import 'data.dart';
