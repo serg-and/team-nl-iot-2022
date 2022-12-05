@@ -23,3 +23,6 @@ In the home.page.dart there is a navigation bar built in, where there are three 
 
 ##Navigating to Sessions History
 Currently, I have created a new page for the sessions history. In the page at the moment only a piece of text has been added. In the navigation bar, an icon has been added with sessions history. When the icon is clicked, the user is sent to the sessions history page.
+
+##Navigating to Current Session
+Liam created the current session page. I myself added an icon via the navigation bar so that the current session page can be navigated to. In the current session page you can see the heart rate in a graph.  
