@@ -20,3 +20,6 @@ flutter_icons:
 
 Navigation bar (Rosario)
 In the home.page.dart there is a navigation bar built in, where there are three buttons to navigate to. There are home, current session and sessions history buttons created, which are represented by an icon. For formatting purposes I have given the items the color white. When a button is selected it turns black and the background of the bar is orange. 
+
+Navigating to Sessions History
+Currently, I have created a new page for the sessions history. In the page at the moment only a piece of text has been added. In the navigation bar, an icon has been added with sessions history. When the icon is clicked, the user is sent to the sessions history page.
