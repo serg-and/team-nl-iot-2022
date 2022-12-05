@@ -6,14 +6,14 @@ export default function SocketHandler (req, res) {
     const io = new Server(res.socket.server)
     res.socket.server.io = io
 
-    io.on('connection', socket => {
+    io.on('connection', async (socket) => {
       console.log('connection started')
 
-      const [sendMessage, kill_process] = startSession()
+      const { sendMessage, endSession } = await startSession()
 
       socket.on('data-point', msg => sendMessage(msg))
 
-      socket.on('disconnect', () => kill_process())
+      socket.on('disconnect', () => endSession())
     })
   }
   res.end()
