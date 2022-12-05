@@ -14,11 +14,11 @@ List bottomBar = [
     color: Colors.white,
   ),
   const Icon(
-    Icons.bluetooth,
+    Icons.accessibility_sharp,
     color: Colors.white,
   ),
   const Icon(
-    Icons.bluetooth,
+    Icons.history,
     color: Colors.white,
   ),
 ];

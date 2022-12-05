@@ -43,7 +43,9 @@ nav:
     - 'EersteIdee.md'
     - 'ToDoList.md'
     - 'Bluetooth.md'
+    - 'Learning outcomes.md'
     - Code Documentation:
+      - 'supabase.md'
       - 'Nextjs-Web-Application.md'
 plugins:
   - search
