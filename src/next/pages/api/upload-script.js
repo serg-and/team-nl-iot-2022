@@ -53,6 +53,8 @@ export default async (req, res) => {
 
   // Construct the file path for the script.
   const filePath = `${scriptsFolder}/${data.id}.${extension}`
+  // Ensure the target folder exists.
+  await fs.mkdir(scriptsFolder)
   // Write the script code to a file.
   await fs.writeFile(filePath, code)
 
