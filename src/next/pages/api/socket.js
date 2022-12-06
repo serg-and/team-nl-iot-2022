@@ -7,7 +7,7 @@ export default function SocketHandler (req, res) {
   if (!res.socket.server.io) {
     // Create a new socket.io instance for the server.
     const io = new Server(res.socket.server, {
-      path: '/api/sessions'
+      path: '/sockets/sessions'
     })
     res.socket.server.io = io
 
