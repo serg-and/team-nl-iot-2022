@@ -44,7 +44,9 @@ export default function StartSessionPage() {
 
   async function startSession() {
     await fetch('/api/socket')
-    setSocket(io())
+    setSocket(io({
+      path: '/sockets/sessions/'
+    }))
   }
 
   async function stopSession() {
