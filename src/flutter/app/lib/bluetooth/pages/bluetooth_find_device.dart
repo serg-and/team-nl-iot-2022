@@ -81,6 +81,7 @@ class FindDevicesScreen extends StatelessWidget {
                             })),
                           ),
                         )
+                        .where((foundDevice) => foundDevice.result.device.name.contains("Movesense"))
                         .toList(),
                   ),
                 ),
