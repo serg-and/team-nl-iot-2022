@@ -32,18 +32,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fl_chart: ^0.55.2
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-
-  dashboard:
-    git:
-      url: https://github.com/vishwas-kr/Dashboard_App_UI
-      ref: master
+  smooth_page_indicator: ^1.0.0+2
+  shared_preferences: ^2.0.12
   flutter_blue_plus: ^1.3.1
+  flutter_native_splash: ^2.2.15
   ionicons: ^0.2.1
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_launcher_icons: "^0.11.0"
@@ -55,8 +52,6 @@ flutter_icons:
   ios: true
   image_path: "assets/Images/Sens_TeamNL.jpg"
 
-  flutter_native_splash: ^2.2.15
-
 # Run the following commands to generate splash screen or to update it.
 # 1) flutter clean
 # 2) flutter pub get
@@ -64,7 +59,7 @@ flutter_icons:
 # For more info about this package check the following link https://pub.dev/packages/flutter_native_splash#3-set-up-app-initialization-optional
 flutter_native_splash:
   background_image: "assets/splashscreen/splash_background.png"
-  image: "assets/splashscreen/splash_image.png"
+  image: "assets/splashscreen/splash_image_new.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -83,6 +78,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/onboardingscreen/
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
