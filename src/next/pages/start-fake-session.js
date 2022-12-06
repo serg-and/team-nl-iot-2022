@@ -44,7 +44,7 @@ export default function StartSessionPage() {
 
   async function startSession() {
     await fetch('/api/socket')
-    setSocket(io())
+    setSocket(io({ transports: ["websocket"] }))
   }
 
   async function stopSession() {
