@@ -9,5 +9,10 @@ const removeImports = require("next-remove-imports")();
 
 module.exports = removeImports({
   experimental: { esmExternals: true },
-  trailingSlash: true
+  rewrites: async () => ([
+    {
+      source: '/socket.io',
+      destination: `/socket.io/`,
+    },
+  ]),
 });
