@@ -4,6 +4,9 @@ import 'dart:async';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 
+List<FlSpot> heartBeatList = [];
+int index = 0;
+
 class HeartBeatPage extends StatelessWidget {
 
   const HeartBeatPage({super.key});
@@ -13,31 +16,79 @@ class HeartBeatPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar("Home"),
       body: ListView(
-        children: [HeartBeatData(), LineChartSample2()],
+        //Add extra data widget here with a button title
+        children: [DropDownBar("HeartBeat", HeartBeatData()), DropDownBar('HeartBeat2', HeartBeatData())],
       ),
     ); //
   }
 }
 
-class HeartBeatData extends StatefulWidget {
+class HeartBeatData extends StatelessWidget{
+  Widget build(BuildContext context){
+    return Center(
+      child: Column(
+        children: [HeartBeatDataText(), HeartBeatDataGraph()],
+      ),
+    );
+  }
+}
+
+class DropDownBar extends StatefulWidget {
+  final String title;
+  final Widget dataWidget;
+  const DropDownBar(this.title, this.dataWidget);
+  _DropDownBarState createState() => _DropDownBarState();
+}
+
+class HeartBeatDataText extends StatefulWidget {
   _HeartBeatState createState() => _HeartBeatState();
 }
 
-class _HeartBeatState extends State<HeartBeatData>{
+class _DropDownBarState extends State<DropDownBar>{
+  bool showData = true;
+  Widget build(BuildContext context){
+    Widget showWidget = widget.dataWidget;
+    showWidget = showData? widget.dataWidget: Container();
+    return Center(
+      child: Column (
+          children: <Widget> [Bar(context), showWidget]
+      ),
+    );
+  }
+
+  Widget Bar(BuildContext context){
+    final ButtonStyle style =
+    ElevatedButton.styleFrom(
+        textStyle: const TextStyle(fontSize: 20, color: Colors.black),
+        fixedSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.width * 0.1),
+        backgroundColor: Colors.grey,
+    );
+    return Center(
+      child: ElevatedButton(
+        child: Text(widget.title, style: TextStyle(fontSize: 20.0),),
+        style: style,
+        onPressed: () {setState(() {
+          showData = showData? false: true;
+        });},
+      ),
+    );
+  }
+}
+
+
+class _HeartBeatState extends State<HeartBeatDataText>{
   int heartBeat = 0;
-  int index = 0;
-  static List<FlSpot> heartBeatList = [];
   late Timer update;
   Random random = new Random();
 
   @override
   void initState(){
     super.initState();
-
     update = Timer.periodic(Duration(milliseconds: 100), (Timer t){
       setState(() {
         heartBeat = 40 + random.nextInt(150 - 40);
         heartBeatList.add(FlSpot(index.toDouble(), heartBeat.toDouble()));
+        if(heartBeatList.length > 30) heartBeatList.removeAt(0);
         index++;
       });
     });
@@ -52,14 +103,14 @@ class _HeartBeatState extends State<HeartBeatData>{
     );
   }
 }
-class LineChartSample2 extends StatefulWidget {
-  const LineChartSample2({super.key});
+class HeartBeatDataGraph extends StatefulWidget {
+  const HeartBeatDataGraph({super.key});
 
   @override
-  State<LineChartSample2> createState() => _LineChartSample2State();
+  State<HeartBeatDataGraph> createState() => _HeartBeatDataGraphState();
 }
 
-class _LineChartSample2State extends State<LineChartSample2> {
+class _HeartBeatDataGraphState extends State<HeartBeatDataGraph> {
   List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
@@ -72,7 +123,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    update = Timer.periodic(Duration(seconds: 1), (Timer t){
+    update = Timer.periodic(Duration(milliseconds: 200), (Timer t){
       setState(() {
 
       });
@@ -188,7 +239,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
       maxY: 200    ,
       lineBarsData: [
         LineChartBarData(
-          spots: _HeartBeatState.heartBeatList,
+          spots: heartBeatList,
           isCurved: false,
           gradient: LinearGradient(
             colors: gradientColors,
