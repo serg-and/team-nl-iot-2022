@@ -1,3 +1,4 @@
+import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:app/onboarding_page.dart';
 import 'package:app/routing.dart';
 import 'package:app/settings_page.dart';
