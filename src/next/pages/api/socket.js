@@ -6,9 +6,7 @@ export default function SocketHandler (req, res) {
   // Check if the server has a socket.io instance.
   if (!res.socket.server.io) {
     // Create a new socket.io instance for the server.
-    const io = new Server(res.socket.server, {
-      path: '/sockets/sessions'
-    })
+    const io = new Server(res.socket.server)
     res.socket.server.io = io
 
     // Listen for new connections.

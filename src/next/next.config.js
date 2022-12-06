@@ -8,8 +8,7 @@
 const removeImports = require("next-remove-imports")();
 
 module.exports = removeImports({
-  experimental: { esmExternals: true },
-  trailingSlash: true
+  experimental: { esmExternals: true }
   // rewrites: async () => ([
   //   {
   //     source: '/api/sessions/',
