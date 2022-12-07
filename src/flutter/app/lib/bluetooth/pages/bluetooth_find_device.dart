@@ -37,38 +37,46 @@ class FindDevicesScreen extends StatelessWidget {
                   stream: Stream.periodic(const Duration(seconds: 2)).asyncMap(
                       (_) => FlutterBluePlus.instance.connectedDevices),
                   initialData: const [],
-                  builder: (c, snapshot) => Column(
-                    children: snapshot.data!
-                        .map((d) => ListTile(
-                              leading: Image.asset("assets/Images/ms.png"),
-                              title: Text(d.name),
-                              subtitle: Text(d.id.toString()),
-                              trailing: StreamBuilder<BluetoothDeviceState>(
-                                stream: d.state,
-                                initialData: BluetoothDeviceState.disconnected,
-                                builder: (c, snapshot) {
-                                  if (snapshot.data ==
-                                      BluetoothDeviceState.connected) {
-                                    return ElevatedButton(
-                                      child: const Text('OPEN'),
-                                      onPressed: () => Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DeviceScreen(device: d))),
-                                    );
-                                  } else if (snapshot.data ==
-                                      BluetoothDeviceState.disconnected) {
-                                    return SingleChildScrollView(
-                                        child: AlertDialog(title: Text("Disconnected"), content: Text("Bluetooth device disconnected"), alignment: Alignment.center),
+                  builder: (c, snapshot) => Column(children: [
+                    Column(children: [ListTile(title: Text("Connected Devices: " + snapshot.data!.length.toString() ))],),
+                    Column(
+                      children: snapshot.data!
+                          .map((d) => ListTile(
+                                leading: Image.asset("assets/Images/ms.png"),
+                                title: Text(d.name),
+                                subtitle: Text(d.id.toString()),
+                                trailing: StreamBuilder<BluetoothDeviceState>(
+                                  stream: d.state,
+                                  initialData:
+                                      BluetoothDeviceState.disconnected,
+                                  builder: (c, snapshot) {
+                                    if (snapshot.data ==
+                                        BluetoothDeviceState.connected) {
+                                      return ElevatedButton(
+                                        child: const Text('OPEN'),
+                                        onPressed: () => Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DeviceScreen(device: d))),
+                                      );
+                                    } else if (snapshot.data ==
+                                        BluetoothDeviceState.disconnected) {
+                                      return SingleChildScrollView(
+                                        child: AlertDialog(
+                                            title: Text("Disconnected"),
+                                            content: Text(
+                                                "Bluetooth device disconnected"),
+                                            alignment: Alignment.center),
                                         clipBehavior: Clip.none,
-                                    );
-                                  }
-                                  return Text(snapshot.data.toString());
-                                },
-                              ),
-                            ))
-                        .toList(),
-                  ),
+                                      );
+                                    }
+                                    return Text(snapshot.data.toString());
+                                  },
+                                ),
+                              ))
+                          .toList(),
+                    )
+                  ]),
                 ),
                 StreamBuilder<List<ScanResult>>(
                   stream: FlutterBluePlus.instance.scanResults,
