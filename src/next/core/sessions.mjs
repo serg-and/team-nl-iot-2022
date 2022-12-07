@@ -81,7 +81,7 @@ export async function startSession() {
   }
 
   // Return functions to control the session and send messages to scripts.
-  return { sendMessage, endSession }
+  return { sessionId, sendMessage, endSession }
 }
 
 // This function appends a value to a script output in the database.
