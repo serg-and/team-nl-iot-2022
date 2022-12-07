@@ -25,7 +25,7 @@ export default () => {
         <Heading level={2}>
           Scripts
         </Heading>
-        <Link href='/scripts/create/'>
+        <Link href='/scripts/create'>
           <Button label='Create Script'/>
         </Link>
       </Box>

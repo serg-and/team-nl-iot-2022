@@ -24,8 +24,8 @@ export default function NavBar() {
           </Box>
         </Link>
         <Box direction='row' gap='medium'>
-          {pageButton('Scripts', '/scripts/')}
-          {pageButton('Start Fake Session', '/start-fake-session/')}
+          {pageButton('Scripts', '/scripts')}
+          {pageButton('Start Fake Session', '/start-fake-session')}
         </Box>
       </Box>
     </Header>
