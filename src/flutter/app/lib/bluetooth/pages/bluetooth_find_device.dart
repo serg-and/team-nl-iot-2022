@@ -11,9 +11,6 @@ class FindDevicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    double screenHeight = MediaQuery.of(context).size.width;
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Find Devices'),
@@ -57,6 +54,12 @@ class FindDevicesScreen extends StatelessWidget {
                                           .push(MaterialPageRoute(
                                               builder: (context) =>
                                                   DeviceScreen(device: d))),
+                                    );
+                                  } else if (snapshot.data ==
+                                      BluetoothDeviceState.disconnected) {
+                                    return SingleChildScrollView(
+                                        child: AlertDialog(title: Text("Disconnected"), content: Text("Bluetooth device disconnected"), alignment: Alignment.center),
+                                        clipBehavior: Clip.none,
                                     );
                                   }
                                   return Text(snapshot.data.toString());
