@@ -35,11 +35,11 @@ class _RoutingState extends State<Routing> {
             routing.elementAt(currentIndex),
             Container(
               margin: EdgeInsets.all(displayWidth * .05),
-              height: displayWidth * .155,
+              height: 50,
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.all(Radius.circular(35))),
+              decoration: BoxDecoration(
+                  color: Color(0xFFF59509),
+                  borderRadius: BorderRadius.all(Radius.circular(displayWidth))),
               child: currentIndex == 4
                   ? GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
