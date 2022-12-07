@@ -40,6 +40,7 @@ class FindDevicesScreen extends StatelessWidget {
                   builder: (c, snapshot) => Column(
                     children: snapshot.data!
                         .map((d) => ListTile(
+                              leading: Image.asset("assets/Images/ms.png"),
                               title: Text(d.name),
                               subtitle: Text(d.id.toString()),
                               trailing: StreamBuilder<BluetoothDeviceState>(
@@ -84,7 +85,8 @@ class FindDevicesScreen extends StatelessWidget {
                             })),
                           ),
                         )
-                        .where((foundDevice) => foundDevice.result.device.name.contains("Movesense"))
+                        .where((foundDevice) => foundDevice.result.device.name
+                            .contains("Movesense"))
                         .toList(),
                   ),
                 ),

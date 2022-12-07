@@ -90,7 +90,8 @@ class ScanResultTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: _buildTitle(context),
-      leading: Text(result.rssi.toString()),
+      // leading: Text(result.rssi.toString()),
+      leading: Image.asset("assets/Images/ms.png"),
       trailing: ElevatedButton(
         child: const Text('CONNECT'),
         style: ElevatedButton.styleFrom(
