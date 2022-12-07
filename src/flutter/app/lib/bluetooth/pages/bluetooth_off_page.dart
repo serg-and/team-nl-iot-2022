@@ -11,28 +11,56 @@ class BluetoothOffScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+              Color.fromRGBO(43, 126, 189, 1),
+              Color.fromRGBO(33, 142, 203, 1),
+              Color.fromRGBO(21, 160, 220, 1),
+              Color.fromRGBO(14, 172, 230, 1),
+              Color.fromRGBO(6, 185, 241, 1),
+            ])),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            const Icon(
-              Icons.bluetooth_disabled,
-              size: 120.0,
-              color: Colors.black,
+            Icon(
+              Icons.bluetooth,
+              size: MediaQuery.of(context).size.width * 0.15,
+              color: Colors.white,
             ),
-            Text(
-              'Bluetooth is ${state != null ? state.toString().substring(15) : 'not available'}',
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .subtitle2
-                  ?.copyWith(color: Colors.black),
-            ),
-            TextButton(
-              child: const Text('TURN ON', style: TextStyle(color: Colors.orange)),
-              onPressed: Platform.isAndroid
-                  ? () => FlutterBluePlus.instance.turnOn()
-                  : null,
+            Column(
+              children: <Widget>[
+                Text(
+                  'Connect',
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .titleLarge
+                      ?.copyWith(color: Colors.white, fontSize: 40),
+                ),
+                SizedBox(
+                  width: 300,
+                  child: Text(
+                    'to any movesense sensor nearby you',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .subtitle2
+                        ?.copyWith(color: Colors.white, fontSize: 20),
+                  ),
+                ),
+                TextButton(
+                  child: const Text('TURN ON',
+                      style: TextStyle(color: Colors.orange)),
+                  onPressed: Platform.isAndroid
+                      ? () => FlutterBluePlus.instance.turnOn()
+                      : null,
+                ),
+              ],
             ),
           ],
         ),
