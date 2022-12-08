@@ -1,4 +1,5 @@
 import 'package:app/bluetooth/pages/bluetooth_page.dart';
+import 'package:app/configure_supabase.dart';
 import 'package:app/onboarding_page.dart';
 import 'package:app/routing.dart';
 import 'package:app/settings_page.dart';
@@ -7,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  await configureApp();
 
   final prefs = await SharedPreferences.getInstance();
   final showHome = prefs.getBool('showHome') ?? false;
