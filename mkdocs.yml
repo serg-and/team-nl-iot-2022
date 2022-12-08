@@ -1,5 +1,5 @@
 # Replace the text below to customize your site
-site_name: IoT Team NL Documentation Page
+site_name: Docs Team NL IoT 2022
 site_description: Documentation for IoT 2022-2023-sep-jan Team - Team NL
 site_author: IoT 2022-2023-sep-jan Team - Team NL
 copyright: Copyright 2022 MIT | IoT 2022-2023-sep-jan Team - Team NL
@@ -11,16 +11,16 @@ theme:
   palette:
     # Palette toggle for dark mode
     - scheme: slate
-      primary: lime
-      accent: pink
+      primary: orange
+      accent: blue
       toggle:
         icon: material/weather-night
         name: Switch to light mode
     
     # Palette toggle for light mode
     - scheme: default
-      primary: indigo
-      accent: pink
+      primary: orange
+      accent: blue
       toggle:
         icon: material/weather-sunny
         name: Switch to dark mode

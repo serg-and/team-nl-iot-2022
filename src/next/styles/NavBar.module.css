@@ -1,0 +1,7 @@
+.container {
+    background-color: var(--primary);
+}
+
+.pageLink {
+    text-decoration: none;
+}

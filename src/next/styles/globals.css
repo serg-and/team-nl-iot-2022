@@ -1,3 +1,8 @@
+:root {
+  --primary: #F59509;
+  --focus: #00378A;
+}
+
 html,
 body {
   padding: 0;

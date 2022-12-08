@@ -13,5 +13,12 @@ The last feature is esspecially important because one of the requirements of Tea
 
 The database will be ran in the cloud during the development phase, because this makes development faster and easeier.
 
+## Schema
+![Database Schema](images/Supbase%20Schema.png)
+
+- **sessions** store active and previous sessions, for active sessions `ended_at` will be `NULL` untill the session finishes
+- **scripts** store informatie about uploaded scripts that can be ran on the data of sessions
+- **script_outputs** stores the of an enabled script for a given session
+
 ## Database API documentation
 Supabase automatically create API documentation: [Supabase documentation](https://app.supabase.com/project/xwxwhsqpsnumkfazbegs/api)

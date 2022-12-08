@@ -18,7 +18,9 @@ Body
   "code": "def main(raw_data, parse_data, save_data_point):\n    for i in raw_data():\n        data = parse_data(i)",
   "language": "py",
   "name": "script",
-  "description": "script description"
+  "description": "script description",
+  "outputType": "line_chart",
+  "outputName": "Heartbeat"
 }
 ```
 
