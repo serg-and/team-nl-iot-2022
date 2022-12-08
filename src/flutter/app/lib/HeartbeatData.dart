@@ -9,7 +9,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'models.dart';
 
-const String SERVER = 'http://192.168.178.37:3000/';
+const String SERVER = 'https://team-nl-iot-2022.onrender.com/';
 const int MAX_GRAPH_VALUES = 30;
 
 List<FlSpot> heartBeatList = [];
