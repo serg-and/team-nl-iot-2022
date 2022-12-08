@@ -34,3 +34,6 @@ A new page has been created with the current session. Currently, the page displa
 
 ##Start current session
 A button has been added on the current page that causes a session to be started. When the user clicks the button, the user starts a session where the heartbeat is measured. This is then displayed in the graph. 
+
+##stop session button
+On the heartbeat page, a stop session button has been added. If the user wants to stop the session, this button can be pressed. The user is then returned to the current page.

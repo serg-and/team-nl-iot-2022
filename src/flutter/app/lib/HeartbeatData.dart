@@ -7,6 +7,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+
 import 'models.dart';
 
 const String SERVER = 'https://team-nl-iot-2022.onrender.com/';
@@ -47,7 +48,7 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
   final sessionOutputs = await supabase
       .from('sessions')
       .select(
-          'script_outputs( id, scripts( id, name, description, output_type, output_name ) )')
+      'script_outputs( id, scripts( id, name, description, output_type, output_name ) )')
       .eq('id', sessionId)
       .single();
 
@@ -86,11 +87,11 @@ Future<void> createSession(Function callback) async {
   // session started, start retrieving outputs
   socket.on(
       'sessionId',
-      (sessionId) async => {
-            print('started session: ${sessionId}'),
-            callback(await getOutputs(sessionId)),
-            fakeDataTimer = startSendingFakeData(socket, sessionId),
-          });
+          (sessionId) async => {
+        print('started session: ${sessionId}'),
+        callback(await getOutputs(sessionId)),
+        fakeDataTimer = startSendingFakeData(socket, sessionId),
+      });
 }
 
 class HeartBeatPage extends StatefulWidget {
@@ -107,8 +108,8 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
   void initState() {
     super.initState();
     createSession((List<ScriptOutput> sessionOutputs) => setState(() {
-          outputs = sessionOutputs;
-        }));
+      outputs = sessionOutputs;
+    }));
   }
 
   @override
@@ -126,15 +127,32 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar("Home"),
-      body: ListView(
-        children: outputs.map((output) => Output(output: output)).toList(),
+      body: Stack(
+        children: [
+          ListView(
+            children: outputs.map((output) => Output(output: output)).toList(),
 
-        //Add extra data widget here with a button title
-        // children: [
-        //   DropDownBar("HeartBeat", HeartBeatData()),
-        //   DropDownBar('HeartBeat2', HeartBeatData()),
-        //   RetrievedDataSection()
-        // ],
+            //Add extra data widget here with a button title
+            // children: [
+            //   DropDownBar("HeartBeat", HeartBeatData()),
+            //   DropDownBar('HeartBeat2', HeartBeatData()),
+            //   RetrievedDataSection()
+            // ],
+          ),
+          Positioned(
+            child: Align(
+              alignment: FractionalOffset.bottomLeft,
+              child: ElevatedButton(
+                  onPressed: () {
+                    //navigate to the current page
+                    Navigator.pop(context);
+                  },
+                  style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                  child: Text('Stop session')),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -158,15 +176,15 @@ class _Output extends State<Output> {
         .stream(primaryKey: ['id'])
         .eq('id', widget.output.id)
         .listen((List<Map<String, dynamic>> data) {
-          if (!data.isEmpty) {
-            setState(() {
-              final int start = data[0]['values'].length - MAX_GRAPH_VALUES;
-              final range = data[0]['values']
-                  .getRange(start >= 0 ? start : 0, data[0]['values'].length);
-              values = initOutputValues(range);
-            });
-          }
+      if (!data.isEmpty) {
+        setState(() {
+          final int start = data[0]['values'].length - MAX_GRAPH_VALUES;
+          final range = data[0]['values']
+              .getRange(start >= 0 ? start : 0, data[0]['values'].length);
+          values = initOutputValues(range);
         });
+      }
+    });
     // add to subscritions so that subscription can be cancled on page dispaose
     subscriptions.add(subscription);
   }
