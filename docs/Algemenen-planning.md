@@ -1,3 +1,6 @@
 # Algemenen planning
 
-Op maandag spreken we met onze coach Bas. Als we geen verplichtingen hebben op school werken we van af huis. Elke dag wordt een daily-standup gehouden om 10:00. zowel online als op school. Op donderdag hebben we de product review met de client om 14:00. Op donderdag ochtend zorgen we er voor dat wij voorbereid zijn voor de product review door een werkend product te hebben. Als we merken voor donderdag merken dat het te veel werk is om op de dag zelf te doen wordt hiervan afgeweken.
+
+On Mondays we meet with our coach Bas. When we don't have obligations at school we work from home. Every day we have a daily-standup at 10:00. both online and at school. On Thursdays we have the product review with the client at 14:00. On Thursday morning we make sure we are prepared for the product review by having a working product. If we find before Thursday that it is too much work to do on the day, this will be waived.
+
+

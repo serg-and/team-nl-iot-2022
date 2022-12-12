@@ -1,30 +1,31 @@
-## Intro
-Onze app gaat veel communiceren door middel van Bluetooth met sensors. Dit is een belangrijk deel van onze app en het is van belang om een bluetooth library te gebruiken met functionaliteiten die bij onze eisen past. Op deze pagina kunt u meer lezen over wat de bevindingen van ons waren op het vlak van verschillende bluetooth libraries. 
+## Introduction
+Our app is going to communicate a lot through Bluetooth with sensors. This is an important part of our app and it is important to use a bluetooth library with functionalities that suits our requirements. On this page you can read more about what our findings were in terms of different bluetooth libraries. 
 
-## Eisen
+## Requirements
 
-Hieronder staan de eisen waaraan de library moet voldoen. 
+Below are the requirements that the library must meet. 
 
-|#|Beschrijving|
+|#|Description|
 |-|-|
-|1|De library moet Bluetooth Low Enegery (BLE) ondersteunen aangezien de Movesense sensor met BLE werkt.| 
-|2|Het moet mogelijk zijn om voor bluetooth devices te zoeken.| 
-|3|Het moet mogelijk zijn om te connecten met een bluetooth device.| 
-|4|Het moet mogelijk zijn om te communiceren door middel van bluetooth| 
+|1|The library must support Bluetooth Low Enegery (BLE) as the Movesense sensor works with BLE.| 
+|2|It must be possible to search for bluetooth devices.||3|It must be possible to search for bluetooth devices. 
+|3|It must be possible to connect to a bluetooth device.|3 
+|4|It must be possible to communicate using bluetooth| 
 
 
-## Opties
+## Options
 
-Hieronder staan verschillende opties voor de Bluetooth functionaliteiten.
+Below are several options for Bluetooth functionality.
 
-|#|Naam|Beschrijving|
+|#|Name|Description|
 |-|-|-|
-|1|flutter_blue|Flutter blue is een library, waar heel veel functionaliteiten inzitten die wij kunnen gebruiken. Het voeldoet aan al onze eisen. Er is echter wel een nadeel. Deze package is al een lange tijd niet meer geupdate. Flutter blue heeft ook een discord pagina voor hulp.|
-|2|flutter_blue_plus|Flutter blue plus is een library, waarvan de code is geforked van Flutter Blue. Dit betekent dus dat ze de zelfde code hebben gebruikt en er op verder hebben gebouwd. De eigenaar van deze package is ook meer actief en er worden regelmatig updates uitgebracht.|
-|3|Tugberk Akdogan's movesense library|Dit is een library, waarin Akdogan het mogelijk maakt om expliciet met movesense Sensors te verbinden. Hierbij heeft Akdogan ook toegevoegd om data in real time te visualiseren.|
-|4|Geen library|Met Flutter kan je zelf ook verbindingen uitlezen met Bluetooth. Dit gaat echter heel diep en zorgt voor veel boiler plate code in het project.|
+|1|flutter_blue|Flutter blue is a library, which contains a lot of functionalities that we can use. It meets all our requirements. However, there is one drawback. This package has not been updated for a long time. Flutter blue also has a discord page for help.
+|2|flutter_blue_plus|Flutter blue plus is a library, whose code is forked from Flutter Blue. This means that they used the same code and built upon it. The owner of this package is also more active and updates are released regularly.|.
+|3|Tugberk Akdogan's movesense library|This is a library, in which Akdogan makes it possible to explicitly connect to movesense Sensors. In doing so, Akdogan has also added to visualize data in real time.|.
+|4|No library|With Flutter you can also read connections with Bluetooth. However, this goes very deep and creates a lot of boiler plate code in the project.|
 
-## Conclusie
-Uiteindelijk zijn wij tot een conclusie gekomen om de bluetooth library flutter_blue_plus te gebruiken. Dit is een library die aan al onze eisen voldoet. Het heeft alle functionaliteiten die wij nodig hebben.
 
-Tijdens dit onderzoek hebben wij ook bevindingen kunnen maken op het gebied van data visualisatie. Tugberk Akdogan's library is open source. In zijn code kunnen wij zien hoe hij live data van een MoveSense visualiseerd. Sinds zijn code open source is kunnen we alle code inzien en een idee krijgen over hoe wij live data van een movesense sensor kunnen visualiseren. [Klik hier](https://github.com/petri-lipponen-movesense/mdsflutter) om naar de github pagina te gaan
+## Conclusion
+In the end, we came to a conclusion to use the bluetooth library flutter_blue_plus. This is a library that meets all our requirements. It has all the functionalities we need.
+
+During this research we were also able to make findings in the area of data visualization. Tugberk Akdogan's library is open source. In his code, we can see how he visualizes live data from a MoveSense. Since his code is open source we can see all the code and get an idea about how we can visualize live data from a movesense sensor. [Click here](https://github.com/petri-lipponen-movesense/mdsflutter) to go to the github page
