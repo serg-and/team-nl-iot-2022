@@ -36,15 +36,16 @@ theme:
     - content.code.annotate 
 nav:
     - 'index.md'
-    - 'Samenwerkingscontract.md'
     - Planning:
       - 'Event-planning.md'
       - 'Algemenen-planning.md'
-    - 'EersteIdee.md'
-    - 'ToDoList.md'
-    - 'Bluetooth.md'
-    - 'Learning outcomes.md'
-    - Code Documentation:
+    - Learning Outcomes:
+      - 'Bluetooth.md'
+      - 'setting-up-the-app.md'
+    - Project Documentation:
+      - 'Samenwerkingscontract.md'
+    - Technical Documentation:
+      - 'hosting.md'
       - 'supabase.md'
       - 'Nextjs-Web-Application.md'
 plugins:
