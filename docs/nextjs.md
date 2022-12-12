@@ -1,4 +1,4 @@
-# Nextjs Web Application
+# Next.js (Web Application)
 The Web Application is written in Next JS, this is a Node JS framework made for react applications.
 
 ## APIs
