@@ -1,17 +1,15 @@
-# Afspraken
+# Agreements
 
-## Samenwerkingscontract
+## Collaboration contract
 
 
-Met het team hebben we afspraken gemaakt die we na moeten komen binnen het project. Hiervoor heeft elk teamlid het
-[Samenwerkingscontract](https://docs.google.com/document/d/1fQunPvVXL3cAuSeUdSEsyO1Jd3oOZ5VH/edit?usp=sharing&ouid=117941582367413396465&rtpof=true&sd=true) ondertekend.
+With the team we made agreements that we have to keep within the project. For this purpose, each team member has signed the
+[Collaboration Contract](https://docs.google.com/document/d/1fQunPvVXL3cAuSeUdSEsyO1Jd3oOZ5VH/edit?usp=sharing&ouid=117941582367413396465&rtpof=true&sd=true) signed.
 ___
 
 
 
 ## Git
 
-Voor elke isue wordt een apparte brench gemaakt. Daar op kan gepushed en commit worden zonder controlle. Merge met de main brench is alleen toegestaan op de gitlab website. Hier maak je een merge request aan en moet worden goed gekeurd door een ander teamlid door te voldoen aan de definition of done. Als er problemen zijn met een isue moet dit worden benoemnd tijdens de daily stand up.
+A separate brench will be created for each isue. You can push and commit on it without control. Merge with the main brench is only allowed on the gitlab website. Here you create a merge request and it must be approved by another team member by meeting the definition of done. If there are problems with an isue it should be mentioned during the daily stand up.
 ___
-
-
