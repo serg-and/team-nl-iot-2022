@@ -11,6 +11,7 @@ Below are the requirements that the library must meet.
 |2|It must be possible to search for bluetooth devices.||3|It must be possible to search for bluetooth devices. 
 |3|It must be possible to connect to a bluetooth device.|3 
 |4|It must be possible to communicate using bluetooth| 
+|5|It must be possible to read sensor data from the movesense sensor| 
 
 
 ## Options
