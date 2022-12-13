@@ -6,4 +6,8 @@ Scripts uploaded to the web application are saved to disk so that they can be us
 In this case the 'main' function is messing it's third parameter.
 
 ## Handeling Sessions
-When sessions are started in the app, they connect to a websocket on the server. Every bit of data comming of the sensors is directly send to the webserver over this websocket.
+When sessions are started in the app, they connect to a websocket on the server. Every bit of data comming of the sensors is directly send to the webserver over this websocket. Websockets are use because they create a continuous connection between the app and the server, reducing the overhead per send message and therefor allowing for a high number of messages to be send back and forth. This is very important because the sensors will be sending data up to hundreds of times per second.<br>
+
+## Handeling Scripts
+New sessions, started by connecting to the websocket, specify which scripts to run for that session. For each of these scripts a process is started .... 
+-- more to come --

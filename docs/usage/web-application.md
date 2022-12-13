@@ -1,4 +1,4 @@
-#How to use the webapplication
+# Web Application
 
 ##Scripts
 ![Script page](/images/Scripts_page.png)
