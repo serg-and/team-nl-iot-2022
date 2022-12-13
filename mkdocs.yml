@@ -48,6 +48,7 @@ nav:
       - 'supabase.md'
       - 'nextjs.md'
       - 'hosting.md'
+    - 'features.md'
 plugins:
   - search
   - git-revision-date-localized:
