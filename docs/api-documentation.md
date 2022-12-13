@@ -1,8 +1,5 @@
-# Next.js (Web Application)
-The Web Application is written in Next JS, this is a Node JS framework made for react applications.
-
-## APIs
-### upload-script [POST]
+# API Documentation
+## upload-script [POST]
 Upload a data analysis script<br><br>
 **URI**<br>
 [POST]() /api/upload-script<br>

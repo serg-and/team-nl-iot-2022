@@ -45,9 +45,9 @@ nav:
     - Project Documentation:
       - 'Samenwerkingscontract.md'
     - Technical Documentation:
-      - 'supabase.md'
-      - 'nextjs.md'
-      - 'hosting.md'
+      - 'database.md'
+      - 'web-application.md'
+      - 'api-documentation.md'
 plugins:
   - search
   - git-revision-date-localized:

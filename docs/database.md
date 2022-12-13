@@ -1,4 +1,4 @@
-# Supabase (Database)
+# Database
 The mobile app and web application uses a Supabase database. Supabase is an open source Firebase alternative. Start your project with a Postgres database, Authentication, instant APIs, Edge Functions, Realtime subscriptions, and Storage.<br>
 
 Supabase was chosen because of the following reasons:
@@ -22,3 +22,5 @@ The database will be ran in the cloud during the development phase, because this
 
 ## Database API documentation
 Supabase automatically create API documentation: [Supabase documentation](https://app.supabase.com/project/xwxwhsqpsnumkfazbegs/api)
+
+## 
