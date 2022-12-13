@@ -12,4 +12,4 @@ There are several features in the app.
 |Bluetooth device detail|||
 |Bluetooth device disconnect|||
 |Bluetooth device|||
-||||
+|Heartbeat charts|||
