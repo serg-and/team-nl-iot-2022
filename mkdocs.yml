@@ -38,6 +38,7 @@ nav:
     - 'index.md'
     - Usage:
       - 'usage/web-application.md'
+      - 'usage/writing-scripts.md'
     - Technical Documentation:
       - 'database.md'
       - Web Application:
