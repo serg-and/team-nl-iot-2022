@@ -8,4 +8,4 @@ There are several features in the app.
 |Bluetooth|Bluetooth is a wireless technology that allows devices to communicate with each other over short distances.|photo|
 |||photo|
 |||photo|
-|Heartbeat charts|||
+|Heartbeat charts||photo|
