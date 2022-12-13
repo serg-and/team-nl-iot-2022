@@ -19,9 +19,9 @@ Below are several options for Bluetooth functionality.
 
 |#|Name|Description|
 |-|-|-|
-|1|flutter_blue|Flutter blue is a library, which contains a lot of functionalities that we can use. It meets all our requirements. However, there is one drawback. This package has not been updated for a long time. Flutter blue also has a discord page for help.
-|2|flutter_blue_plus|Flutter blue plus is a library, whose code is forked from Flutter Blue. This means that they used the same code and built upon it. The owner of this package is also more active and updates are released regularly.|.
-|3|Tugberk Akdogan's movesense library|This is a library, in which Akdogan makes it possible to explicitly connect to movesense Sensors. In doing so, Akdogan has also added to visualize data in real time.|.
+|1|flutter_blue|The flutter_blue package is a Flutter plugin that provides a Bluetooth API for Flutter apps. It allows developers to easily integrate Bluetooth functionality into their Flutter apps, allowing them to communicate with other Bluetooth devices. This can be useful for a wide range of applications, such as connecting to fitness trackers, wireless speakers, or other Bluetooth-enabled devices. The flutter_blue package provides a simple, high-level API for working with Bluetooth in Flutter, making it easy for developers to add Bluetooth functionality to their apps without having to deal with the low-level details of working with Bluetooth.
+|2|flutter_blue_plus|The flutter_blue_plus package is an extension of the flutter_blue package, which provides a Bluetooth plugin for Flutter. The flutter_blue_plus package adds additional functionality to the flutter_blue package, such as the ability to connect to multiple devices simultaneously and support for Bluetooth Low Energy (BLE) GATT characteristic write types. This can be useful for developers who want to build mobile apps that use Bluetooth to communicate with other devices.|.
+|3|mdsflutter|The mdsflutter package is a Flutter plugin that allows developers to easily communicate with Movesense sensors using Bluetooth. By using the mdsflutter package, developers can build Flutter apps that can collect data from Movesense sensors and use it in their applications. This can be useful for a wide range of applications, such as health and fitness tracking, sports performance analysis, and more.|.
 |4|No library|With Flutter you can also read connections with Bluetooth. However, this goes very deep and creates a lot of boiler plate code in the project.|
 
 
