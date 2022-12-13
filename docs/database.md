@@ -23,4 +23,5 @@ The database will be ran in the cloud during the development phase, because this
 ## Database API documentation
 Supabase automatically create API documentation: [Supabase documentation](https://app.supabase.com/project/xwxwhsqpsnumkfazbegs/api)
 
-## 
+## Hosting the Database
+To self-host the Supabase Database we recommend running Supabase using Docker. Follow the [Self-hosting with Docker](https://supabase.com/docs/guides/hosting/docker) guide from Supabase.
