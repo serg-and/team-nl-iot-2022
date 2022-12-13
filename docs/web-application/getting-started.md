@@ -6,7 +6,11 @@ The Web Application is written in Next JS, this is a Node JS framework made for 
 - MacOS, Windows (using WSL), and Linux are supported
 
 ## Running the web application
-First clone the project repository ---- ?? Do we have documentation for this ?? ----, the source code of the web application is housed under `src/next`.
+First clone the project repository
+```
+git clone https://github.com/serg-and/team-nl-iot-2022.git
+```
+The source code of the web application is housed under `src/next`.
 To start the web application run:
 ```shell
 npm i
