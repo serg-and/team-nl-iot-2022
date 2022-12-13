@@ -44,6 +44,8 @@ nav:
       - Web Application:
         - 'web-application/getting-started.md'
         - 'web-application/code-documentation.md'
+      - App documentation:
+        - 'App/Packages.md'
       - 'api-documentation.md'
 plugins:
   - search
