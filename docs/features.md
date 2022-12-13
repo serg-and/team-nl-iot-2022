@@ -6,6 +6,7 @@ There are several features in the app.
 |Onboarding screen|Onboarding screens are screens that are shown to users when they first start using a app. These screens are designed to introduce users to the app and explain its key features and functions. Onboarding screens often include step-by-step instructions or tutorials to help users get started with the app and become familiar with its interface and features. In short, an onboarding screen is a feature that helps new users understand and use a app.|![Splash Screen](images/Splashscreen.jpg)|
 |||photo|
 |||photo|
+|||photo|
 |Bluetooth|Bluetooth is a wireless technology that allows devices to communicate with each other over short distances.|photo|
 |||photo|
 |||photo|
