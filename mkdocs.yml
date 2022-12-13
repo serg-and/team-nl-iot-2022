@@ -46,7 +46,9 @@ nav:
       - 'Samenwerkingscontract.md'
     - Technical Documentation:
       - 'database.md'
-      - 'web-application.md'
+      - Web Application:
+        - 'web-application/getting-started.md'
+        - 'web-application/code-documentation.md'
       - 'api-documentation.md'
 plugins:
   - search

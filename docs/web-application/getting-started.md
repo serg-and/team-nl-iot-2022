@@ -1,4 +1,4 @@
-# Web Application
+# Getting Started
 The Web Application is written in Next JS, this is a Node JS framework made for react applications.
 
 ## System Requirements
@@ -42,7 +42,6 @@ This output is generated inside the .next folder:
 - `.next/cache` – Output for the build cache and cached images, responses, and pages from the Next.js server. Using a cache helps decrease build times and improve performance of loading images
 All JavaScript code inside .next has been compiled and browser bundles have been minified to help achieve the best performance and support all modern browsers.
 
-
-
 ## APIs
 Read the [API Documentation](api-documentation)
+
