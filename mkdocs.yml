@@ -50,7 +50,7 @@ nav:
         - 'web-application/getting-started.md'
         - 'web-application/code-documentation.md'
       - 'api-documentation.md'
-      - 'used.md'
+      - 'web-application/used.md'
 plugins:
   - search
   - git-revision-date-localized:
