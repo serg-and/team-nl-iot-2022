@@ -51,11 +51,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/splashscreen/app_icon.png"
-  adaptive_icon_foreground: "assets/splashscreen/app_icon.png"
+  image_path: "assets/launcher_icons/app_icon.png"
+  adaptive_icon_foreground: "assets/launcher_icons/app_icon.png"
   adaptive_icon_background: "#ffffff"
 
 # Run the following commands to generate splash screen or to update it.
@@ -65,7 +66,7 @@ flutter_icons:
 # For more info about this package check the following link https://pub.dev/packages/flutter_native_splash#3-set-up-app-initialization-optional
 flutter_native_splash:
   background_image: "assets/splashscreen/splash_background.png"
-  image: "assets/splashscreen/splash_image_new.png"
+  image: "assets/splashscreen/splash_image_with_move.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
