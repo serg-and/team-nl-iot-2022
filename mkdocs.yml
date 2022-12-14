@@ -46,9 +46,10 @@ nav:
         - 'web-application/code-documentation.md'
       - App documentation:
         - 'App/Packages.md'
+        - 'App/App-code-documentation.md'
+        - 'features.md'
       - 'api-documentation.md'
-      - 'features.md'
-      - 'App\App-code-documentation.md'
+      
 plugins:
   - search
   - git-revision-date-localized:
