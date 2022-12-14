@@ -22,10 +22,9 @@ export const validateRScript = (code) => {
   const lines = code.split('\n')
 
   for (const line of lines) {
-    if (line.length < 4 || line.slice(0, 4) !== 'main') continue
-
     const syntaxes = line.split(' ')
     if (syntaxes.length < 3) continue
+    if (syntaxes[0] !== 'main') continue
     if (!['<-', '='].includes(syntaxes[1])) continue
     
     if (!syntaxes[2].includes('function(')) continue
