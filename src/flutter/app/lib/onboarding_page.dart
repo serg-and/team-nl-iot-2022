@@ -1,14 +1,16 @@
-import 'package:app/bluetooth/pages/bluetooth_page.dart';
+// Import the pages and files
 import 'package:app/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+// OnBoardingPage is a stateful widget that represents the onboarding page for the app.
+// It displays a series of pages with text and images that explain the features of the app.
 class OnBoardingPage extends StatefulWidget {
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
 }
-
+// PageController for managing page views
 class _OnboardingPageState extends State<OnBoardingPage> {
   final controller = PageController();
   bool isLastPage = false;
