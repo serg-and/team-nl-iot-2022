@@ -1,4 +1,4 @@
-
+// Import the other pages
 import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:app/current_session.dart';
 import 'package:app/sessions.history.dart';
@@ -31,7 +31,7 @@ class _RoutingState extends State<Routing> {
     return Scaffold(
         body: Stack(
           alignment: Alignment.bottomCenter,
-          children: [
+          children: [ // This is the widget that will be displayed at the current index
             routing.elementAt(currentIndex),
             Container(
               margin: EdgeInsets.all(displayWidth * .05),
@@ -41,7 +41,7 @@ class _RoutingState extends State<Routing> {
                   color: Color(0xFFF59509),
                   borderRadius: BorderRadius.all(Radius.circular(displayWidth))),
               child: currentIndex == 4
-                  ? GestureDetector(
+                  ? GestureDetector( // This is the "Book Now" button that will be displayed on the last screen
                 onTap: () => Navigator.of(context).pop(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
