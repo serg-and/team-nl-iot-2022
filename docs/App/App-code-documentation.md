@@ -76,6 +76,132 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 }
 
 ```
+
+### Routing
+This Dart code is a simple routing class that manages the navigation between different pages in an app. The code imports several classes from other files, including Home, Bluetooth, Current, and History, which are the different pages that the user can navigate to.
+
+```
+// Import the other pages
+import 'package:app/bluetooth/pages/bluetooth_page.dart';
+import 'package:app/current_session.dart';
+import 'package:app/sessions.history.dart';
+import 'package:flutter/material.dart';
+
+import 'data.dart';
+import 'home_page.dart';
+
+
+class Routing extends StatefulWidget {
+  const Routing({Key? key}) : super(key: key);
+
+  @override
+  State<Routing> createState() => _RoutingState();
+}
+
+class _RoutingState extends State<Routing> {
+
+  var currentIndex = 0;
+
+  List routing = [
+    Home(),
+    const Bluetooth(),
+    const Current(),
+    const History()
+  ];
+  @override
+  Widget build(BuildContext context) {
+    double displayWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+        body: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [ // This is the widget that will be displayed at the current index
+            routing.elementAt(currentIndex),
+            Container(
+              margin: EdgeInsets.all(displayWidth * .05),
+              height: 50,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Color(0xFFF59509),
+                  borderRadius: BorderRadius.all(Radius.circular(displayWidth))),
+              child: currentIndex == 4
+                  ? GestureDetector( // This is the "Book Now" button that will be displayed on the last screen
+                onTap: () => Navigator.of(context).pop(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "Book Now ",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Icon(
+                      Icons.home,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+              )
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ...List.generate(bottomBar.length, (i) {
+                    return GestureDetector(
+                      onTap: () => setState(() {
+                        currentIndex = i;
+                      }),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          bottomBar[i],
+                          const SizedBox(height: 4),
+                          currentIndex == i
+                              ? Container(
+                            width: 4,
+                            height: 4,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                          )
+                              : Container()
+                        ],
+                      ),
+                    );
+                  })
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+}
+```
+### Settings
+Three dots have been added in the main dart. These three dots is the settings button. The user can click on settings and will be redirected.  
+
+```
+import 'package:app/main.dart'; // Import main.dart file
+import 'package:flutter/material.dart'; // Import Material Design package
+
+class Settings extends StatelessWidget {
+  const Settings({super.key}); // Constructor for Settings class
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar("Settings"), // Use CustomAppBar with "Settings" as title
+      body: Center(
+        child: Text('Settings'), // Display "Settings" text in the center of the screen
+      ),
+    ); // End Scaffold
+  }
+}
+```
 ## Home page
 This is how the home page is written. At this point there is not much to say about the home page. A piece of text has been added showing that the user is on the home page. More about the home page is coming soon!
 
@@ -735,110 +861,6 @@ class History extends StatelessWidget {
         child: Text("Sessions History")
       ),
     ); //
-  }
-}
-```
-## Routing
-This Dart code is a simple routing class that manages the navigation between different pages in an app. The code imports several classes from other files, including Home, Bluetooth, Current, and History, which are the different pages that the user can navigate to.
-
-```
-// Import the other pages
-import 'package:app/bluetooth/pages/bluetooth_page.dart';
-import 'package:app/current_session.dart';
-import 'package:app/sessions.history.dart';
-import 'package:flutter/material.dart';
-
-import 'data.dart';
-import 'home_page.dart';
-
-
-class Routing extends StatefulWidget {
-  const Routing({Key? key}) : super(key: key);
-
-  @override
-  State<Routing> createState() => _RoutingState();
-}
-
-class _RoutingState extends State<Routing> {
-
-  var currentIndex = 0;
-
-  List routing = [
-    Home(),
-    const Bluetooth(),
-    const Current(),
-    const History()
-  ];
-  @override
-  Widget build(BuildContext context) {
-    double displayWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [ // This is the widget that will be displayed at the current index
-            routing.elementAt(currentIndex),
-            Container(
-              margin: EdgeInsets.all(displayWidth * .05),
-              height: 50,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Color(0xFFF59509),
-                  borderRadius: BorderRadius.all(Radius.circular(displayWidth))),
-              child: currentIndex == 4
-                  ? GestureDetector( // This is the "Book Now" button that will be displayed on the last screen
-                onTap: () => Navigator.of(context).pop(),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "Book Now ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Icon(
-                      Icons.home,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-              )
-                  : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ...List.generate(bottomBar.length, (i) {
-                    return GestureDetector(
-                      onTap: () => setState(() {
-                        currentIndex = i;
-                      }),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          bottomBar[i],
-                          const SizedBox(height: 4),
-                          currentIndex == i
-                              ? Container(
-                            width: 4,
-                            height: 4,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                          )
-                              : Container()
-                        ],
-                      ),
-                    );
-                  })
-                ],
-              ),
-            ),
-          ],
-        ));
   }
 }
 ```
