@@ -255,11 +255,11 @@ class HeartBeatData extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          HeartBeatDataText(
+          DataText(
             name: outputName,
             lastValue: values.isEmpty ? null : values.last,
           ),
-          HeartBeatDataGraph(values: values)
+          DataLineGraph(values: values)
         ],
       ),
     );

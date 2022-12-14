@@ -1,19 +1,11 @@
-import 'dart:convert';
-import 'package:app/main.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-
 import 'models.dart';
 
-class HeartBeatDataText extends StatelessWidget {
+class DataText extends StatelessWidget {
   final String name;
   final OutputValue? lastValue;
-  const HeartBeatDataText({required this.name, required this.lastValue});
+  const DataText({required this.name, required this.lastValue});
 
   // _HeartBeatState createState() => _HeartBeatState();
 
@@ -27,9 +19,9 @@ class HeartBeatDataText extends StatelessWidget {
 }
 
 // class HeartBeatDataGraph extends StatefulWidget {
-class HeartBeatDataGraph extends StatelessWidget {
+class DataLineGraph extends StatelessWidget {
   final List<OutputValue> values;
-  const HeartBeatDataGraph({super.key, required this.values});
+  const DataLineGraph({super.key, required this.values});
 
 //   @override
 //   State<HeartBeatDataGraph> createState() => _HeartBeatDataGraphState();
@@ -37,8 +29,9 @@ class HeartBeatDataGraph extends StatelessWidget {
 
 // class _HeartBeatDataGraphState extends State<HeartBeatDataGraph> {
   static List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
+    const Color(0xffff0000),
+    const Color(0xffff1a1a),
+    const Color(0xffff5a5a),
   ];
 
   static bool showAvg = false;
@@ -71,7 +64,7 @@ class HeartBeatDataGraph extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(0),
               ),
-              color: Color(0xff232d37),
+              color: Color(0xffececec),
             ),
             child: Padding(
               padding: const EdgeInsets.only(
