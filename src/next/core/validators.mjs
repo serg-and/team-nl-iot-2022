@@ -13,3 +13,7 @@ export const validatePythonScript = (code) => {
 
   return {}
 }
+
+export const validateRScript = (code) => {
+  return {}
+}
