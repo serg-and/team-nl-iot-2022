@@ -14,7 +14,7 @@ export default function SocketHandler (req, res) {
       console.log('connection started')
 
       // Start a new session and get functions to control it.
-      const { sessionId, sendMessage, endSession } = await startSession()
+      const { sessionId, sendMessage, endSession } = await startSession([36])
 
       socket.emit('sessionId', sessionId)
 
