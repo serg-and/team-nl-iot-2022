@@ -54,7 +54,9 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/Images/Sens_TeamNL.jpg"
+  image_path: "assets/splashscreen/test8.png"
+  adaptive_icon_foreground: "assets/splashscreen/test8.png"
+  adaptive_icon_background: "#ffffff"
 
 # Run the following commands to generate splash screen or to update it.
 # 1) flutter clean
