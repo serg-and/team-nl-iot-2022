@@ -203,7 +203,7 @@ class Settings extends StatelessWidget {
 }
 ```
 
-### onboarding page
+### Onboarding page
 The onboarding pages provide the app's color combinations. In addition, it also takes care of the style that the app has. 
 
 ```
@@ -363,6 +363,80 @@ class _OnboardingPageState extends State<OnBoardingPage> {
             ));
 }
 
+```
+
+### Data
+Icons have been added to the navigation bar. This allows the user to immediately see where the home, bluetooth, current session and sessions history pages are. 
+
+```
+import 'package:flutter/material.dart';
+
+// ! Routing
+int currentIndex = 0;
+// ! Routing
+
+// List of bottom bar icons
+List bottomBar = [
+  // Icon for Home page
+  const Icon(
+    Icons.home,
+    color: Colors.white,
+  ),
+  // Icon for Bluetooth page
+  const Icon(
+    Icons.bluetooth,
+    color: Colors.white,
+  ),
+  // Icon for Accessibility page
+  const Icon(
+    Icons.accessibility_sharp,
+    color: Colors.white,
+  ),
+];
+
+// name of the city, country, rating of the city and image of the path
+List data = [
+  {
+    "city": 'Nassau',
+    "country": 'Bahamas',
+    "rating": '4.6',
+    'image': 'assets/images/nassau.jpg'
+  },
+  {
+    "city": 'Mykonos',
+    "country": 'Greece',
+    "rating": '4.8',
+    'image': 'assets/images/mykonos.jpg'
+  },
+  {
+    "city": 'Colosseum',
+    "country": 'Rome',
+    "rating": '4.4',
+    'image': 'assets/images/rome.jpg'
+  },
+  {
+    "city": 'London',
+    "country": 'England',
+    "rating": '4.5',
+    'image': 'assets/images/london.jpg'
+  },
+];
+List data_2 = [
+  {"name": 'Flaye', 'image': 'assets/images/flaye.png'},
+  {"name": 'Beach', 'image': 'assets/images/beach.png'},
+  {"name": 'Park', 'image': 'assets/images/park.png'},
+  {"name": 'Camp', 'image': 'assets/images/camp.png'},
+  {"name": 'Flaye', 'image': 'assets/images/flaye.png'},
+  {"name": 'Beach', 'image': 'assets/images/beach.png'},
+  {"name": 'Park', 'image': 'assets/images/park.png'},
+  {"name": 'Camp', 'image': 'assets/images/camp.png'},
+];
+final categoryList = ['Populare', 'Recommended', 'Most Viewd', 'Most Liked'];
+
+// Colors
+const kAvatarColor = Color(0xffffdbc9);
+const kPrimaryColor = Color(0xFFEEF7FF);
+const kSecondaryColor = Color(0xFF29303D);
 ```
 ## Home page
 This is how the home page is written. At this point there is not much to say about the home page. A piece of text has been added showing that the user is on the home page. More about the home page is coming soon!
