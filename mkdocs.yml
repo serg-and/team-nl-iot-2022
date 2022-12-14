@@ -36,19 +36,17 @@ theme:
     - content.code.annotate 
 nav:
     - 'index.md'
-    - Planning:
-      - 'Event-planning.md'
-      - 'Algemenen-planning.md'
-    - Learning Outcomes:
-      - 'Bluetooth.md'
-      - 'setting-up-the-app.md'
-    - Project Documentation:
-      - 'Samenwerkingscontract.md'
+    - Usage:
+      - 'usage/web-application.md'
+      - 'usage/writing-scripts.md'
     - Technical Documentation:
-      - 'supabase.md'
-      - 'nextjs.md'
-      - 'hosting.md'
-    - 'features.md'
+      - 'database.md'
+      - Web Application:
+        - 'web-application/getting-started.md'
+        - 'web-application/code-documentation.md'
+      - App documentation:
+        - 'App/Packages.md'
+      - 'api-documentation.md'
 plugins:
   - search
   - git-revision-date-localized:

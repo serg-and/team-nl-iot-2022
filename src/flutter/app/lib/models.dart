@@ -1,9 +1,9 @@
 class Script {
   int id;
-  String name;
+  String name; // Name of the script
   String? description;
-  String outputType;
-  String outputName;
+  String outputType; // bar_chart || line_chart
+  String outputName; // Display name of the value
 
   Script(
       this.id, this.name, this.description, this.outputType, this.outputName);
