@@ -1,6 +1,81 @@
 # Code Documentation
 This page contains the code for the app. In the code of the TeamNL MoveSens app, comments have been added so that the reader can understand what the functionalities do that have been used in the app. These comments are represented with a //. 
 
+## Main 
+In the main, the database is set up. In the main, the text TeamNL is also displayed in the appbar. The settings button is also placed in the main. Because the appbar and settings button are placed in the main, these options are displayed on every page. 
+
+```
+// Import the pages
+import 'package:app/bluetooth/pages/bluetooth_page.dart';
+import 'package:app/configure_supabase.dart';
+import 'package:app/onboarding_page.dart';
+import 'package:app/routing.dart';
+import 'package:app/settings_page.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future <void> main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  await configureApp(); // Awaiting the configuration of the app
+
+  final prefs = await SharedPreferences.getInstance();// Getting the shared preferences instance
+  final showHome = prefs.getBool('showHome') ?? false;// Getting the value for 'showHome' from the shared preferences, or false if it does not exist
+
+  runApp(MyApp(showHome: showHome));// Running the MyApp widget
+}
+
+class MyApp extends StatelessWidget {
+  final bool showHome; // Declaring a boolean variable 'showHome'
+
+  const MyApp({
+    Key? key,
+    required this.showHome, // The 'showHome' variable is required
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: showHome ? Routing() : OnBoardingPage(),// If showHome is true, display the Routing widget, otherwise display the OnBoardingPage
+      debugShowCheckedModeBanner: false, // Don't show the debug banner
+    );
+  }
+}
+
+class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+  @override
+  final Size preferredSize; // The preferred size of the app bar
+  final navigatorKey = GlobalKey<NavigatorState>(); // A key to access the app's navigator
+  final String title; // The title to display in the app bar
+
+  CustomAppBar(this.title, {Key? key})
+      : preferredSize = Size.fromHeight(50.0), // Set the app bar's preferred height to 50.0
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text('TeamNL'), // Set the app bar's title to 'TeamNL'
+      centerTitle: true,
+      backgroundColor: Color(0xFFF59509), // Set the background color to a hex color code
+      actions: [
+        PopupMenuButton(
+            itemBuilder: (ctx) => [
+                  const PopupMenuItem(
+                      value: "Settings", child: Text("Settings"))
+                ],// Set the items in the popup menu to a single 'Settings' option
+            onSelected: (result) {
+              if (title != "Settings") { // If the selected item is not 'Settings'
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const Settings()));
+              }
+            })
+      ],
+    );
+  }
+}
+
+```
 ## Home page
 This is how the home page is written. At this point there is not much to say about the home page. A piece of text has been added showing that the user is on the home page. More about the home page is coming soon!
 
@@ -87,7 +162,61 @@ class Current extends StatelessWidget {
 In the heartbeat page, a session is started when the user has pressed the start button. The graph shows the processed data. In this case, it is the heartbeat. The data is written in a script. This script is read and eventually the data is fed to a database. If the session needs to be stopped, the user can click on stop session. The user is then navigated to the current page.
 
 ```
-List<ScriptOutput> scriptOutputs = [];
+import 'dart:convert';
+import 'package:app/main.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:math';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+
+import 'models.dart';
+
+const String SERVER = 'https://team-nl-iot-2022.onrender.com/';
+const int MAX_GRAPH_VALUES = 30;
+
+List<FlSpot> heartBeatList = [];
+int index = 0;
+Timer? fakeDataTimer;
+List<dynamic> subscriptions = [];
+
+List<OutputValue> initOutputValues(jsonValues) {
+  List<OutputValue> outputValues = [];
+  jsonValues.forEach((item) =>
+      outputValues.add(OutputValue(item['value'], item['timestamp'])));
+
+  return outputValues;
+}
+
+Timer startSendingFakeData(IO.Socket socket, int sessionId) {
+  print('starting fake data for session session: ${sessionId}');
+  Random random = new Random();
+
+  return Timer.periodic(Duration(milliseconds: 100), (Timer t) {
+    int heartBeat = 40 + random.nextInt(150 - 40);
+    socket.emit(
+        'data-point',
+        jsonEncode({
+          'value': heartBeat,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        }));
+  });
+}
+
+// retrieve all script_outputs of given session
+// and initialise values
+Future<List<ScriptOutput>> getOutputs(int sessionId) async {
+  final supabase = Supabase.instance.client;
+  final sessionOutputs = await supabase
+      .from('sessions')
+      .select(
+      'script_outputs( id, scripts( id, name, description, output_type, output_name ) )')
+      .eq('id', sessionId)
+      .single();
+
+  List<ScriptOutput> scriptOutputs = [];
 
   sessionOutputs['script_outputs'].forEach((record) {
     scriptOutputs.add(ScriptOutput(
