@@ -15,5 +15,39 @@ export const validatePythonScript = (code) => {
 }
 
 export const validateRScript = (code) => {
+  let foundMain = false
+  let parameters
+  let correctParametersCount = false
+
+  const lines = code.split('\n')
+
+  for (const line of lines) {
+    if (line.length < 4 || line.slice(0, 4) !== 'main') continue
+
+    const syntaxes = line.split(' ')
+    if (syntaxes.length < 3) continue
+    if (!['<-', '='].includes(syntaxes[1])) continue
+    
+    if (!syntaxes[2].includes('function(')) continue
+    const functionDeclaration = line.slice(line.indexOf('function('), line.length)
+    foundMain = true
+
+    parameters = functionDeclaration
+      .split('(')[1]
+      .split(')')[0]
+      .split(',')  
+    
+    if (parameters.length === 2) {
+      correctParametersCount = true
+      break
+    }
+  }
+
+  if (!foundMain)
+    return { error: 'No "main" function found' }
+
+  if (!correctParametersCount)
+    return { error: `"main" function is expected to have 2 parameters (get_data, save_value), got ${parameters.length} parameters (${parameters})` }
+  
   return {}
 }
