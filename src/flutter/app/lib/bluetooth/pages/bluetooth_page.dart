@@ -108,8 +108,8 @@ class DeviceScreen extends StatelessWidget {
                     device.connect().whenComplete(() =>
                         Mds.connect(
                             device.id.toString(), (serial) {
-                          Mds.get(Mds.createRequestUri(serial, "/heartbeat"),
-                              "",
+                          Mds.get(Mds.createRequestUri(serial, "/Meas/HR"),
+                              "{}",
                                   (data, statusCode) {
                                     print(data);
                                   },
