@@ -51,19 +51,27 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+# Run the following commands to update the launcher icon of the app.
+# 1) flutter clean
+# 2) flutter pub run flutter_launcher_icons
+# For more info about this package or if you have any issues with it, check the following link https://pub.dev/packages/flutter_launcher_icons
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/Images/Sens_TeamNL.jpg"
+  image_path: "assets/launcher_icons/app_icon.png"
+  # This two lines are only for Android devices
+  # because Android has a little problem with not fully filling the background of the icon.
+  adaptive_icon_foreground: "assets/launcher_icons/app_icon.png"
+  adaptive_icon_background: "#ffffff"
 
 # Run the following commands to generate splash screen or to update it.
 # 1) flutter clean
 # 2) flutter pub get
 # 3) flutter pub run flutter_native_splash:create
-# For more info about this package check the following link https://pub.dev/packages/flutter_native_splash#3-set-up-app-initialization-optional
+# For more info about this package or if you have any issues with it, check the following link https://pub.dev/packages/flutter_native_splash#3-set-up-app-initialization-optional
 flutter_native_splash:
   background_image: "assets/splashscreen/splash_background.png"
-  image: "assets/splashscreen/splash_image_new.png"
+  image: "assets/splashscreen/splash_image_with_move.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
