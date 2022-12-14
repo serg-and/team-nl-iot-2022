@@ -40,8 +40,9 @@ class _MyHomePageState extends State<Home> { // Create _MyHomePageState class th
 
 ```
 
-## Current page
+## Current session page
 On the current page there is a button that causes the session to be started. Pressing this button redirects the user to the heartbeat page. 
+
 ```
 import 'package:app/HeartbeatData.dart';
 import 'package:flutter/cupertino.dart';
@@ -87,7 +88,29 @@ class Current extends StatelessWidget {
 
 ```
 
-## History page
-```
+## Sessions history page
+A page has been created for the sessions history. The page now contains only a text with Sessions History. There will be more on this page soon.
 
+```
+import 'package:flutter/material.dart';
+
+import 'main.dart';
+
+// This class defines a stateless widget called `History`
+class History extends StatelessWidget {
+  // The constructor takes a `Key` as an argument
+  const History({super.key});
+
+  // This is the `build` method, which returns a `Scaffold` widget with a custom `AppBar` and a `Center` widget
+  // containing text that reads "Sessions History"
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar("History"),
+      body: Center(
+        child: Text("Sessions History")
+      ),
+    ); //
+  }
+}
 ```
