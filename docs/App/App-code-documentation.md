@@ -438,6 +438,71 @@ const kAvatarColor = Color(0xffffdbc9);
 const kPrimaryColor = Color(0xFFEEF7FF);
 const kSecondaryColor = Color(0xFF29303D);
 ```
+### Configure
+This page ensures that when the app starts up, it manages to connect to supabase. 
+
+```
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'constants.dart';
+
+Future configureApp() async {
+  // init Supabase singleton
+  await Supabase.initialize(
+    url: Constants.supabaseUrl,
+    anonKey: Constants.supabaseAnnonKey,
+    authCallbackUrlHostname: 'login-callback',
+    debug: true,
+    localStorage: SecureLocalStorage(),
+  );
+}
+
+// user flutter_secure_storage to persist user session
+class SecureLocalStorage extends LocalStorage {
+  SecureLocalStorage()
+      : super(
+          initialize: () async {},
+          hasAccessToken: () {
+            const storage = FlutterSecureStorage();
+            return storage.containsKey(key: supabasePersistSessionKey);
+          },
+          accessToken: () {
+            const storage = FlutterSecureStorage();
+            return storage.read(key: supabasePersistSessionKey);
+          },
+          removePersistedSession: () {
+            const storage = FlutterSecureStorage();
+            return storage.delete(key: supabasePersistSessionKey);
+          },
+          persistSession: (String value) {
+            const storage = FlutterSecureStorage();
+            return storage.write(key: supabasePersistSessionKey, value: value);
+          },
+        );
+}
+
+```
+
+### Constants
+This page causes the keys to be retrieved so that a connection can be made to the database.
+
+```
+/// Environment variables and shared app constants.
+abstract class Constants {
+  static const String supabaseUrl = String.fromEnvironment(
+    'SUPABASE_URL',
+    defaultValue: '',
+  );
+
+  static const String supabaseAnnonKey = String.fromEnvironment(
+    'SUPABASE_ANNON_KEY',
+    defaultValue: '',
+  );
+}
+
+```
+
 ## Home page
 This is how the home page is written. At this point there is not much to say about the home page. A piece of text has been added showing that the user is on the home page. More about the home page is coming soon!
 
