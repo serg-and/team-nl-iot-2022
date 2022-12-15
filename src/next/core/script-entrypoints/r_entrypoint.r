@@ -12,7 +12,11 @@ get_data <- function() {
     fromJSON(json_str=line)
 }
 
+# function for script writer
+# sends data to mother process wchich will
+# add the given value to the output chosen by the script
 save_value <- function(value, timestamp) {
+    # prepare return data
     return_data = list(
         'type'='save',
         'value'=value,
