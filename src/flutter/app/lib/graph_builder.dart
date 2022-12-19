@@ -18,14 +18,11 @@ class DataText extends StatelessWidget {
   }
 }
 
-// class HeartBeatDataGraph extends StatefulWidget {
 class DataLineGraph extends StatelessWidget {
   final List<OutputValue> values;
   const DataLineGraph({super.key, required this.values});
 
-//   @override
-//   State<HeartBeatDataGraph> createState() => _HeartBeatDataGraphState();
-// }
+
 
 // class _HeartBeatDataGraphState extends State<HeartBeatDataGraph> {
   static List<Color> gradientColors = [
@@ -180,4 +177,87 @@ class DataLineGraph extends StatelessWidget {
       ],
     );
   }
+}
+
+class lalaBarChart extends StatelessWidget {
+  final List<OutputValue> values;
+  const lalaBarChart({super.key, required this.values});
+
+  @override
+  Widget build(BuildContext context) {
+    return BarChart(
+      BarChartData(
+        titlesData: titlesData,
+        borderData: borderData,
+        barGroups: barGroups,
+        gridData: FlGridData(show: false),
+        alignment: BarChartAlignment.spaceAround,
+        maxY: 20,
+      ),
+    );
+  }
+
+
+
+  Widget getTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Color(0xff7589a2),
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    );
+    String text;
+    text = value.toString();
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Text(text, style: style),
+    );
+  }
+
+  FlTitlesData get titlesData => FlTitlesData(
+    show: true,
+    bottomTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 30,
+        getTitlesWidget: getTitles,
+      ),
+    ),
+    leftTitles: AxisTitles(
+      sideTitles: SideTitles(showTitles: false),
+    ),
+    topTitles: AxisTitles(
+      sideTitles: SideTitles(showTitles: false),
+    ),
+    rightTitles: AxisTitles(
+      sideTitles: SideTitles(showTitles: false),
+    ),
+  );
+
+  FlBorderData get borderData => FlBorderData(
+    show: false,
+  );
+
+  LinearGradient get _barsGradient => const LinearGradient(
+    colors: [
+      Colors.lightBlueAccent,
+      Colors.greenAccent,
+    ],
+    begin: Alignment.bottomCenter,
+    end: Alignment.topCenter,
+  );
+
+  List<BarChartGroupData> get barGroups => values
+      .map(
+          (value) => BarChartGroupData(
+            x: value.timestamp,
+            barRods: [
+              BarChartRodData(
+                toY: value.value,
+                gradient: _barsGradient,
+              )
+            ],
+            showingTooltipIndicators: [0],
+          ))
+      .toList();
 }

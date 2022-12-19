@@ -3,7 +3,6 @@ import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -14,7 +13,6 @@ import 'graph_builder.dart';
 const String SERVER = 'https://team-nl-iot-2022.onrender.com/';
 const int MAX_GRAPH_VALUES = 30;
 
-List<FlSpot> heartBeatList = [];
 int index = 0;
 Timer? fakeDataTimer;
 List<dynamic> subscriptions = [];
@@ -201,7 +199,7 @@ class _Output extends State<Output> {
     return DropDownBar(
         widget.output.script.name,
         HeartBeatData(
-            outputName: widget.output.script.outputName, values: values));
+            outputName: widget.output.script.outputName, values: values, outputType: widget.output.script.outputType));
   }
 }
 
@@ -249,7 +247,8 @@ class _DropDownBarState extends State<DropDownBar> {
 class HeartBeatData extends StatelessWidget {
   final String outputName;
   final List<OutputValue> values;
-  const HeartBeatData({required this.outputName, required this.values});
+  final String outputType;
+  const HeartBeatData({required this.outputName, required this.values, required this.outputType});
 
   Widget build(BuildContext context) {
     return Center(
@@ -259,7 +258,13 @@ class HeartBeatData extends StatelessWidget {
             name: outputName,
             lastValue: values.isEmpty ? null : values.last,
           ),
-          DataLineGraph(values: values)
+          if(outputType == 'bar_chart')...[
+            lalaBarChart(values: values)
+          ]
+          else...
+            [
+              DataLineGraph(values: values)
+            ]
         ],
       ),
     );
