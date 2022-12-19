@@ -40,6 +40,7 @@ nav:
       - 'usage/web-application.md'
       - 'usage/writing-scripts.md'
     - Technical Documentation:
+      - 'flutter.md'
       - 'database.md'
       - Web Application:
         - 'web-application/getting-started.md'
