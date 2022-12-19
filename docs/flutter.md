@@ -1,4 +1,4 @@
-# What is Flutter?
+# Flutter?
 
 Flutter is an open-source mobile application development framework created by Google. It uses the
 Dart programming language and allows developers to create web, desktop and cross-platform apps that
