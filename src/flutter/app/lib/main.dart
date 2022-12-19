@@ -4,7 +4,10 @@ import 'package:app/onboarding_page.dart';
 import 'package:app/routing.dart';
 import 'package:app/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'bluetooth/pages/app_model.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +17,8 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final showHome = prefs.getBool('showHome') ?? false;
 
-  runApp(MyApp(showHome: showHome));
+  runApp(
+      ChangeNotifierProvider(create: (context) => AppModel(), child: MyApp(showHome: showHome)));
 }
 
 class MyApp extends StatelessWidget {
@@ -52,10 +56,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       backgroundColor: Color(0xFFF59509),
       actions: [
         PopupMenuButton(
-            itemBuilder: (ctx) => [
-                  const PopupMenuItem(
-                      value: "Settings", child: Text("Settings"))
-                ],
+            itemBuilder: (ctx) =>
+            [
+              const PopupMenuItem(
+                  value: "Settings", child: Text("Settings"))
+            ],
             onSelected: (result) {
               if (title != "Settings") {
                 Navigator.of(context).push(

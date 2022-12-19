@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:app/main.dart';
@@ -108,12 +109,14 @@ class DeviceScreen extends StatelessWidget {
                     device.connect().whenComplete(() =>
                         Mds.connect(
                             device.id.toString(), (serial) {
-                          Mds.get(Mds.createRequestUri(serial, "/Meas/HR"),
+                              print("HALLOHALLO");
+                          Mds.subscribe(
+                              Mds.createSubscriptionUri(serial, "/Meas/HR"),
                               "{}",
-                                  (data, statusCode) {
-                                    print(data);
-                                  },
-                                  (error, statusCode) { /* onError */ }
+                                  (d, c) => {},
+                                  (e, c) => {},
+                                  (data) => _onNewHrData(data),
+                                  (e, c) => {}
                           );
                         }, () {}, () {}))
                   };
@@ -238,5 +241,12 @@ class DeviceScreen extends StatelessWidget {
     }
     subscription.cancel();
     // Device disconnected, stopping RSSI stream
+  }
+
+  void _onNewHrData(String data) {
+    Map<String, dynamic> hrData = jsonDecode(data);
+    Map<String, dynamic> body = hrData["Body"];
+    double hr = body["average"];
+    print(hr.toStringAsFixed(1) + " bpm");
   }
 }
