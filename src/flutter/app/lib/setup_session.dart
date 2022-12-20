@@ -3,16 +3,15 @@ import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'models.dart';
+import 'graph_builder.dart';
 
 const String SERVER = 'https://team-nl-iot-2022.onrender.com/';
 const int MAX_GRAPH_VALUES = 30;
 
-List<FlSpot> heartBeatList = [];
 int index = 0;
 Timer? fakeDataTimer;
 List<dynamic> subscriptions = [];
@@ -209,7 +208,9 @@ class _Output extends State<Output> {
     return DropDownBar(
         widget.output.script.name,
         HeartBeatData(
-            outputName: widget.output.script.outputName, values: values));
+            outputName: widget.output.script.outputName,
+            values: values,
+            outputType: widget.output.script.outputType));
   }
 }
 
@@ -257,300 +258,27 @@ class _DropDownBarState extends State<DropDownBar> {
 class HeartBeatData extends StatelessWidget {
   final String outputName;
   final List<OutputValue> values;
-  const HeartBeatData({required this.outputName, required this.values});
+  final String outputType;
+  const HeartBeatData(
+      {required this.outputName,
+      required this.values,
+      required this.outputType});
 
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         children: [
-          HeartBeatDataText(
+          DataText(
             name: outputName,
             lastValue: values.isEmpty ? null : values.last,
           ),
-          HeartBeatDataGraph(values: values)
+          if (outputType == 'bar_chart') ...[
+            BarChartBuilder(values: values)
+          ] else ...[
+            DataLineGraph(values: values)
+          ]
         ],
       ),
-    );
-  }
-}
-
-class HeartBeatDataText extends StatelessWidget {
-  final String name;
-  final OutputValue? lastValue;
-  const HeartBeatDataText({required this.name, required this.lastValue});
-
-  // _HeartBeatState createState() => _HeartBeatState();
-
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: new Text('Last ${name} = ${lastValue?.value}'),
-      ),
-    );
-  }
-}
-
-// class _HeartBeatState extends State<HeartBeatDataText> {
-//   int heartBeat = 0;
-//   late Timer update;
-//   Random random = new Random();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     update = Timer.periodic(Duration(milliseconds: 100), (Timer t) {
-//       setState(() {
-//         heartBeat = 40 + random.nextInt(150 - 40);
-//         heartBeatList.add(FlSpot(index.toDouble(), heartBeat.toDouble()));
-//         if (heartBeatList.length > 30) heartBeatList.removeAt(0);
-//         index++;
-//       });
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Center(
-//         child: new Text('HeartBeat = ' + heartBeat.toString()),
-//       ),
-//     );
-//   }
-// }
-
-// class HeartBeatDataGraph extends StatefulWidget {
-class HeartBeatDataGraph extends StatelessWidget {
-  final List<OutputValue> values;
-  const HeartBeatDataGraph({super.key, required this.values});
-
-//   @override
-//   State<HeartBeatDataGraph> createState() => _HeartBeatDataGraphState();
-// }
-
-// class _HeartBeatDataGraphState extends State<HeartBeatDataGraph> {
-  static List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
-  ];
-
-  static bool showAvg = false;
-//   late Timer update;
-
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     update = Timer.periodic(Duration(milliseconds: 200), (Timer t) {
-//       setState(() {});
-//     });
-//   }
-
-  List<FlSpot> getSpots() => values
-      .map(
-          (value) => FlSpot(value.timestamp.toDouble(), value.value.toDouble()))
-      .toList();
-
-  @override
-  Widget build(BuildContext context) {
-    // List<FlSpot> spots = this.values.map((value) => FlSpot(value.timestamp.toDouble(), value.value)).toList();
-
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(0),
-              ),
-              color: Color(0xff232d37),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-                left: 0,
-                top: 24,
-                bottom: 12,
-              ),
-              child: LineChart(
-                mainData(),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff68737d),
-      fontWeight: FontWeight.bold,
-      fontSize: 10,
-    );
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text(
-        '\ ${value}',
-        style: style,
-      ),
-      space: 8.0,
-    );
-  }
-
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff67727d),
-      fontWeight: FontWeight.bold,
-      fontSize: 10,
-    );
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text('\ ${value}', style: style),
-    );
-  }
-
-  LineChartData mainData() {
-    final spots = getSpots();
-
-    return LineChartData(
-      gridData: FlGridData(
-        show: true,
-        drawVerticalLine: true,
-        horizontalInterval: 1,
-        verticalInterval: 1,
-        getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingVerticalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            interval: 10,
-            getTitlesWidget: bottomTitleWidgets,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: 20,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 100,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d)),
-      ),
-      minY: 0,
-      maxY: 200,
-      lineBarsData: [
-        LineChartBarData(
-          spots: spots,
-          isCurved: false,
-          gradient: LinearGradient(
-            colors: gradientColors,
-          ),
-          barWidth: 1,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: false,
-          ),
-        ),
-      ],
-    );
-  }
-
-  LineChartData avgData() {
-    return LineChartData(
-      lineTouchData: LineTouchData(enabled: false),
-      gridData: FlGridData(
-        show: true,
-        drawHorizontalLine: true,
-        verticalInterval: 1,
-        horizontalInterval: 1,
-        getDrawingVerticalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
-            interval: 1,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-            interval: 1,
-          ),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d)),
-      ),
-      minY: 0,
-      maxY: 10,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
-          isCurved: false,
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: false,
-          ),
-        ),
-      ],
     );
   }
 }
