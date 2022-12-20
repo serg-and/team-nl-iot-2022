@@ -6,9 +6,10 @@ class Device {
   String? _serial;
   DeviceConnectionStatus _connectionStatus = DeviceConnectionStatus.NOT_CONNECTED;
 
-  Device(String? name, String? address) {
+  Device(String? name, String? address, String? serial) {
     _name = name;
     _address = address;
+    _serial = serial;
   }
 
   String? get name => _name != null ? _name : "";
