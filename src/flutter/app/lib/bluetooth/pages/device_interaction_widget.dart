@@ -26,8 +26,6 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
   @override
   void initState() {
     super.initState();
-    _appModel = Provider.of<AppModel>(context, listen: false);
-    _appModel.onDeviceMdsDisconnected((device) => {Navigator.pop(context)});
   }
 
   void _onAccelerometerButtonPressed(DeviceModel deviceModel) {
