@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/device.dart';
 import '../models/device_model.dart';
-import 'app_model.dart';
 
 class DeviceInteractionWidget extends StatefulWidget {
   final Device device;
@@ -16,7 +15,6 @@ class DeviceInteractionWidget extends StatefulWidget {
 }
 
 class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
-  late AppModel _appModel;
   late Device device;
 
   _DeviceInteractionWidgetState(Device givenDevice) {
