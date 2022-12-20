@@ -11,6 +11,5 @@ extension DeviceConnectionStatusExtenstion on DeviceConnectionStatus {
       case DeviceConnectionStatus.CONNECTING: return "Connecting"; break;
       case DeviceConnectionStatus.CONNECTED: return "MDS connected"; break;
     }
-    return "Not connected";
   }
 }
