@@ -206,10 +206,6 @@ class BarChartBuilder extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
-                    'Transactions',
-                    style: TextStyle(color: Colors.white, fontSize: 22),
-                  ),
                   const SizedBox(
                     width: 4,
                   ),
@@ -244,7 +240,7 @@ class BarChartBuilder extends StatelessWidget {
                         sideTitles: SideTitles(
                           showTitles: true,
                           reservedSize: 28,
-                          interval: 1,
+                          interval: 50,
                           getTitlesWidget: leftTitles,
                         ),
                       ),

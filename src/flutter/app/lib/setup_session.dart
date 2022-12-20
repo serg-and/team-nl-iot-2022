@@ -259,8 +259,13 @@ class HeartBeatData extends StatelessWidget {
             name: outputName,
             lastValue: values.isEmpty ? null : values.last,
           ),
-          DataLineGraph(values: values),
-          BarChartBuilder(values: values)
+          if(outputType == 'bar_chart')...[
+            BarChartBuilder(values: values)
+          ]
+          else...
+          [
+            DataLineGraph(values: values)
+          ]
         ],
       ),
     );
