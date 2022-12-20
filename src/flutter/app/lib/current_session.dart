@@ -10,7 +10,9 @@ class Current extends StatefulWidget {
   const Current({super.key});
 
   static const scripts = [
-    {'name': "serge", 'description': "rosario"}
+    {'name': "serge", 'description': "rosario"},
+    {'name': "serge", 'description': "rosario"},
+    {'name': "serge", 'description': "rosario"},
   ];
 
   @override
@@ -37,9 +39,9 @@ class _CurrentState extends State<Current> {
         children: [
           ListView(
               children: Current.scripts
-                  .map((script) => Overview(
-                      name: 'name',
-                      description: 'Description',
+                  .map((Map script) => Overview(
+                      name: script['name'],
+                      description: script['description'],
                       onClick: () => onScriptClick(script)))
                   .toList()),
           Positioned(
@@ -69,7 +71,11 @@ class Overview extends StatelessWidget {
   final String description;
   final void onClick;
 
-  const Overview({Key? key, required this.name, required this.description, required this.onClick})
+  const Overview(
+      {Key? key,
+      required this.name,
+      required this.description,
+      required this.onClick})
       : super(key: key);
 
   @override
@@ -80,4 +86,3 @@ class Overview extends StatelessWidget {
     );
   }
 }
-
