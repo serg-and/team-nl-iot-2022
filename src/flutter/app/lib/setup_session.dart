@@ -6,7 +6,6 @@ import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-
 import 'models.dart';
 import 'graph_builder.dart';
 
@@ -47,7 +46,7 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
   final sessionOutputs = await supabase
       .from('sessions')
       .select(
-      'script_outputs( id, scripts( id, name, description, output_type, output_name ) )')
+          'script_outputs( id, scripts( id, name, description, output_type, output_name ) )')
       .eq('id', sessionId)
       .single();
 
@@ -69,7 +68,7 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
 }
 
 // start session by opening a websocket
-Future<void> createSession(Function callback) async {
+Future<void> createSession(List<int> scriptIds, Function callback) async {
   IO.Socket socket = IO.io(SERVER, <String, dynamic>{
     'path': '/socket.io',
     'autoConnect': false,
@@ -83,14 +82,22 @@ Future<void> createSession(Function callback) async {
   socket.onConnectError((err) => print('onConnectError: ${err}'));
   socket.onError((err) => print('onError: ${err}'));
 
+  // Temp, select all possible scripts
+  // done because option to select scripts is not yet ready
+  // Generate a list of IDs between 0 and 1000
+  scriptIds = new List<int>.generate(1000, (i) => i);
+
+  // send message to start session with the given scripts
+  socket.emit('start-session', {'scripts': scriptIds});
+
   // session started, start retrieving outputs
   socket.on(
       'sessionId',
-          (sessionId) async => {
-        print('started session: ${sessionId}'),
-        callback(await getOutputs(sessionId)),
-        fakeDataTimer = startSendingFakeData(socket, sessionId),
-      });
+      (sessionId) async => {
+            print('started session: ${sessionId}'),
+            callback(await getOutputs(sessionId)),
+            fakeDataTimer = startSendingFakeData(socket, sessionId),
+          });
 }
 
 class HeartBeatPage extends StatefulWidget {
@@ -106,9 +113,11 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
   @override
   void initState() {
     super.initState();
-    createSession((List<ScriptOutput> sessionOutputs) => setState(() {
-      outputs = sessionOutputs;
-    }));
+    createSession(
+        [],
+        (List<ScriptOutput> sessionOutputs) => setState(() {
+              outputs = sessionOutputs;
+            }));
   }
 
   @override
@@ -147,7 +156,7 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
                     Navigator.pop(context);
                   },
                   style:
-                  ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   child: Text('Stop session')),
             ),
           )
@@ -175,15 +184,15 @@ class _Output extends State<Output> {
         .stream(primaryKey: ['id'])
         .eq('id', widget.output.id)
         .listen((List<Map<String, dynamic>> data) {
-      if (!data.isEmpty) {
-        setState(() {
-          final int start = data[0]['values'].length - MAX_GRAPH_VALUES;
-          final range = data[0]['values']
-              .getRange(start >= 0 ? start : 0, data[0]['values'].length);
-          values = initOutputValues(range);
+          if (!data.isEmpty) {
+            setState(() {
+              final int start = data[0]['values'].length - MAX_GRAPH_VALUES;
+              final range = data[0]['values']
+                  .getRange(start >= 0 ? start : 0, data[0]['values'].length);
+              values = initOutputValues(range);
+            });
+          }
         });
-      }
-    });
     // add to subscritions so that subscription can be cancled on page dispaose
     subscriptions.add(subscription);
   }
@@ -199,7 +208,9 @@ class _Output extends State<Output> {
     return DropDownBar(
         widget.output.script.name,
         HeartBeatData(
-            outputName: widget.output.script.outputName, values: values, outputType: widget.output.script.outputType));
+            outputName: widget.output.script.outputName,
+            values: values,
+            outputType: widget.output.script.outputType));
   }
 }
 
@@ -248,22 +259,22 @@ class HeartBeatData extends StatelessWidget {
   final String outputName;
   final List<OutputValue> values;
   final String outputType;
-  const HeartBeatData({required this.outputName, required this.values, required this.outputType});
+  const HeartBeatData(
+      {required this.outputName,
+      required this.values,
+      required this.outputType});
 
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-
         children: [
           DataText(
             name: outputName,
             lastValue: values.isEmpty ? null : values.last,
           ),
-          if(outputType == 'bar_chart')...[
+          if (outputType == 'bar_chart') ...[
             BarChartBuilder(values: values)
-          ]
-          else...
-          [
+          ] else ...[
             DataLineGraph(values: values)
           ]
         ],
@@ -271,4 +282,3 @@ class HeartBeatData extends StatelessWidget {
     );
   }
 }
-

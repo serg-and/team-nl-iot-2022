@@ -1,11 +1,11 @@
 import fs from 'fs/promises'
 import { supabaseService } from '../../core/supabase.mjs'
-import { validatePythonScript } from '../../core/validators.mjs'
+import { validatePythonScript, validateRScript } from '../../core/validators.mjs'
 
 const scriptsFolder = './storage/uploads/scripts'
 const scriptValidators = {
   py: validatePythonScript,
-  r: () => console.log('start R script validator'),
+  r: validateRScript,
 }
 
 // It is a function that handles HTTP requests.
