@@ -1,4 +1,4 @@
-import 'package:app/HeartbeatData.dart';
+import 'package:app/setup_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,8 +50,12 @@ class _CurrentState extends State<Current> {
               child: ElevatedButton(
                 // When the button is pressed, it will navigate to the `HeartBeatPage`
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HeartBeatPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HeartBeatPage(
+                                scriptIds: [],
+                              )));
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                 // The button will have the text "Start session"

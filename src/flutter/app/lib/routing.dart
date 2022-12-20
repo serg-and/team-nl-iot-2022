@@ -1,5 +1,6 @@
 // Import the other pages
-import 'package:app/HeartbeatData.dart';
+// import 'package:app/HeartbeatData.dart';
+import 'package:app/setup_session.dart';
 import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:app/current_session.dart';
 import 'package:app/StartSessionPage.dart';
@@ -35,7 +36,7 @@ class _RoutingState extends State<Routing> {
       Home(),
       const Bluetooth(),
       sessionActive
-          ? const HeartBeatPage()
+          ? HeartBeatPage(scriptIds: sessionScripts)
           : SelectScriptPageWidget(
               switchToSession: switchToSession,
             ),
