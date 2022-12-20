@@ -212,16 +212,19 @@ class DeviceScreen extends StatelessWidget {
                 return Text("Something went wrong!");
               },
             ),
-            TextButton(onPressed: () => {
-              Mds.connect('${device.id}', (address) {
-                print("Connected");
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DeviceInteractionWidget(Device(device.name, address))));
-              }, () { }, () { })
-
-            }, child: Text("View Live Data"))
+            TextButton(
+                onPressed: () => {
+                      Mds.connect('${device.id}', (serial) {
+                        print("Connected = " + serial);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DeviceInteractionWidget(
+                                    Device(
+                                        device.name, '${device.id}', serial))));
+                      }, () {}, () {})
+                    },
+                child: Text("View Live Data"))
           ],
         ),
       ),
