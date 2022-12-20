@@ -1,4 +1,5 @@
 // Import the other pages
+import 'package:app/HeartbeatData.dart';
 import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:app/current_session.dart';
 import 'package:app/StartSessionPage.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'home_page.dart';
+
+List<int> sessionScripts = [];
 
 class Routing extends StatefulWidget {
   const Routing({Key? key}) : super(key: key);
@@ -17,17 +20,28 @@ class Routing extends StatefulWidget {
 
 class _RoutingState extends State<Routing> {
   var currentIndex = 0;
+  bool sessionActive = false;
 
-  List routing = [
-    Home(),
-    const Bluetooth(),
-    // const Current(),
-    const SelectScriptPageWidget(),
-    const History()
-  ];
+  void switchToSession() {
+    setState(() {
+      sessionActive = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double displayWidth = MediaQuery.of(context).size.width;
+    List routing = [
+      Home(),
+      const Bluetooth(),
+      sessionActive
+          ? const HeartBeatPage()
+          : SelectScriptPageWidget(
+              switchToSession: switchToSession,
+            ),
+      const History()
+    ];
+
     return Scaffold(
         body: Stack(
       alignment: Alignment.bottomCenter,

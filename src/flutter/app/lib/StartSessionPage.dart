@@ -2,35 +2,36 @@
 // import '../flutter_flow/flutter_flow_theme.dart';
 // import '../flutter_flow/flutter_flow_util.dart';
 // import '../flutter_flow/flutter_flow_widgets.dart';
-import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
-import 'package:app/main.dart'; // Import main.dart file
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-List<int> activeScripts = [];
+import 'package:app/main.dart';
+import 'package:app/models.dart';
 
 class SelectScriptPageWidget extends StatefulWidget {
-  const SelectScriptPageWidget({Key? key}) : super(key: key);
+  final Function switchToSession;
+  const SelectScriptPageWidget({Key? key, required this.switchToSession})
+      : super(key: key);
 
   @override
   _SelectScriptPageWidgetState createState() => _SelectScriptPageWidgetState();
 }
 
 class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
+  final supabase = Supabase.instance.client;
+
   TextEditingController? searchBarController;
-  bool? checkboxListTileValue1;
-  bool? checkboxListTileValue2;
-  bool? checkboxListTileValue3;
-  bool? checkboxListTileValue4;
-  bool? checkboxListTileValue5;
-  bool? checkboxListTileValue6;
-  bool? checkboxListTileValue7;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<Script> allScripts = [];
+  List<Script> filteredScripts = [];
+  List<int> selectedScripts = [];
 
   @override
   void initState() {
     super.initState();
     searchBarController = TextEditingController();
+    getScripts();
   }
 
   @override
@@ -39,23 +40,31 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    const scripts = [
-      {'id': 4, 'name': "serge", 'description': "rosario"},
-      {'id': 5, 'name': "serge", 'description': "rosario"},
-      {'id': 6, 'name': "serge", 'description': "rosario"},
-    ];
+  void getScripts() async {
+    final _scripts = await supabase.from('scripts').select();
 
-    void onScriptClick(script) {
-      if (activeScripts.contains(script.id)) {
-        activeScripts.removeWhere((element) => element == script.id);
+    setState(() {
+      _scripts.forEach((s) => allScripts.add(Script(s['id'], s['name'],
+          s['description'], s['output_type'], s['output_name'])));
+
+      filteredScripts = allScripts;
+    });
+  }
+
+  void onScriptClick(Script script) {
+    setState(() {
+      if (selectedScripts.contains(script.id)) {
+        selectedScripts.removeWhere((element) => element == script.id);
       } else {
-        activeScripts.add(script.id);
+        selectedScripts.add(script.id);
       }
-    }
+    });
+  }
 
+  List<Widget> getScrollableSection() {
     List<Widget> scrollableSection = [];
+
+    // top padding, place below search bar
     scrollableSection.add(Padding(
       padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
       child: Text(
@@ -64,17 +73,53 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
         //     .title3,
       ),
     ));
-    scrollableSection.addAll(scripts
-        .map((Map script) => ScriptListing(
-            name: script['name'],
-            description: script['description'],
-            selected: false,
+
+    // All scripts
+    scrollableSection.addAll(filteredScripts
+        .map((Script script) => ScriptListing(
+            name: script.name,
+            description: script.description,
+            selected: selectedScripts.contains(script.id),
             onClick: () => onScriptClick(script)))
         .toList());
 
+    return scrollableSection;
+  }
+
+  void filterScripts() {
+    final String? query = searchBarController?.text.toLowerCase();
+
+    setState(() {
+      if (query == null || query == '') {
+        filteredScripts = allScripts;
+        return;
+      }
+
+      // only show scripts that have the query string in their name or description
+      filteredScripts = allScripts
+          .where((Script script) =>
+              '${script.name.toLowerCase()} ${script.description?.toLowerCase()}'
+                  .contains(query))
+          .toList();
+    });
+  }
+
+  void startSession() {
+    print('start session with scripts: ${selectedScripts}');
+    widget.switchToSession();
+  }
+
+  Color getStartButtonColor() {
+    if (selectedScripts.isEmpty) {
+      return Colors.grey;
+    }
+    return Color(0xFFF59509);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar("Current"),
-      key: scaffoldKey,
       // backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -88,11 +133,10 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                 child: Column(
                   children: [
                     TabBar(
-                      // labelColor: FlutterFlowTheme.of(context).primaryColor,
-                      // unselectedLabelColor:
-                      //     FlutterFlowTheme.of(context).secondaryText,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.black54,
                       // labelStyle: FlutterFlowTheme.of(context).subtitle1,
-                      // indicatorColor: FlutterFlowTheme.of(context).primaryColor,
+                      indicatorColor: Color(0xFFF59509),
                       tabs: [
                         Tab(
                           text: 'Scripts',
@@ -111,11 +155,11 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                 alignment: AlignmentDirectional(0, 0),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 70, 0, 120),
+                                      0, 70, 0, 0),
                                   child: ListView(
                                     padding: EdgeInsets.zero,
                                     scrollDirection: Axis.vertical,
-                                    children: scrollableSection,
+                                    children: getScrollableSection(),
                                   ),
                                 ),
                               ),
@@ -127,10 +171,14 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           16, 12, 8, 0),
                                       child: TextFormField(
+                                        cursorColor: Colors.black,
                                         controller: searchBarController,
+                                        onChanged: (value) => filterScripts(),
                                         obscureText: false,
                                         decoration: InputDecoration(
-                                          labelText: 'Search for your shoes...',
+                                          labelStyle:
+                                              TextStyle(color: Colors.black),
+                                          labelText: 'Search for scripts',
                                           // labelStyle:
                                           //     FlutterFlowTheme.of(context)
                                           //         .bodyText2,
@@ -149,9 +197,6 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                              // color:
-                                              //     FlutterFlowTheme.of(context)
-                                              //         .lineColor,
                                               width: 2,
                                             ),
                                             borderRadius:
@@ -175,16 +220,12 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                                 BorderRadius.circular(12),
                                           ),
                                           filled: true,
-                                          // fillColor:
-                                          //     FlutterFlowTheme.of(context)
-                                          //         .primaryBackground,
                                           contentPadding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   24, 24, 20, 24),
                                           prefixIcon: Icon(
                                             Icons.search,
-                                            // color: FlutterFlowTheme.of(context)
-                                            //     .secondaryText,
+                                            color: Colors.black,
                                             size: 16,
                                           ),
                                         ),
@@ -197,61 +238,12 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 12, 12, 0),
-                                    // child: FlutterFlowIconButton(
-                                    //   borderColor: Colors.transparent,
-                                    //   borderRadius: 30,
-                                    //   borderWidth: 1,
-                                    //   buttonSize: 50,
-                                    //   icon: Icon(
-                                    //     Icons.search_sharp,
-                                    //     color: FlutterFlowTheme.of(context)
-                                    //         .primaryText,
-                                    //     size: 30,
-                                    //   ),
-                                    //   onPressed: () {
-                                    //     print('IconButton pressed ...');
-                                    //   },
-                                    // ),
+                                    child: IconButton(
+                                      icon: new Icon(Icons.search),
+                                      onPressed: () => filterScripts(),
+                                    ),
                                   ),
                                 ],
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(0, 1),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 70),
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        // color: FlutterFlowTheme.of(context)
-                                        //     .secondaryBackground,
-                                        ),
-                                    // child: FFButtonWidget(
-                                    //   onPressed: () {
-                                    //     print('Button pressed ...');
-                                    //   },
-                                    //   text: 'Button',
-                                    //   options: FFButtonOptions(
-                                    //     width: 130,
-                                    //     height: 40,
-                                    //     color: FlutterFlowTheme.of(context)
-                                    //         .primaryColor,
-                                    //     textStyle: FlutterFlowTheme.of(context)
-                                    //         .subtitle2
-                                    //         .override(
-                                    //           fontFamily: 'Poppins',
-                                    //           color: Colors.white,
-                                    //         ),
-                                    //     borderSide: BorderSide(
-                                    //       color: Colors.transparent,
-                                    //       width: 1,
-                                    //     ),
-                                    //     borderRadius: BorderRadius.circular(8),
-                                    //   ),
-                                    // ),
-                                  ),
-                                ),
                               ),
                             ],
                           ),
@@ -278,6 +270,50 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                 ),
               ),
             ),
+            Align(
+              alignment: AlignmentDirectional(0, 1),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 80),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      // color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                  child: TextButton(
+                    child: Text('Start Session',
+                        style: Theme.of(context).textTheme.button),
+                    // onPressed: () => startSession(),
+                    onPressed: () => startSession(),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStatePropertyAll(getStartButtonColor()),
+                    ),
+                  ),
+                  // child: FFButtonWidget(
+                  //   onPressed: () {
+                  //     print('Button pressed ...');
+                  //   },
+                  //   text: 'Button',
+                  //   options: FFButtonOptions(
+                  //     width: 130,
+                  //     height: 40,
+                  //     color: FlutterFlowTheme.of(context).primaryColor,
+                  //     textStyle:
+                  //         FlutterFlowTheme.of(context).subtitle2.override(
+                  //               fontFamily: 'Poppins',
+                  //               color: Colors.white,
+                  //             ),
+                  //     borderSide: BorderSide(
+                  //       color: Colors.transparent,
+                  //       width: 1,
+                  //     ),
+                  //     borderRadius: BorderRadius.circular(8),
+                  //   ),
+                  // ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -286,11 +322,10 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
 }
 
 class ScriptListing extends StatelessWidget {
-  // final Map script;
   final String name;
-  final String description;
+  final String? description;
   final bool selected;
-  final void onClick;
+  final Function onClick;
 
   const ScriptListing(
       {Key? key,
@@ -300,20 +335,8 @@ class ScriptListing extends StatelessWidget {
       required this.onClick})
       : super(key: key);
 
-  // const ScriptListing({Key? key, required this.script}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    void onScriptClick() {
-      // if (activeScripts.contains(script['id'])) {
-      //   activeScripts.removeWhere((element) => element == script['id']);
-      // } else {
-      //   activeScripts.add(script['id']);
-      // }
-    }
-
-    // bool selected = activeScripts.contains(script['id']);
-
     return Align(
       alignment: AlignmentDirectional(0, 0),
       child: Padding(
@@ -351,15 +374,13 @@ class ScriptListing extends StatelessWidget {
                     ),
                     child: CheckboxListTile(
                       value: selected,
-                      onChanged: ((bool? newValue) => true),
+                      onChanged: (value) => onClick(),
                       title: Text(
-                        'Script name',
-                        // style: FlutterFlowTheme
-                        //         .of(context)
-                        //     .title3,
+                        name,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       tileColor: Color(0xFFF1F4F8),
-                      activeColor: Color(0xFF4B39EF),
+                      activeColor: Color(0xFFF59509),
                       checkColor: Colors.white,
                       dense: false,
                       controlAffinity: ListTileControlAffinity.trailing,
@@ -377,7 +398,7 @@ class ScriptListing extends StatelessWidget {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(12, 0, 24, 0),
                   child: Text(
-                    'A very long description of the script goes here, it might be multiple lines',
+                    description ?? '',
                     // style:
                     //     FlutterFlowTheme.of(
                     //             context)
