@@ -253,18 +253,14 @@ class HeartBeatData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+
         children: [
           DataText(
             name: outputName,
             lastValue: values.isEmpty ? null : values.last,
           ),
-          if(outputType == 'bar_chart')...[
-            lalaBarChart(values: values)
-          ]
-          else...
-            [
-              DataLineGraph(values: values)
-            ]
+          DataLineGraph(values: values),
+          BarChartBuilder(values: values)
         ],
       ),
     );

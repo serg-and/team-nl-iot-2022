@@ -179,85 +179,130 @@ class DataLineGraph extends StatelessWidget {
   }
 }
 
-class lalaBarChart extends StatelessWidget {
+
+class BarChartBuilder extends StatelessWidget {
   final List<OutputValue> values;
-  const lalaBarChart({super.key, required this.values});
+  const BarChartBuilder({super.key, required this.values});
+
+  final Color leftBarColor = const Color(0xff53fdd7);
+  final Color rightBarColor = const Color(0xffff5182);
+  final double width = 7;
+
+
 
   @override
   Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        titlesData: titlesData,
-        borderData: borderData,
-        barGroups: barGroups,
-        gridData: FlGridData(show: false),
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        color: const Color(0xff2c4260),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Text(
+                    'Transactions',
+                    style: TextStyle(color: Colors.white, fontSize: 22),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  const Text(
+                    'state',
+                    style: TextStyle(color: Color(0xff77839a), fontSize: 16),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 38,
+              ),
+              Expanded(
+                child: BarChart(
+                  BarChartData(
+                    titlesData: FlTitlesData(
+                      show: true,
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: bottomTitles,
+                          reservedSize: 42,
+                        ),
+                      ),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 28,
+                          interval: 1,
+                          getTitlesWidget: leftTitles,
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    barGroups: barGroups,
+                    gridData: FlGridData(show: false),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-
-
-  Widget getTitles(double value, TitleMeta meta) {
+  Widget leftTitles(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Color(0xff7589a2),
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    String text;
-    text = value.toString();
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      space: 4,
-      child: Text(text, style: style),
+      space: 0,
+      child: Text('\ ${value}', style: style),
     );
   }
 
-  FlTitlesData get titlesData => FlTitlesData(
-    show: true,
-    bottomTitles: AxisTitles(
-      sideTitles: SideTitles(
-        showTitles: true,
-        reservedSize: 30,
-        getTitlesWidget: getTitles,
-      ),
-    ),
-    leftTitles: AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-    topTitles: AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-    rightTitles: AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-  );
+  Widget bottomTitles(double value, TitleMeta meta) {
+      const style = TextStyle(
+        color: Color(0xff7589a2),
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+      );
 
-  FlBorderData get borderData => FlBorderData(
-    show: false,
-  );
-
-  LinearGradient get _barsGradient => const LinearGradient(
-    colors: [
-      Colors.lightBlueAccent,
-      Colors.greenAccent,
-    ],
-    begin: Alignment.bottomCenter,
-    end: Alignment.topCenter,
-  );
-
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 16, //margin top
+      child: Text('/ ${value}', style: style),
+    );
+  }
   List<BarChartGroupData> get barGroups => values
       .map(
           (value) => BarChartGroupData(
             x: value.timestamp,
             barRods: [
               BarChartRodData(
-                toY: value.value,
-                gradient: _barsGradient,
+                toY: value.value.toDouble(),
               )
             ],
             showingTooltipIndicators: [0],
-          ))
-      .toList();
+          )
+      ).toList();
 }
