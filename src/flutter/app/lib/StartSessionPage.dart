@@ -67,11 +67,11 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
     // top padding, place below search bar
     scrollableSection.add(Padding(
       padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
-      child: Text(
-        'Select scripts to use',
-        // style: FlutterFlowTheme.of(context)
-        //     .title3,
-      ),
+      child: Text('Select scripts to use',
+          style: Theme.of(context).textTheme.headlineSmall
+          // style: FlutterFlowTheme.of(context)
+          //     .title3,
+          ),
     ));
 
     // All scripts
@@ -105,8 +105,7 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
   }
 
   void startSession() {
-    print('start session with scripts: ${selectedScripts}');
-    widget.switchToSession();
+    widget.switchToSession(selectedScripts);
   }
 
   Color getStartButtonColor() {

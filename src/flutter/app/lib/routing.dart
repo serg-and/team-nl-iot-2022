@@ -23,7 +23,8 @@ class _RoutingState extends State<Routing> {
   var currentIndex = 0;
   bool sessionActive = false;
 
-  void switchToSession() {
+  void switchToSession(List<int> scriptIds) {
+    sessionScripts = scriptIds;
     setState(() {
       sessionActive = true;
     });
