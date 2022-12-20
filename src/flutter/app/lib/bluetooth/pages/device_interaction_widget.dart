@@ -6,16 +6,22 @@ import 'app_model.dart';
 
 class DeviceInteractionWidget extends StatefulWidget {
   final Device device;
+
   const DeviceInteractionWidget(this.device);
 
   @override
   State<StatefulWidget> createState() {
-    return _DeviceInteractionWidgetState();
+    return _DeviceInteractionWidgetState(device);
   }
 }
 
 class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
   late AppModel _appModel;
+  late Device device;
+
+  _DeviceInteractionWidgetState(Device givenDevice) {
+    this.device = givenDevice;
+  }
 
   @override
   void initState() {
@@ -41,14 +47,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
   }
 
   @override
-  void dispose() {
-    _appModel.disconnectFromDevice(widget.device);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    Device device = widget.device;
     return ChangeNotifierProvider(
       create: (context) => DeviceModel(device.name, device.serial),
       child: Consumer<DeviceModel>(
