@@ -1,13 +1,9 @@
-import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:app/configure_supabase.dart';
 import 'package:app/onboarding_page.dart';
 import 'package:app/routing.dart';
 import 'package:app/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'bluetooth/pages/app_model.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +13,7 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final showHome = prefs.getBool('showHome') ?? false;
 
-  runApp(
-      ChangeNotifierProvider(create: (context) => AppModel(), child: MyApp(showHome: showHome)));
+  runApp(MyApp(showHome: showHome));
 }
 
 class MyApp extends StatelessWidget {
