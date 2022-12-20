@@ -1,12 +1,11 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import axios from 'axios'
 import io from 'socket.io-client'
+import { Box, Button, TextInput } from 'grommet'
 import { useEffect, useState } from 'react'
 
 export default function StartSessionPage() {
   const [socket, setSocket] = useState()
+  const [script, setScript] = useState('')
 
   useEffect(() => {
     if (!socket) return
@@ -24,27 +23,48 @@ export default function StartSessionPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {socket ? (
-          <>
-            <button onClick={sendMessage}>
-              Send Message
-            </button>
-            <button onClick={stopSession}>
-              Stop Session
-            </button>
-          </>
-        ) : (
-          <button onClick={startSession}>
-            Start Session
-          </button>
-        )}
+        <Box width='medium'>
+          {socket ? (
+            <Box direction='row' gap='medium'>
+              <Button
+                label='Send Message'
+                onClick={sendMessage}
+              />
+              <Button
+                label='Stop Session'
+                onClick={stopSession}
+              />
+            </Box>
+          ) : (
+            <Box gap='small'>
+              <Button
+                label='Start Session'
+                onClick={startSession}
+                disabled={!script}
+              />
+              <TextInput
+                placeholder='Script ID'
+                type='number'
+                value={script}
+                onChange={e => setScript(e.target.value)}
+              />
+            </Box>
+          )}
+        </Box>
       </main>
     </div>
   )
 
   async function startSession() {
     await fetch('/api/socket')
-    setSocket(io({ transports: ["websocket"] }))
+    const socket = io({ transports: ["websocket"] })
+    socket.on("connect", () => {
+      socket.emit('start-session', {
+        scripts: [script]
+      })
+      socket.on('sessionId', sessionId => console.log('Started session:', sessionId))
+      setSocket(socket)
+    })
   }
 
   async function stopSession() {

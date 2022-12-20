@@ -11,7 +11,7 @@ const entrypoints = {
 }
 
 // Starts a session and creates processes to run scripts.
-export async function startSession(scriptIds = null) {
+export async function startSession(scriptIds) {
   // Create a session in the database.
   const { data: { id: sessionId }, error: sessionError } = await supabaseService
     .from('sessions')
@@ -23,7 +23,7 @@ export async function startSession(scriptIds = null) {
   const { data: scripts, error: scriptsError } = await supabaseService
     .from('scripts')
     .select('id, language, output_type')
-    // .in('id', scriptIds)       ENABLE LATER
+    .in('id', scriptIds)
   
   // Create output records for each script in the database.
   const { data: scriptOutputs, error: scriptOutputsError } = await supabaseService
