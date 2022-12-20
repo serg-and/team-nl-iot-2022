@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:app/bluetooth/models/device.dart';
+import 'package:app/bluetooth/pages/device_interaction_widget.dart';
 import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -210,6 +212,16 @@ class DeviceScreen extends StatelessWidget {
                 return Text("Something went wrong!");
               },
             ),
+            TextButton(onPressed: () => {
+              Mds.connect('${device.id}', (address) {
+                print("Connected");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DeviceInteractionWidget(Device(device.name, address))));
+              }, () { }, () { })
+
+            }, child: Text("View Live Data"))
           ],
         ),
       ),
