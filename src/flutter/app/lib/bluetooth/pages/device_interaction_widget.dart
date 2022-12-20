@@ -3,33 +3,45 @@ import 'package:provider/provider.dart';
 import '../models/device.dart';
 import '../models/device_model.dart';
 
+// This class is a stateful widget that displays a list of device interaction options
+// such as subscribing to accelerometer data, heart rate data, and controlling the LED
 class DeviceInteractionWidget extends StatefulWidget {
   final Device device;
 
+  // Constructor that initializes the device field
   const DeviceInteractionWidget(this.device);
 
+  // Creates the state for this widget
   @override
   State<StatefulWidget> createState() {
     return _DeviceInteractionWidgetState(device);
   }
 }
 
+// This class represents the state for the DeviceInteractionWidget
 class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
+  // This field represents the device for which the interactions are being displayed
   late Device device;
 
+  // Constructor that initializes the device field
   _DeviceInteractionWidgetState(Device givenDevice) {
     this.device = givenDevice;
   }
 
+  // This method is called when the state is initialized
   @override
   void initState() {
     super.initState();
   }
 
+  // This method is called when the "Subscribe"/"Unsubscribe" button for the accelerometer is pressed
   void _onAccelerometerButtonPressed(DeviceModel deviceModel) {
+  // If the user is currently subscribed to accelerometer data, unsubscribe them
     if (deviceModel.accelerometerSubscribed) {
       deviceModel.unsubscribeFromAccelerometer();
-    } else {
+    }
+  // If the user is not currently subscribed to accelerometer data, subscribe them
+    else {
       deviceModel.subscribeToAccelerometer();
     }
   }
