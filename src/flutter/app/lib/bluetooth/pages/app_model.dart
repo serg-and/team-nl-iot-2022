@@ -43,7 +43,7 @@ class AppModel extends ChangeNotifier {
 
     try {
       Mds.startScan((name, address) {
-        Device device = Device(name, address);
+        Device device = Device(name, address, null);
         if (!_deviceList.contains(device)) {
           _deviceList.add(device);
           notifyListeners();
