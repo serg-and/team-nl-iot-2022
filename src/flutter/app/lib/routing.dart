@@ -1,12 +1,16 @@
 // Import the other pages
+// import 'package:app/HeartbeatData.dart';
+import 'package:app/setup_session.dart';
 import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:app/current_session.dart';
+import 'package:app/StartSessionPage.dart';
 import 'package:app/sessions.history.dart';
 import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'home_page.dart';
 
+List<int> sessionScripts = [];
 
 class Routing extends StatefulWidget {
   const Routing({Key? key}) : super(key: key);
@@ -16,84 +20,108 @@ class Routing extends StatefulWidget {
 }
 
 class _RoutingState extends State<Routing> {
-
   var currentIndex = 0;
+  bool sessionActive = false;
 
-  List routing = [
-    Home(),
-    const Bluetooth(),
-    const Current(),
-    const History()
-  ];
+  void switchToSession(List<int> scriptIds) {
+    sessionScripts = scriptIds;
+    setState(() {
+      sessionActive = true;
+    });
+  }
+
+  void stopSession() {
+    sessionScripts = [];
+    setState(() {
+      sessionActive = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double displayWidth = MediaQuery.of(context).size.width;
+    List routing = [
+      Home(),
+      const Bluetooth(),
+      sessionActive
+          ? HeartBeatPage(
+              scriptIds: sessionScripts,
+              stopSession: stopSession,
+            )
+          : SelectScriptPageWidget(
+              switchToSession: switchToSession,
+            ),
+      const History()
+    ];
+
     return Scaffold(
         body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [ // This is the widget that will be displayed at the current index
-            routing.elementAt(currentIndex),
-            Container(
-              margin: EdgeInsets.all(displayWidth * .05),
-              height: 50,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Color(0xFFF59509),
-                  borderRadius: BorderRadius.all(Radius.circular(displayWidth))),
-              child: currentIndex == 4
-                  ? GestureDetector( // This is the "Book Now" button that will be displayed on the last screen
-                onTap: () => Navigator.of(context).pop(),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "Book Now ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
+      alignment: Alignment.bottomCenter,
+      children: [
+        // This is the widget that will be displayed at the current index
+        routing.elementAt(currentIndex),
+        Container(
+          margin: EdgeInsets.all(displayWidth * .05),
+          height: 50,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Color(0xFFF59509),
+              borderRadius: BorderRadius.all(Radius.circular(displayWidth))),
+          child: currentIndex == 4
+              ? GestureDetector(
+                  // This is the "Book Now" button that will be displayed on the last screen
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Book Now ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 5),
-                    Icon(
-                      Icons.home,
-                      color: Colors.white,
-                    )
+                      SizedBox(width: 5),
+                      Icon(
+                        Icons.home,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ...List.generate(bottomBar.length, (i) {
+                      return GestureDetector(
+                        onTap: () => setState(() {
+                          currentIndex = i;
+                        }),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            bottomBar[i],
+                            const SizedBox(height: 4),
+                            currentIndex == i
+                                ? Container(
+                                    width: 4,
+                                    height: 4,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Container()
+                          ],
+                        ),
+                      );
+                    })
                   ],
                 ),
-              )
-                  : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ...List.generate(bottomBar.length, (i) {
-                    return GestureDetector(
-                      onTap: () => setState(() {
-                        currentIndex = i;
-                      }),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          bottomBar[i],
-                          const SizedBox(height: 4),
-                          currentIndex == i
-                              ? Container(
-                            width: 4,
-                            height: 4,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                          )
-                              : Container()
-                        ],
-                      ),
-                    );
-                  })
-                ],
-              ),
-            ),
-          ],
-        ));
+        ),
+      ],
+    ));
   }
 }

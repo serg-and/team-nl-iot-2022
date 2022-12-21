@@ -28,9 +28,10 @@ export default function SocketHandler (req, res) {
         socket.emit('sessionId', sessionId)
   
         // Listen for 'data-point' messages from the client.
-        socket.on('data-point', msg => sendMessage(msg))      
+        socket.on('data-point', msg => sendMessage(msg))
         
         // Listen for disconnect events from the client.
+        socket.on('stop-session', () => endSession())
         socket.on('disconnect', () => endSession())
       })
     })

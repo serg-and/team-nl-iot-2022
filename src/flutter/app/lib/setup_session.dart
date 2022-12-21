@@ -15,6 +15,7 @@ const int MAX_GRAPH_VALUES = 30;
 int index = 0;
 Timer? fakeDataTimer;
 List<dynamic> subscriptions = [];
+IO.Socket? socket;
 
 List<OutputValue> initOutputValues(jsonValues) {
   List<OutputValue> outputValues = [];
@@ -24,13 +25,13 @@ List<OutputValue> initOutputValues(jsonValues) {
   return outputValues;
 }
 
-Timer startSendingFakeData(IO.Socket socket, int sessionId) {
+Timer startSendingFakeData(int sessionId) {
   print('starting fake data for session session: ${sessionId}');
   Random random = new Random();
 
   return Timer.periodic(Duration(milliseconds: 100), (Timer t) {
     int heartBeat = 40 + random.nextInt(150 - 40);
-    socket.emit(
+    socket?.emit(
         'data-point',
         jsonEncode({
           'value': heartBeat,
@@ -69,39 +70,40 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
 
 // start session by opening a websocket
 Future<void> createSession(List<int> scriptIds, Function callback) async {
-  IO.Socket socket = IO.io(SERVER, <String, dynamic>{
+  IO.Socket _socket = IO.io(SERVER, <String, dynamic>{
     'path': '/socket.io',
     'autoConnect': false,
     'transports': ['websocket'],
   });
-  socket.connect();
-  socket.onConnect((_) {
+  socket = _socket;
+  _socket.connect();
+  _socket.onConnect((_) {
     print('Connection established');
+
+    print('start-session with scripts: ${scriptIds}');
+
+    // send message to start session with the given scripts
+    _socket.emit('start-session', {'scripts': scriptIds});
+
+    // session started, start retrieving outputs
+    _socket.on(
+        'sessionId',
+        (sessionId) async => {
+              print('started session: ${sessionId}'),
+              callback(await getOutputs(sessionId)),
+              fakeDataTimer = startSendingFakeData(sessionId),
+            });
   });
-  socket.onDisconnect((_) => print('Connection Disconnection'));
-  socket.onConnectError((err) => print('onConnectError: ${err}'));
-  socket.onError((err) => print('onError: ${err}'));
-
-  // Temp, select all possible scripts
-  // done because option to select scripts is not yet ready
-  // Generate a list of IDs between 0 and 1000
-  scriptIds = new List<int>.generate(1000, (i) => i);
-
-  // send message to start session with the given scripts
-  socket.emit('start-session', {'scripts': scriptIds});
-
-  // session started, start retrieving outputs
-  socket.on(
-      'sessionId',
-      (sessionId) async => {
-            print('started session: ${sessionId}'),
-            callback(await getOutputs(sessionId)),
-            fakeDataTimer = startSendingFakeData(socket, sessionId),
-          });
+  _socket.onDisconnect((_) => print('Connection Disconnection'));
+  _socket.onConnectError((err) => print('onConnectError: ${err}'));
+  _socket.onError((err) => print('onError: ${err}'));
 }
 
 class HeartBeatPage extends StatefulWidget {
-  const HeartBeatPage({super.key});
+  final List<int> scriptIds;
+  final Function stopSession;
+  const HeartBeatPage(
+      {super.key, required this.scriptIds, required this.stopSession});
 
   @override
   State<HeartBeatPage> createState() => _HeartBeatPageState();
@@ -114,7 +116,7 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
   void initState() {
     super.initState();
     createSession(
-        [],
+        widget.scriptIds,
         (List<ScriptOutput> sessionOutputs) => setState(() {
               outputs = sessionOutputs;
             }));
@@ -128,6 +130,11 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
     subscriptions.forEach((subscribtion) {
       subscribtion.cancel();
     });
+
+    // send signal to stop session
+    if (socket != null) {
+      socket?.emit('stop-session');
+    }
     super.dispose();
   }
 
@@ -139,25 +146,23 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
         children: [
           ListView(
             children: outputs.map((output) => Output(output: output)).toList(),
-
-            //Add extra data widget here with a button title
-            // children: [
-            //   DropDownBar("HeartBeat", HeartBeatData()),
-            //   DropDownBar('HeartBeat2', HeartBeatData()),
-            //   RetrievedDataSection()
-            // ],
           ),
           Positioned(
             child: Align(
-              alignment: FractionalOffset.bottomLeft,
-              child: ElevatedButton(
+              alignment: FractionalOffset.bottomCenter,
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 80),
+                child: ElevatedButton(
                   onPressed: () {
-                    //navigate to the current page
-                    Navigator.pop(context);
+                    // stop the current session,
+                    // navigates back to start session page
+                    widget.stopSession();
                   },
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  child: Text('Stop session')),
+                  child: Text('Stop session'),
+                ),
+              ),
             ),
           )
         ],
