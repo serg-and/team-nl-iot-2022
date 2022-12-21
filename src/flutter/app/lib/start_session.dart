@@ -13,6 +13,35 @@ class StartSession extends StatefulWidget {
 }
 
 class _StartSessionState extends State<StartSession> {
+  List<int> scriptIds = [];
+  bool validState = false;
+
+  void validateState() {
+    print(scriptIds);
+    setState(() {
+      validState = true;
+    });
+  }
+
+  void startSession() {}
+
+  void navigateToSelectScripts() async {
+    // wait for script select page to finish,
+    // page will return a list of selected script ids
+    List<int> newScriptIds = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SelectScripts(
+          alreadySelected: scriptIds,
+        ),
+      ),
+    );
+
+    setState(() {
+      scriptIds = newScriptIds;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +62,7 @@ class _StartSessionState extends State<StartSession> {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         TextFormField(
+                          onChanged: (value) => validateState(),
                           controller: StartSession.sessionNameController,
                           cursorColor: Colors.black,
                           style: TextStyle(fontSize: 20),
@@ -55,13 +85,7 @@ class _StartSessionState extends State<StartSession> {
                           maxLines: 1,
                         ),
                         InkWell(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  SelectScripts(switchToSession: () => null),
-                            ),
-                          ),
+                          onTap: navigateToSelectScripts,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -69,6 +93,7 @@ class _StartSessionState extends State<StartSession> {
                                 'Select Scripts',
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
+                              Text(scriptIds.length.toString()),
                               Icon(Icons.chevron_right)
                             ],
                           ),
@@ -77,24 +102,24 @@ class _StartSessionState extends State<StartSession> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: AlignmentDirectional(0, 1),
+                SizedBox(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 80),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          // color: FlutterFlowTheme.of(context).secondaryBackground,
-                          ),
-                      child: TextButton(
-                        child: Text('Start Sesson',
-                            style: Theme.of(context).textTheme.button),
-                        onPressed: () => null,
-                        // onPressed: () => startSession(),
-                        // style: ButtonStyle(
-                        //   backgroundColor:
-                        //       MaterialStatePropertyAll(getStartButtonColor()),
+                    padding: EdgeInsets.fromLTRB(16, 0, 16, 80),
+                    child: ElevatedButton(
+                      onPressed: validState ? startSession : null,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Start Session',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ]),
                       ),
                     ),
                   ),

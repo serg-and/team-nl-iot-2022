@@ -16,8 +16,8 @@ const Map<String, String> outputTypeDisplayNames = {
 };
 
 class SelectScripts extends StatefulWidget {
-  final Function switchToSession;
-  const SelectScripts({Key? key, required this.switchToSession})
+  final List<int> alreadySelected;
+  const SelectScripts({Key? key, required this.alreadySelected})
       : super(key: key);
 
   @override
@@ -66,28 +66,13 @@ class _SelectScriptsState extends State<SelectScripts> {
     });
   }
 
-  List<Widget> getScrollableSection() {
-    List<Widget> scrollableSection = [];
-
-    // // top padding, place below search bar
-    // scrollableSection.add(Padding(
-    //   padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
-    //   child: Text('Select scripts to use',
-    //       style: Theme.of(context).textTheme.headlineSmall
-    //       // style: FlutterFlowTheme.of(context)
-    //       //     .title3,
-    //       ),
-    // ));
-
-    // All scripts
-    scrollableSection.addAll(filteredScripts
+  List<Widget> getScriptListings() {
+    return filteredScripts
         .map((Script script) => ScriptListing(
             script: script,
             selected: selectedScripts.contains(script.id),
             onClick: () => onScriptClick(script)))
-        .toList());
-
-    return scrollableSection;
+        .toList();
   }
 
   void filterScripts() {
@@ -108,8 +93,14 @@ class _SelectScriptsState extends State<SelectScripts> {
     });
   }
 
-  void startSession() {
-    widget.switchToSession(selectedScripts);
+  void clearSelectedScripts() {
+    setState(() {
+      selectedScripts = [];
+    });
+  }
+
+  void onConfirm() {
+    Navigator.pop(context, selectedScripts);
   }
 
   Color getStartButtonColor() {
@@ -194,29 +185,50 @@ class _SelectScriptsState extends State<SelectScripts> {
                   child: ListView(
                     padding: EdgeInsets.zero,
                     scrollDirection: Axis.vertical,
-                    children: getScrollableSection(),
+                    children: [
+                      ...getScriptListings(),
+                      SizedBox(height: 16),
+                    ],
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16, 5, 16, 30),
-                  child: InkWell(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.orange,
-                      ),
-                      width: double.infinity,
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          'Ok',
-                          style: Theme.of(context).textTheme.headline6,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: selectedScripts.length > 0
+                            ? clearSelectedScripts
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red),
+                        icon: Icon(Icons.close),
+                        label: Text(
+                          'Remove All',
+                          style: TextStyle(
+                            color: selectedScripts.length > 0
+                                ? Colors.white
+                                : Colors.grey,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
-                    ),
+                      ElevatedButton.icon(
+                        onPressed: onConfirm,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFF59509)),
+                        icon: Icon(Icons.check),
+                        label: Text(
+                          'Ok',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                // SizedBox(height: 30),
               ],
             ),
           ],
