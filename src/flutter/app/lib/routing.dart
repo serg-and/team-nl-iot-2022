@@ -23,7 +23,7 @@ class _RoutingState extends State<Routing> {
   List routing = [
     Home(),
     const Bluetooth(),
-    const CreateTeamPage(),
+    CreateTeamPage(),
     const History(),
   ];
   @override

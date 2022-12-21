@@ -25,11 +25,10 @@ class ScriptOutput {
 }
 
 class TeamModel{
-  int id;
   String name;
-  CoachModel coach;
-  List<TeamMemberModel> teamMembers;
-  TeamModel(this.id, this.name, this.teamMembers, this.coach);
+  CoachModel? coach;
+  List<TeamMemberModel> teamMembers =  List.empty();
+  TeamModel(this.name);
 }
 
 class CoachModel{
