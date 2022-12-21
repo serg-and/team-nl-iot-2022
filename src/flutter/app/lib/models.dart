@@ -23,3 +23,17 @@ class ScriptOutput {
 
   ScriptOutput(this.id, this.script, this.values);
 }
+
+class TeamModel{
+  int id;
+  String name;
+  List<TeamMemberModel> teamMembers;
+  TeamModel(this.id, this.name, this.teamMembers);
+}
+
+class TeamMemberModel{
+  int id;
+  String name;
+
+  TeamMemberModel(this.id, this.name);
+}
