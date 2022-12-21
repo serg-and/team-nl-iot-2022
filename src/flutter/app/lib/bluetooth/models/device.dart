@@ -9,7 +9,9 @@ class Device {
   Device(String? name, String? address, String? serial) {
     _name = name;
     _address = address;
-    _serial = serial;
+    if (serial != null) {
+      onMdsConnected(serial);
+    }
   }
 
   String? get name => _name != null ? _name : "";
