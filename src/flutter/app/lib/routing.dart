@@ -21,7 +21,7 @@ class _RoutingState extends State<Routing> {
   var currentIndex = 0;
   bool sessionActive = false;
 
-  void switchToSession(List<int> scriptIds) {
+  void startSession(List<int> scriptIds) {
     sessionScripts = scriptIds;
     setState(() {
       sessionActive = true;
@@ -40,8 +40,8 @@ class _RoutingState extends State<Routing> {
     double displayWidth = MediaQuery.of(context).size.width;
     Widget sessionPage = sessionActive
         ? HeartBeatPage(scriptIds: sessionScripts, stopSession: stopSession)
-        // : SelectScripts(switchToSession: switchToSession);
-        : StartSession(switchToSession: switchToSession);
+        // : SelectScripts(startSession: startSession);
+        : StartSession(startSession: startSession);
 
     List routing = [
       Home(),

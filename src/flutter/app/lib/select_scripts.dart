@@ -35,6 +35,7 @@ class _SelectScriptsState extends State<SelectScripts> {
   @override
   void initState() {
     super.initState();
+    selectedScripts = [...widget.alreadySelected];
     searchBarController = TextEditingController();
     getScripts();
   }
@@ -192,7 +193,7 @@ class _SelectScriptsState extends State<SelectScripts> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

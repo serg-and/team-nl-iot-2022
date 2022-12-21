@@ -3,32 +3,34 @@ import 'package:app/select_scripts.dart';
 import 'package:flutter/material.dart';
 
 class StartSession extends StatefulWidget {
-  final Function switchToSession;
-  const StartSession({Key? key, required this.switchToSession});
-
-  static TextEditingController sessionNameController = TextEditingController();
+  final Function startSession;
+  const StartSession({Key? key, required this.startSession});
 
   @override
   State<StartSession> createState() => _StartSessionState();
 }
 
 class _StartSessionState extends State<StartSession> {
+  static TextEditingController sessionNameController = TextEditingController();
   List<int> scriptIds = [];
   bool validState = false;
 
   void validateState() {
-    print(scriptIds);
     setState(() {
-      validState = true;
+      validState =
+          scriptIds.isNotEmpty && sessionNameController.text.length > 0;
     });
   }
 
-  void startSession() {}
+  void onStartSession() {
+    if (!validState) return;
+    widget.startSession(scriptIds);
+  }
 
   void navigateToSelectScripts() async {
     // wait for script select page to finish,
     // page will return a list of selected script ids
-    List<int> newScriptIds = await Navigator.push(
+    List<int>? newScriptIds = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SelectScripts(
@@ -38,8 +40,10 @@ class _StartSessionState extends State<StartSession> {
     );
 
     setState(() {
-      scriptIds = newScriptIds;
+      scriptIds = newScriptIds != null ? newScriptIds : scriptIds;
     });
+
+    validateState();
   }
 
   @override
@@ -55,7 +59,7 @@ class _StartSessionState extends State<StartSession> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Wrap(
-                      runSpacing: 25,
+                      runSpacing: 20,
                       children: [
                         Text(
                           'Start a Session',
@@ -63,7 +67,7 @@ class _StartSessionState extends State<StartSession> {
                         ),
                         TextFormField(
                           onChanged: (value) => validateState(),
-                          controller: StartSession.sessionNameController,
+                          controller: sessionNameController,
                           cursorColor: Colors.black,
                           style: TextStyle(fontSize: 20),
                           decoration: InputDecoration(
@@ -89,11 +93,35 @@ class _StartSessionState extends State<StartSession> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Select Scripts',
-                                style: Theme.of(context).textTheme.titleMedium,
+                              Expanded(
+                                child: ListTile(
+                                  visualDensity: VisualDensity(vertical: 1),
+                                  title: Text(
+                                      'Configure Scripts  ${scriptIds.isEmpty ? "❗" : ""}'),
+                                  subtitle: Text(scriptIds.isEmpty
+                                      ? 'No scripts selected'
+                                      : '${scriptIds.length.toString()} scripts selected'),
+                                ),
                               ),
-                              Text(scriptIds.length.toString()),
+                              Icon(Icons.chevron_right)
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => print('confiugre team'),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: ListTile(
+                                  visualDensity: VisualDensity(vertical: 1),
+                                  title: Text(
+                                      'Configure Team Members  ${[].isEmpty ? "❗" : ""}'),
+                                  subtitle: Text([].isEmpty
+                                      ? 'No team members'
+                                      : '${[].length.toString()} Team Members'),
+                                ),
+                              ),
                               Icon(Icons.chevron_right)
                             ],
                           ),
@@ -104,9 +132,9 @@ class _StartSessionState extends State<StartSession> {
                 ),
                 SizedBox(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 0, 16, 80),
+                    padding: EdgeInsets.fromLTRB(16, 0, 16, 90),
                     child: ElevatedButton(
-                      onPressed: validState ? startSession : null,
+                      onPressed: validState ? onStartSession : null,
                       child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Row(
