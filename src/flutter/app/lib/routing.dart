@@ -30,6 +30,13 @@ class _RoutingState extends State<Routing> {
     });
   }
 
+  void stopSession() {
+    sessionScripts = [];
+    setState(() {
+      sessionActive = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double displayWidth = MediaQuery.of(context).size.width;
@@ -37,7 +44,10 @@ class _RoutingState extends State<Routing> {
       Home(),
       const Bluetooth(),
       sessionActive
-          ? HeartBeatPage(scriptIds: sessionScripts)
+          ? HeartBeatPage(
+              scriptIds: sessionScripts,
+              stopSession: stopSession,
+            )
           : SelectScriptPageWidget(
               switchToSession: switchToSession,
             ),

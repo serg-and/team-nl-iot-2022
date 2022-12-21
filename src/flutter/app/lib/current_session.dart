@@ -55,6 +55,7 @@ class _CurrentState extends State<Current> {
                       MaterialPageRoute(
                           builder: (context) => HeartBeatPage(
                                 scriptIds: [],
+                                stopSession: () => null,
                               )));
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),

@@ -10,6 +10,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app/main.dart';
 import 'package:app/models.dart';
 
+const Map<String, String> outputTypeDisplayNames = {
+  'line_chart': 'Line Chart',
+  'bar_chart': 'Bar Chart',
+};
+
 class SelectScriptPageWidget extends StatefulWidget {
   final Function switchToSession;
   const SelectScriptPageWidget({Key? key, required this.switchToSession})
@@ -64,21 +69,20 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
   List<Widget> getScrollableSection() {
     List<Widget> scrollableSection = [];
 
-    // top padding, place below search bar
-    scrollableSection.add(Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
-      child: Text('Select scripts to use',
-          style: Theme.of(context).textTheme.headlineSmall
-          // style: FlutterFlowTheme.of(context)
-          //     .title3,
-          ),
-    ));
+    // // top padding, place below search bar
+    // scrollableSection.add(Padding(
+    //   padding: EdgeInsetsDirectional.fromSTEB(16, 16, 0, 0),
+    //   child: Text('Select scripts to use',
+    //       style: Theme.of(context).textTheme.headlineSmall
+    //       // style: FlutterFlowTheme.of(context)
+    //       //     .title3,
+    //       ),
+    // ));
 
     // All scripts
     scrollableSection.addAll(filteredScripts
         .map((Script script) => ScriptListing(
-            name: script.name,
-            description: script.description,
+            script: script,
             selected: selectedScripts.contains(script.id),
             onClick: () => onScriptClick(script)))
         .toList());
@@ -168,7 +172,7 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                   Expanded(
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 12, 8, 0),
+                                          16, 12, 16, 0),
                                       child: TextFormField(
                                         cursorColor: Colors.black,
                                         controller: searchBarController,
@@ -221,7 +225,7 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                           filled: true,
                                           contentPadding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  24, 24, 20, 24),
+                                                  19, 19, 19, 19),
                                           prefixIcon: Icon(
                                             Icons.search,
                                             color: Colors.black,
@@ -234,14 +238,14 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 12, 12, 0),
-                                    child: IconButton(
-                                      icon: new Icon(Icons.search),
-                                      onPressed: () => filterScripts(),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: EdgeInsetsDirectional.fromSTEB(
+                                  //       0, 12, 12, 0),
+                                  //   child: IconButton(
+                                  //     icon: new Icon(Icons.search),
+                                  //     onPressed: () => filterScripts(),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ],
@@ -289,27 +293,6 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
                           MaterialStatePropertyAll(getStartButtonColor()),
                     ),
                   ),
-                  // child: FFButtonWidget(
-                  //   onPressed: () {
-                  //     print('Button pressed ...');
-                  //   },
-                  //   text: 'Button',
-                  //   options: FFButtonOptions(
-                  //     width: 130,
-                  //     height: 40,
-                  //     color: FlutterFlowTheme.of(context).primaryColor,
-                  //     textStyle:
-                  //         FlutterFlowTheme.of(context).subtitle2.override(
-                  //               fontFamily: 'Poppins',
-                  //               color: Colors.white,
-                  //             ),
-                  //     borderSide: BorderSide(
-                  //       color: Colors.transparent,
-                  //       width: 1,
-                  //     ),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  // ),
                 ),
               ),
             ),
@@ -321,15 +304,13 @@ class _SelectScriptPageWidgetState extends State<SelectScriptPageWidget> {
 }
 
 class ScriptListing extends StatelessWidget {
-  final String name;
-  final String? description;
+  final Script script;
   final bool selected;
   final Function onClick;
 
   const ScriptListing(
       {Key? key,
-      required this.name,
-      required this.description,
+      required this.script,
       required this.selected,
       required this.onClick})
       : super(key: key);
@@ -361,7 +342,7 @@ class ScriptListing extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
                   child: Theme(
                     data: ThemeData(
                       checkboxTheme: CheckboxThemeData(
@@ -375,10 +356,13 @@ class ScriptListing extends StatelessWidget {
                       value: selected,
                       onChanged: (value) => onClick(),
                       title: Text(
-                        name,
+                        script.name,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       tileColor: Color(0xFFF1F4F8),
+                      subtitle: Text(
+                          outputTypeDisplayNames[script.outputType] ?? '',
+                          style: Theme.of(context).textTheme.bodyLarge),
                       activeColor: Color(0xFFF59509),
                       checkColor: Colors.white,
                       dense: false,
@@ -394,26 +378,12 @@ class ScriptListing extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 24, 0),
-                  child: Text(
-                    description ?? '',
-                    // style:
-                    //     FlutterFlowTheme.of(
-                    //             context)
-                    //         .bodyText2
-                    //         .override(
-                    //           fontFamily:
-                    //               'Outfit',
-                    //           color: Color(
-                    //               0xFF57636C),
-                    //           fontSize: 14,
-                    //           fontWeight:
-                    //               FontWeight
-                    //                   .normal,
-                    //         ),
+                if (script.description != '')
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
+                    child: Text(script.description ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium),
                   ),
-                ),
               ],
             ),
           ),
