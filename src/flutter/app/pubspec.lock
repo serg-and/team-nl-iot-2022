@@ -335,11 +335,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "feature/async_api"
-      resolved-ref: "369447a62ecb56f1e5a64e0cc8a0c742ed356ec0"
-      url: "https://github.com/petri-lipponen-movesense/mdsflutter.git"
+      ref: master
+      resolved-ref: "98519bea494df52949d442f093e2bf79297e87c3"
+      url: "https://github.com/Berkanozc/mdsflutter.git"
     source: git
-    version: "1.9.9-dev2"
+    version: "1.1.0"
   meta:
     dependency: transitive
     description:
@@ -495,7 +495,7 @@ packages:
     source: hosted
     version: "4.2.4"
   protobuf:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: protobuf
       url: "https://pub.dartlang.org"
