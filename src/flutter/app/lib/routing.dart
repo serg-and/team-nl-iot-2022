@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'home_page.dart';
+import 'team_builder.dart';
 
 
 class Routing extends StatefulWidget {
@@ -22,8 +23,8 @@ class _RoutingState extends State<Routing> {
   List routing = [
     Home(),
     const Bluetooth(),
-    const Current(),
-    const History()
+    const CreateTeamPage(),
+    const History(),
   ];
   @override
   Widget build(BuildContext context) {

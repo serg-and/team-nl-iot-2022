@@ -27,8 +27,16 @@ class ScriptOutput {
 class TeamModel{
   int id;
   String name;
+  CoachModel coach;
   List<TeamMemberModel> teamMembers;
-  TeamModel(this.id, this.name, this.teamMembers);
+  TeamModel(this.id, this.name, this.teamMembers, this.coach);
+}
+
+class CoachModel{
+  int id;
+  String name;
+
+  CoachModel(this.id, this.name);
 }
 
 class TeamMemberModel{
