@@ -14,12 +14,16 @@ export default function SocketHandler (req, res) {
       console.log('connection started')
 
       socket.on('start-session', async message => {
+        console.log('got start-session request with message: ', message)
+
         const scripts = message.scripts
         // sessions must specify atleast one script to run.
         if (!scripts || !scripts.length) return
         
         // Start a new session and get functions to control it.
         const { sessionId, sendMessage, endSession } = await startSession(scripts)
+
+        console.log('succesfully started session: ', sessionId)
   
         socket.emit('sessionId', sessionId)
   
