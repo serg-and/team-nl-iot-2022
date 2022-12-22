@@ -32,8 +32,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  protobuf: any
-
   mdsflutter:
     git:
       url: https://github.com/Berkanozc/mdsflutter.git
