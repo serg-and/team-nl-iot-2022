@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mdsflutter/Mds.dart';
 import 'package:provider/provider.dart';
 import '../models/device.dart';
 import '../models/device_model.dart';
@@ -56,15 +57,15 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return ChangeNotifierProvider(
       create: (context) => DeviceModel(device.name, device.serial),
       child: Consumer<DeviceModel>(
         builder: (context, model, child) {
-          return Scaffold(
-              appBar: AppBar(
-                title: Text(device.name!),
-              ),
-              body: Column(
+          return Container(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   _accelerometerItem(model),
