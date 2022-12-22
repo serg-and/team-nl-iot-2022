@@ -1,8 +1,11 @@
+import 'package:app/bluetooth/pages/device_interaction_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:functional_data/functional_data.dart';
+import 'package:mdsflutter/Mds.dart';
 import 'package:provider/provider.dart';
 
+import '../../../bluetooth/models/device.dart';
 import '../../ble/ble_device_connector.dart';
 import '../../ble/ble_device_interactor.dart';
 import 'characteristic_interaction_dialog.dart';
@@ -25,6 +28,7 @@ class DeviceInteractionTab extends StatelessWidget {
                 __) =>
             _DeviceInteractionTab(
           viewModel: DeviceInteractionViewModel(
+              device: device,
               deviceId: device.id,
               connectionStatus: connectionStateUpdate.connectionState,
               deviceConnector: deviceConnector,
@@ -38,12 +42,14 @@ class DeviceInteractionTab extends StatelessWidget {
 @FunctionalData()
 class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
   const DeviceInteractionViewModel({
+    this.device,
     required this.deviceId,
     required this.connectionStatus,
     required this.deviceConnector,
     required this.discoverServices,
   });
 
+  final DiscoveredDevice? device;
   final String deviceId;
   final DeviceConnectionState connectionStatus;
   final BleDeviceConnector deviceConnector;
@@ -54,7 +60,9 @@ class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
       connectionStatus == DeviceConnectionState.connected;
 
   void connect() {
-    deviceConnector.connect(deviceId);
+    Mds.connect('${deviceId}', (p0) {
+      deviceConnector.connect(deviceId);
+    }, () {}, () {});
   }
 
   void disconnect() {
@@ -142,6 +150,9 @@ class _DeviceInteractionTabState extends State<_DeviceInteractionTab> {
                     deviceId: widget.viewModel.deviceId,
                     discoveredServices: discoveredServices,
                   ),
+                if (widget.viewModel.deviceConnected)
+                  DeviceInteractionWidget(Device(widget.viewModel.device!.name,
+                      '${widget.viewModel.deviceId}'))
               ],
             ),
           ),
