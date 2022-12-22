@@ -17,14 +17,13 @@ class _StartSessionState extends State<StartSession> {
 
   void validateState() {
     setState(() {
-      validState =
-          scriptIds.isNotEmpty && sessionNameController.text.length > 0;
+      validState = scriptIds.isNotEmpty;
     });
   }
 
   void onStartSession() {
     if (!validState) return;
-    widget.startSession(scriptIds);
+    widget.startSession(sessionNameController.text, scriptIds);
   }
 
   void navigateToSelectScripts() async {

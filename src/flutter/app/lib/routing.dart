@@ -8,6 +8,7 @@ import 'package:app/select_scripts.dart';
 import 'package:app/sessions.history.dart';
 import 'home_page.dart';
 
+String? sessionName;
 List<int> sessionScripts = [];
 
 class Routing extends StatefulWidget {
@@ -21,7 +22,8 @@ class _RoutingState extends State<Routing> {
   var currentIndex = 0;
   bool sessionActive = false;
 
-  void startSession(List<int> scriptIds) {
+  void startSession(String? name, List<int> scriptIds) {
+    sessionName = name;
     sessionScripts = scriptIds;
     setState(() {
       sessionActive = true;
@@ -29,6 +31,7 @@ class _RoutingState extends State<Routing> {
   }
 
   void stopSession() {
+    sessionName = null;
     sessionScripts = [];
     setState(() {
       sessionActive = false;
@@ -39,7 +42,11 @@ class _RoutingState extends State<Routing> {
   Widget build(BuildContext context) {
     double displayWidth = MediaQuery.of(context).size.width;
     Widget sessionPage = sessionActive
-        ? HeartBeatPage(scriptIds: sessionScripts, stopSession: stopSession)
+        ? HeartBeatPage(
+            name: sessionName,
+            scriptIds: sessionScripts,
+            stopSession: stopSession,
+          )
         // : SelectScripts(startSession: startSession);
         : StartSession(startSession: startSession);
 
