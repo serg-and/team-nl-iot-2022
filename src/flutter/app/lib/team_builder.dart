@@ -12,7 +12,7 @@ class CreateTeamPage extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar("Settings"),
         body: Container(
-            padding: EdgeInsets.only(top: 24),
+
             child: _CreateTeam()) // Use CustomAppBar with "Settings" as title
         );
 // End Scaffold
@@ -43,18 +43,29 @@ class _CreateTeamState extends State<_CreateTeam> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
+            padding: EdgeInsets.only(bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
             children: [
-              Row(children: [
-                Container(
-                    padding: EdgeInsets.only(left: 16.0),
-                    child: Text('Create New Team')),
-                Container(
-                    padding: EdgeInsets.only(left: 16.0), child: teamButtonWidget),
-              ]),
-              Column(
-                children: teams.map((team) => TeamOverView(team)).toList()
-              )
-    ]));
+              Container(
+              padding: EdgeInsets.only(bottom: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            child: Text('Create New Team', style: TextStyle(),)
+                        ),
+                        Container(
+                            child: teamButtonWidget
+                        ),
+                      ]
+                  )
+              ),
+                  Column(
+                    children: teams.map((team) => TeamOverView(team)).toList()
+                  )
+                ],
+              ),
+        );
+
   }
 }
 
@@ -83,9 +94,15 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: Icon(Icons.add),
-      onPressed: () => {
+    return SizedBox(
+        width: 50,
+        height: 50,
+        child: ElevatedButton(
+          child: Icon(
+              size: 20.0,
+              Icons.add
+          ),
+          onPressed: () => {
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -114,30 +131,99 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
               );
             })
       },
-    );
+    ));
   }
 }
 
-class TeamOverView extends StatelessWidget {
+class TeamOverView extends StatefulWidget {
   final TeamModel _teamModel;
   TeamOverView(this._teamModel);
+
+  @override
+  State<TeamOverView> createState() => _TeamOverViewState();
+}
+
+class _TeamOverViewState extends State<TeamOverView> {
+  // Create a text controller. Later, use it to retrieve the
+  // current value of the TextField.
+  final _myControllerName = TextEditingController();
+  final _myControllerId = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    _myControllerName.dispose();
+    _myControllerId.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
           child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            color: Colors.grey[300],
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width * 0.15,
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                 children: [
-                  Text('${_teamModel.name}', textAlign: TextAlign.center)
+                  Text('${widget._teamModel.name}', textAlign: TextAlign.center),
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () => {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Create Team'),
+                                actions: [
+                                  TextField(
+                                    controller: _myControllerName,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'name',
+                                    ),
+                                  ),
+                                  TextField(
+                                    controller: _myControllerId,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Team name',
+                                    ),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          print('name: ${_myControllerName.text} id: ${_myControllerId}');
+                                          this.widget._teamModel.teamMembers.add(new TeamMemberModel(int.parse(_myControllerId.text), _myControllerName.text));
+                                          Navigator.pop(context);
+                                          print(this.widget._teamModel.teamMembers.map((teamMember) => 'name: ${teamMember.name} id: ${teamMember.id}'));
+                                        });
+                                      },
+                                      child: const Text('Create'))
+                                ],
+                              );
+                            })
+                      },
+
+                      child: Icon(
+                        size: 20.0,
+                        Icons.add
+                      )
+                  ),)
                 ]
               ),
             )
           )
-      )
+      ),
+      TeamView(this.widget._teamModel)
     ]);
   }
 }
@@ -161,8 +247,17 @@ class TeamMember extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-        child: Column(
-      children: [Text(teamMember.name), Text(teamMember.id.toString())],
-    ));
+      padding: EdgeInsets.symmetric(vertical: 2.0,horizontal: 16.0),
+      child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+
+              child: Row(
+                  children: [Text('name: ${teamMember.name} \t\t\t ID: ${teamMember.id}')]
+              )
+          )
+      )
+    );
   }
 }

@@ -27,7 +27,7 @@ class ScriptOutput {
 class TeamModel{
   String name;
   CoachModel? coach;
-  List<TeamMemberModel> teamMembers =  List.empty();
+  List<TeamMemberModel> teamMembers =  List.empty(growable: true);
   TeamModel(this.name);
 }
 
