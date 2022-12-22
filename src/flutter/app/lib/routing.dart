@@ -4,6 +4,7 @@ import 'package:app/current_session.dart';
 import 'package:app/sessions.history.dart';
 import 'package:flutter/material.dart';
 
+import 'bluetoothNew/bluetoothmain.dart';
 import 'data.dart';
 import 'home_page.dart';
 
@@ -21,7 +22,7 @@ class _RoutingState extends State<Routing> {
 
   List routing = [
     Home(),
-    const Bluetooth(),
+    const BluetoothScreen(),
     const Current(),
     const History()
   ];
