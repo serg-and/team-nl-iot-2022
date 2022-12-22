@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app/bluetoothNew/ble/reactive_state.dart';
+import 'package:app/bluetooth/ble/reactive_state.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class BleDeviceConnector extends ReactiveState<ConnectionStateUpdate> {
