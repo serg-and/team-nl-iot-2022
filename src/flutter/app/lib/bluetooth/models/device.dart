@@ -6,11 +6,11 @@ class Device {
   String? _serial;
   DeviceConnectionStatus _connectionStatus = DeviceConnectionStatus.NOT_CONNECTED;
 
-  Device(String? name, String? address, String? serial) {
+  Device(String? name, String? address) {
     _name = name;
     _address = address;
-    if (serial != null) {
-      onMdsConnected(serial);
+    if (name != null) {
+      onMdsConnected(name.replaceAll(new RegExp(r'[^0-9]'),''));
     }
   }
 
