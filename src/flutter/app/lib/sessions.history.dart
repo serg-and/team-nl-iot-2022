@@ -56,8 +56,8 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
       _sessions.forEach((s) => allSessions.add(models.Session(
             s['id'],
             s['name'],
-            // s['stated_at'],
-            // s['ended_at'],
+            s['stated_at'],
+            s['ended_at'],
           )));
 
       filteredSessions = allSessions;
@@ -167,7 +167,7 @@ class SessionListing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(session.startedAt);
+     print(session.startedAt);
 
     return Container(
       width: 367.7,
@@ -182,7 +182,7 @@ class SessionListing extends StatelessWidget {
             ),
           ),
           Text(
-            '${session.id} -- ${session.name}',
+            '${session.id} -- ${session.name} -- ${session.startedAt} -- ${session.endedAt}',
           ),
         ],
       ),

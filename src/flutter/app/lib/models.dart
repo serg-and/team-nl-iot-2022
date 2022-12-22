@@ -27,8 +27,8 @@ class ScriptOutput {
 class Session {
   int id;
   String name;
-  // String startedAt;
-  // String? endedAt;
+  var startedAt;
+  var endedAt;
 
-  Session(this.id, this.name);
+  Session(this.id, this.name, this.startedAt, this.endedAt);
 }
