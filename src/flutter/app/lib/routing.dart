@@ -1,5 +1,9 @@
-import 'package:app/start_session.dart';
+
+import 'package:app/current_session.dart';
+import 'package:app/sessions.history.dart';
 import 'package:flutter/material.dart';
+
+import 'bluetooth/bluetooth_screen.dart';
 import 'data.dart';
 // Import the other pages
 import 'package:app/setup_session.dart';
@@ -38,6 +42,12 @@ class _RoutingState extends State<Routing> {
     });
   }
 
+  List routing = [
+    Home(),
+    const BluetoothScreen(),
+    const Current(),
+    const History()
+  ];
   @override
   Widget build(BuildContext context) {
     double displayWidth = MediaQuery.of(context).size.width;
