@@ -4,6 +4,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'constants.dart';
 
 Future configureApp() async {
+  print(Constants.supabaseUrl);
+  print(Constants.supabaseAnnonKey);
+
   // init Supabase singleton
   await Supabase.initialize(
     url: Constants.supabaseUrl,
