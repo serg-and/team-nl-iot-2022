@@ -57,6 +57,7 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
       _sessions.forEach((s) => allSessions.add(models.Session(
             s['id'],
             s['name'],
+            // format for the day, date & time
             Jiffy(s['stated_at']),
             Jiffy(s['ended_at']),
 
@@ -182,6 +183,7 @@ class SessionListing extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Shows the sessions from the database
                 Text( '${session.name}',
                     style: Theme.of(context).textTheme.bodyMedium),
                 Text('${session.startedAt.yMMMMEEEEdjm} '),
