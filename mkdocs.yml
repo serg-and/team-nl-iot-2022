@@ -36,9 +36,10 @@ theme:
     - content.code.annotate 
 nav:
     - index.md
-    - Usage:
-      - usage/web-application.md
-      - usage/writing-scripts.md
+    - Features:
+      - features/mobile-app.md
+      - features/web-application.md
+      - features/writing-scripts.md
     - Technical Documentation:
       - running-the-project.md
       - devops.md
@@ -48,7 +49,6 @@ nav:
         - web-application/code-documentation.md
       - App documentation:
         - flutter.md
-        - features.md
         - App/Packages.md
       - api-documentation.md
       
