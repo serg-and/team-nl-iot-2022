@@ -2,6 +2,7 @@ import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:app/models.dart' as models;
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:jiffy/jiffy.dart';
 
 const Map<String, String> outputTypeDisplayNames = {
   'line_chart': 'Line Chart',
@@ -56,8 +57,10 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
       _sessions.forEach((s) => allSessions.add(models.Session(
             s['id'],
             s['name'],
-            // s['stated_at'],
-            // s['ended_at'],
+            // format for the day, date & time
+            Jiffy(s['stated_at']),
+            Jiffy(s['ended_at']),
+
           )));
 
       filteredSessions = allSessions;
@@ -167,24 +170,27 @@ class SessionListing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(session.startedAt);
+     print(session.startedAt);
 
     return Container(
       width: 367.7,
       height: 103.3,
       decoration: BoxDecoration(),
-      child: Stack(
-        children: [
-          Align(
-            alignment: AlignmentDirectional(-0.92, 0),
-            child: Text(
-              'Description',
+      child: Container(
+        child:
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Shows the sessions from the database
+                Text( '${session.name}',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                Text('${session.startedAt.yMMMMEEEEdjm} '),
+                Text('${session.endedAt.yMMMMEEEEdjm}'),
+              ],
             ),
-          ),
-          Text(
-            '${session.id} -- ${session.name}',
-          ),
-        ],
+    ),
       ),
     );
   }

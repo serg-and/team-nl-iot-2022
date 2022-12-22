@@ -4,6 +4,7 @@ class Script {
   String? description;
   String outputType; // bar_chart || line_chart
   String outputName; // Display name of the value
+  
 
   Script(
       this.id, this.name, this.description, this.outputType, this.outputName);
@@ -27,8 +28,8 @@ class ScriptOutput {
 class Session {
   int id;
   String name;
-  // String startedAt;
-  // String? endedAt;
+  var startedAt;
+  var endedAt;
+  Session(this.id, this.name, this.startedAt, this.endedAt);
 
-  Session(this.id, this.name);
 }
