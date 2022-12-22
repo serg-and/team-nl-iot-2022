@@ -177,13 +177,17 @@ class SessionListing extends StatelessWidget {
         children: [
           Align(
             alignment: AlignmentDirectional(-0.92, 0),
-            child: Text(
+
+            child:
+            Text(
               'Description',
             ),
           ),
-          Text(
-            '${session.id} -- ${session.name} -- ${session.startedAt} -- ${session.endedAt}',
-          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
+            child: Text( '${session.id} -- ${session.name} -- ${session.endedAt}',
+                style: Theme.of(context).textTheme.bodyMedium),
+    ),
         ],
       ),
     );
