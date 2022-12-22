@@ -69,7 +69,8 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
 }
 
 // start session by opening a websocket
-Future<void> createSession(List<int> scriptIds, Function callback) async {
+Future<void> createSession(
+    String? name, List<int> scriptIds, Function callback) async {
   IO.Socket _socket = IO.io(SERVER, <String, dynamic>{
     'path': '/socket.io',
     'autoConnect': false,
@@ -82,8 +83,11 @@ Future<void> createSession(List<int> scriptIds, Function callback) async {
 
     print('start-session with scripts: ${scriptIds}');
 
-    // send message to start session with the given scripts
-    _socket.emit('start-session', {'scripts': scriptIds});
+    // send message to start session with the given options
+    _socket.emit('start-session', {
+      'name': name,
+      'scripts': scriptIds,
+    });
 
     // session started, start retrieving outputs
     _socket.on(
@@ -100,10 +104,15 @@ Future<void> createSession(List<int> scriptIds, Function callback) async {
 }
 
 class HeartBeatPage extends StatefulWidget {
+  final String? name;
   final List<int> scriptIds;
   final Function stopSession;
-  const HeartBeatPage(
-      {super.key, required this.scriptIds, required this.stopSession});
+  const HeartBeatPage({
+    super.key,
+    this.name,
+    required this.scriptIds,
+    required this.stopSession,
+  });
 
   @override
   State<HeartBeatPage> createState() => _HeartBeatPageState();
@@ -116,6 +125,7 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
   void initState() {
     super.initState();
     createSession(
+        widget.name,
         widget.scriptIds,
         (List<ScriptOutput> sessionOutputs) => setState(() {
               outputs = sessionOutputs;
