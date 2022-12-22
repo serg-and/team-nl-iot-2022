@@ -1,19 +1,33 @@
 import { spawn } from 'child_process'
 import { supabaseService } from './supabase.mjs'
+import { getFormattedDateTime } from './utils.mjs'
+
+const programs = {
+  py: 'python3',
+  r: 'Rscript',
+}
+const entrypoints = {
+  py: 'python_entrypoint.py',
+  r: 'r_entrypoint.r',
+}
 
 // Starts a session and creates processes to run scripts.
-export async function startSession() {
+export async function startSession({ name, scriptIds }) {
+  // generate default name if no session name is given
+  if (!name?.length) name = `Session ${getFormattedDateTime()}`
+
   // Create a session in the database.
   const { data: { id: sessionId }, error: sessionError } = await supabaseService
     .from('sessions')
-    .insert({ name: 'No Script Name' })
+    .insert({ name })
     .select('id')
     .single()
   
-  // Get a list of scripts from the database.
+  // Get the given scripts from the database.
   const { data: scripts, error: scriptsError } = await supabaseService
     .from('scripts')
     .select('id, language, output_type')
+    .in('id', scriptIds)
   
   // Create output records for each script in the database.
   const { data: scriptOutputs, error: scriptOutputsError } = await supabaseService
@@ -29,7 +43,10 @@ export async function startSession() {
   // Spawn a process for each script to run it.
   const processes = outputs.map(output => {
     const script_path = `storage/uploads/scripts/${output.script.id}.${output.script.language}`
-    const child = spawn('python3', ['core/script-entrypoints/python/start_script.py', script_path])
+    const child = spawn(
+      programs[output.script.language],
+      [`core/script-entrypoints/${entrypoints[output.script.language]}`, script_path]
+    )
 
     // Handle messages from the script.
     child.stdout.on('data', data => {
