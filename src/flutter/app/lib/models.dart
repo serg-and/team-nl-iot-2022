@@ -32,5 +32,4 @@ class Session {
   var endedAt;
   Session(this.id, this.name, this.startedAt, this.endedAt);
 
-
 }
