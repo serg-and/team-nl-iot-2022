@@ -19,9 +19,27 @@ class CreateTeamPage extends StatelessWidget {
   }
 }
 
-class _CreateTeam extends StatelessWidget {
+class _CreateTeam extends StatefulWidget {
   const _CreateTeam({super.key});
 
+  @override
+  State<_CreateTeam> createState() => _CreateTeamState();
+}
+
+class _CreateTeamState extends State<_CreateTeam> {
+
+  late Widget teamButtonWidget;
+  @override
+  void initState() {
+    super.initState();
+    teamButtonWidget = _CreateTeamButton(this.callback);
+  }
+
+  void callback(){
+    setState(() {
+
+    });
+  }
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
@@ -31,7 +49,7 @@ class _CreateTeam extends StatelessWidget {
                     padding: EdgeInsets.only(left: 16.0),
                     child: Text('Create New Team')),
                 Container(
-                    padding: EdgeInsets.only(left: 16.0), child: _CreateTeamButton()),
+                    padding: EdgeInsets.only(left: 16.0), child: teamButtonWidget),
               ]),
               Column(
                 children: teams.map((team) => TeamOverView(team)).toList()
@@ -40,8 +58,11 @@ class _CreateTeam extends StatelessWidget {
   }
 }
 
+
 class _CreateTeamButton extends StatefulWidget {
-  const _CreateTeamButton({super.key});
+  Function callback;
+
+  _CreateTeamButton(this.callback, {super.key});
 
   @override
   State<_CreateTeamButton> createState() => _CreateTeamButtonState();
@@ -85,7 +106,7 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
                           teams.add(new TeamModel(myController.text));
                           Navigator.pop(context);
                           print(teams.map((team) => team.name));
-                          _CreateTeam();
+                          this.widget.callback();
                         });
                       },
                       child: const Text('Create'))
@@ -105,8 +126,18 @@ class TeamOverView extends StatelessWidget {
     return Column(children: [
       Container(
           child: Card(
-            child: Text('${_teamModel.name}'),
-      ))
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width * 0.15,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('${_teamModel.name}', textAlign: TextAlign.center)
+                ]
+              ),
+            )
+          )
+      )
     ]);
   }
 }
