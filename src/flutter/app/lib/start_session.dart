@@ -1,6 +1,7 @@
 import 'package:app/main.dart';
 import 'package:app/select_scripts.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StartSession extends StatefulWidget {
   final Function startSession;
@@ -15,6 +16,12 @@ class _StartSessionState extends State<StartSession> {
   List<int> scriptIds = [];
   bool validState = false;
 
+  @override
+  void initState() {
+    getPreferredScripts();
+    super.initState();
+  }
+
   void validateState() {
     setState(() {
       validState = scriptIds.isNotEmpty;
@@ -23,7 +30,25 @@ class _StartSessionState extends State<StartSession> {
 
   void onStartSession() {
     if (!validState) return;
+    savePreferredScripts();
     widget.startSession(sessionNameController.text, scriptIds);
+  }
+
+  void getPreferredScripts() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String>? ids = prefs.getStringList('scripts');
+    if (ids == null) return;
+
+    setState(() {
+      scriptIds = ids.map((String id) => int.parse(id)).toList();
+    });
+  }
+
+  void savePreferredScripts() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> ids = scriptIds.map((int id) => id.toString()).toList();
+    print('got ${ids}');
+    prefs.setStringList('scripts', ids);
   }
 
   void navigateToSelectScripts() async {
