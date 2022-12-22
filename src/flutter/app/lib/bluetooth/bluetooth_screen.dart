@@ -1,5 +1,5 @@
-import 'package:app/bluetoothNew/ui/ble_status_screen.dart';
-import 'package:app/bluetoothNew/ui/device_list.dart';
+import 'package:app/bluetooth/ui/ble_status_screen.dart';
+import 'package:app/bluetooth/ui/device_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';

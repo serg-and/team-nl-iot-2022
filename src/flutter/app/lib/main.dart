@@ -7,11 +7,11 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'bluetoothNew/ble/ble_device_connector.dart';
-import 'bluetoothNew/ble/ble_device_interactor.dart';
-import 'bluetoothNew/ble/ble_logger.dart';
-import 'bluetoothNew/ble/ble_scanner.dart';
-import 'bluetoothNew/ble/ble_status_monitor.dart';
+import 'bluetooth/ble/ble_device_connector.dart';
+import 'bluetooth/ble/ble_device_interactor.dart';
+import 'bluetooth/ble/ble_logger.dart';
+import 'bluetooth/ble/ble_scanner.dart';
+import 'bluetooth/ble/ble_status_monitor.dart';
 
 Future<void> main()  async {
   WidgetsFlutterBinding.ensureInitialized();

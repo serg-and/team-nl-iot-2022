@@ -1,10 +1,9 @@
 
-import 'package:app/bluetooth/pages/bluetooth_page.dart';
 import 'package:app/current_session.dart';
 import 'package:app/sessions.history.dart';
 import 'package:flutter/material.dart';
 
-import 'bluetoothNew/bluetooth_screen.dart';
+import 'bluetooth/bluetooth_screen.dart';
 import 'data.dart';
 import 'home_page.dart';
 
