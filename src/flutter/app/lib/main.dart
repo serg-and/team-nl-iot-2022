@@ -13,7 +13,7 @@ import 'bluetoothNew/ble/ble_logger.dart';
 import 'bluetoothNew/ble/ble_scanner.dart';
 import 'bluetoothNew/ble/ble_status_monitor.dart';
 
-Future<void> main() async {
+Future<void> main()  async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final _ble = FlutterReactiveBle();

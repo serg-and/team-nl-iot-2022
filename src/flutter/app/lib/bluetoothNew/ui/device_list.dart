@@ -148,7 +148,7 @@ class _DeviceListState extends State<_DeviceList> {
                                         DeviceDetailScreen(device: device)));
                           },
                         ),
-                      ).where((element) => false)
+                      )
                       .toList(),
                 ],
               ),
