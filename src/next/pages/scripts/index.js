@@ -1,42 +1,120 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Box, Button, Heading, Text } from "grommet"
-import { FormTrash } from 'grommet-icons'
+// import { Box, Button, Heading, Text } from "grommet"
+// import { Close } from 'grommet-icons'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Close from '@mui/icons-material/Close';
+import { Box, Button, Card, IconButton, Modal, Stack, Paper, Typography } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
+
+const outputTypeDisplayStrings = {
+  'line_chart': 'Line Chart',
+  'bar_chart': 'Bar Chart',
+}
+const languageDisplayStrings = {
+  'py': 'Python',
+  'r': 'R',
+}
 
 export default () => {
   const supabase = useSupabaseClient()
   const [scripts, setScripts] = useState([])
+  const [deletionScript, setDeletionScript] = useState()
 
   useEffect(() => {
-    const loadData = async () => {
+    async function loadData() {
       const { data, error } = await supabase
         .from('scripts')
         .select('id, name, language, output_type, created_at')
       
-      setScripts(data)
+      if (data) setScripts(data)
     }
     loadData()
   }, [])
 
   return (
-    <Box gap='small'>
-      <Box direction='row' justify='between' align='center'>
-        <Heading level={2}>
-          Scripts
-        </Heading>
-        <Link href='/scripts/create'>
-          <Button label='Create Script'/>
-        </Link>
-      </Box>
-      {scripts.map(script => 
-        <ScriptListing
-          key={script.id}
-          script={script}
-          deleteScript={() => deleteScript(script)}
-        />
-      )}
-    </Box>
+    <>
+      <Stack spacing={3}>
+        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+          <Typography variant='h5'>Scripts</Typography>
+          <Link href='/scripts/create' style={{ textDecoration: 'none' }}>
+            <Button variant='contained'>Create Script</Button>
+          </Link>
+        </Stack>
+        <div style={{ display: 'flex', height: '100%' }}>
+          <div style={{ flexGrow: 1, height: '75vh' }}>
+            <DataGrid
+              rows={scripts}
+              columns={[
+                {
+                  field: 'name',
+                  headerName: 'Name',
+                  flex: 1,
+                  minWidth: 150,
+                },
+                {
+                  field: 'output_type',
+                  headerName: 'Output Type',
+                  valueGetter: ({ value }) => outputTypeDisplayStrings[value]
+                },
+                {
+                  field: 'language',
+                  headerName: 'Language',
+                  valueGetter: ({ value }) => languageDisplayStrings[value]
+                },
+                {
+                  field: 'actions',
+                  headerName: 'Actions',
+                  width: 132,
+                  sortable: false,
+                  renderCell: (params) => (
+                    <Stack direction='row' spacing={1}>
+                      <Link href={`/scripts/${params.row.id}`} style={{ textDecoration: 'none' }}>
+                        <Button
+                          variant='contained'
+                        >Edit</Button>
+                      </Link>
+                      <IconButton onClick={() => setDeletionScript(params.row)}>
+                        <DeleteForeverIcon color='error' />
+                      </IconButton>
+                    </Stack>
+                  )
+                }
+              ]}
+            />
+          </div>
+        </div>
+      </Stack>
+      <Modal
+        open={!!deletionScript}
+        onClose={() => setDeletionScript(null)}
+      >
+        <Paper sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 'min(90vw, 400px)',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          <Stack spacing={3}>
+            <Stack direction='row' justifyContent='space-between'>
+              <Typography variant='h5'>Delete Script</Typography>
+              <IconButton onClick={() => setDeletionScript(null)}>
+                <Close />
+              </IconButton>
+            </Stack>
+            <Stack direction='row' spacing={3}>
+              <Button variant='outlined' color='secondary' onClick={() => setDeletionScript(null)}>Cancel</Button>
+              <Button variant='contained' color='error' onClick={() => deleteScript(deletionScript)}>Delete</Button>
+            </Stack>
+          </Stack>
+        </Paper>
+      </Modal>
+    </>
   )
 
   async function deleteScript(script) {
@@ -52,21 +130,4 @@ export default () => {
     
     setScripts(scripts.filter(s => s !== script))
    }
-}
-
-function ScriptListing({ script, deleteScript }) {
-  // console.log(script)
-  return (
-    <Box direction='row' align='center' gap='large' background='light-grey'>
-      <Heading level={4}>
-        {script.name}
-      </Heading>
-      <Text>{script.output_type}</Text>
-      <Text>{script.language}</Text>
-      <Button
-        icon={<FormTrash color='red'/>}
-        onClick={deleteScript}
-      />
-    </Box>
-  )
 }

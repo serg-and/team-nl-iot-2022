@@ -1,0 +1,1 @@
+export const scriptsFolder = './storage/uploads/scripts'
