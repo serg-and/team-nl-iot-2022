@@ -1,4 +1,3 @@
-
 import 'package:app/current_session.dart';
 import 'package:app/sessions.history.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +6,10 @@ import 'bluetooth/bluetooth_screen.dart';
 import 'data.dart';
 // Import the other pages
 import 'package:app/setup_session.dart';
-import 'package:app/bluetooth/pages/bluetooth_page.dart';
-import 'package:app/select_scripts.dart';
-import 'package:app/sessions.history.dart';
+// import 'package:app/bluetooth/pages/bluetooth_page.dart';
+import 'package:app/start_session.dart';
+// import 'package:app/select_scripts.dart';
+// import 'package:app/sessions.history.dart';
 import 'home_page.dart';
 
 String? sessionName;
@@ -62,7 +62,7 @@ class _RoutingState extends State<Routing> {
 
     List routing = [
       Home(),
-      const Bluetooth(),
+      const BluetoothScreen(),
       sessionPage,
       const History(),
     ];
