@@ -1,17 +1,21 @@
 import 'dart:async';
 
+import 'package:app/bluetooth/ble/ble_scanner.dart';
 import 'package:app/bluetooth/ble/reactive_state.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class BleDeviceConnector extends ReactiveState<ConnectionStateUpdate> {
-  BleDeviceConnector({
-    required FlutterReactiveBle ble,
-    required Function(String message) logMessage,
-  })  : _ble = ble,
-        _logMessage = logMessage;
+  BleDeviceConnector(
+      {required FlutterReactiveBle ble,
+      required Function(String message) logMessage,
+      required BleScanner scanner})
+      : _ble = ble,
+        _logMessage = logMessage,
+        _scanner = scanner;
 
   final FlutterReactiveBle _ble;
   final void Function(String message) _logMessage;
+  final BleScanner _scanner;
 
   @override
   Stream<ConnectionStateUpdate> get state => _deviceConnectionController.stream;
@@ -23,6 +27,13 @@ class BleDeviceConnector extends ReactiveState<ConnectionStateUpdate> {
 
   Future<void> connect(String deviceId) async {
     _logMessage('Start connecting to $deviceId');
+    if (_scanner.connected.where((element) => element.id == deviceId).length >
+        0) {
+      _scanner.connected.remove(
+          _scanner.connected.where((element) => element.id == deviceId).first);
+    }
+    _scanner.connected
+        .add(_scanner.devices.where((element) => element.id == deviceId).first);
     _connection = _ble.connectToDevice(id: deviceId).listen(
       (update) {
         _logMessage(
@@ -35,6 +46,8 @@ class BleDeviceConnector extends ReactiveState<ConnectionStateUpdate> {
   }
 
   Future<void> disconnect(String deviceId) async {
+    _scanner.connected
+        .remove(_scanner.connected.where((element) => element.id == deviceId));
     try {
       _logMessage('disconnecting to device: $deviceId');
       await _connection.cancel();
