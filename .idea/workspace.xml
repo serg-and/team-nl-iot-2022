@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ede8b63c-6a97-4190-b143-ee47ba998306" name="Changes" comment="Add features to nav">
+      <change beforePath="$PROJECT_DIR$/src/flutter/app/lib/HeartbeatData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/src/flutter/app/lib/HeartbeatData.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2Ir4ZmdDPRxkRW8RbHxBRhKzwQc" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ede8b63c-6a97-4190-b143-ee47ba998306" name="Changes" comment="" />
+      <created>1670926427092</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1670926427092</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Add better descriptions to bluetooth packages">
+      <created>1670926862659</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1670926862660</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Add requirement">
+      <created>1670927304553</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1670927304553</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add features">
+      <created>1670929438461</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1670929438461</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Add features">
+      <created>1670929737773</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670929737773</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add features">
+      <created>1670930024725</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670930024725</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Fix image">
+      <created>1670935490525</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670935490525</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add photo">
+      <created>1670935974716</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670935974716</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add photo">
+      <created>1670936137315</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1670936137315</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add photo">
+      <created>1670936258534</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670936258534</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Add description to heartbeat charts">
+      <created>1671015181416</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1671015181416</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Add description to heartbeat charts">
+      <created>1671015301508</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1671015301508</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Add description to heartbeat charts and image">
+      <created>1671015547932</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1671015547932</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Add features to nav">
+      <created>1671015870806</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1671015870806</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add better descriptions to bluetooth packages" />
+    <MESSAGE value="Add requirement" />
+    <MESSAGE value="Add features" />
+    <MESSAGE value="Fix image" />
+    <MESSAGE value="add photo" />
+    <MESSAGE value="Add description to heartbeat charts" />
+    <MESSAGE value="Add description to heartbeat charts and image" />
+    <MESSAGE value="Add features to nav" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add features to nav" />
+  </component>
+</project>
