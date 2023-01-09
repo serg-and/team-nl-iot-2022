@@ -13,7 +13,7 @@ import 'bluetooth/ble/ble_logger.dart';
 import 'bluetooth/ble/ble_scanner.dart';
 import 'bluetooth/ble/ble_status_monitor.dart';
 
-Future<void> main()  async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final _ble = FlutterReactiveBle();
@@ -21,9 +21,7 @@ Future<void> main()  async {
   final _scanner = BleScanner(ble: _ble, logMessage: _bleLogger.addToLog);
   final _monitor = BleStatusMonitor(_ble);
   final _connector = BleDeviceConnector(
-    ble: _ble,
-    logMessage: _bleLogger.addToLog,
-  );
+      ble: _ble, logMessage: _bleLogger.addToLog, scanner: _scanner);
   final _serviceDiscoverer = BleDeviceInteractor(
     bleDiscoverServices: _ble.discoverServices,
     readCharacteristic: _ble.readCharacteristic,
@@ -50,6 +48,7 @@ Future<void> main()  async {
         StreamProvider<BleScannerState?>(
           create: (_) => _scanner.state,
           initialData: const BleScannerState(
+            connectedDevices: [],
             discoveredDevices: [],
             scanIsInProgress: false,
           ),
