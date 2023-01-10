@@ -15,9 +15,11 @@ part 'device_interaction_tab.g.dart';
 
 class DeviceInteractionTab extends StatelessWidget {
   final DiscoveredDevice device;
+  final void Function(String deviceId) disconnect;
 
   const DeviceInteractionTab({
     required this.device,
+    required this.disconnect,
     Key? key,
   }) : super(key: key);
 
@@ -66,6 +68,7 @@ class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
   }
 
   void disconnect() {
+    Mds.disconnect('${deviceId}');
     deviceConnector.disconnect(deviceId);
   }
 }

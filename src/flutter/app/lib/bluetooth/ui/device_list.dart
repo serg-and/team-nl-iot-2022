@@ -16,6 +16,7 @@ class DeviceListScreen extends StatelessWidget {
         builder: (_, bleScanner, bleScannerState, bleLogger, __) => _DeviceList(
           scannerState: bleScannerState ??
               const BleScannerState(
+                connectedDevices: [],
                 discoveredDevices: [],
                 scanIsInProgress: false,
               ),
@@ -129,7 +130,30 @@ class _DeviceListState extends State<_DeviceList> {
                     trailing: (widget.scannerState.scanIsInProgress ||
                             widget.scannerState.discoveredDevices.isNotEmpty)
                         ? Text(
-                            'count: ${widget.scannerState.discoveredDevices.length}',
+                            'connected count: ${widget.scannerState.connectedDevices.length}',
+                          )
+                        : null,
+                  ),
+                  ...widget.scannerState.connectedDevices.map(
+                    (device) => ListTile(
+                      title: Text(device.name),
+                      subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
+                      leading: Image.asset("assets/Images/ms.png"),
+                      onTap: () async {
+                        widget.stopScan();
+                        await Navigator.push<void>(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    DeviceDetailScreen(device: device)));
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    trailing: (widget.scannerState.scanIsInProgress ||
+                            widget.scannerState.discoveredDevices.isNotEmpty)
+                        ? Text(
+                            'count: ${widget.scannerState.discoveredDevices.where((element) => element.name.contains("Movesense")).length}',
                           )
                         : null,
                   ),
@@ -138,7 +162,7 @@ class _DeviceListState extends State<_DeviceList> {
                         (device) => ListTile(
                           title: Text(device.name),
                           subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                          leading: const BluetoothIcon(),
+                          leading: Image.asset("assets/Images/ms.png"),
                           onTap: () async {
                             widget.stopScan();
                             await Navigator.push<void>(
@@ -149,6 +173,8 @@ class _DeviceListState extends State<_DeviceList> {
                           },
                         ),
                       )
+                      .where((element) =>
+                          element.title.toString().contains("Movesense"))
                       .toList(),
                 ],
               ),
