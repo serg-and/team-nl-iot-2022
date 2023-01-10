@@ -14,7 +14,7 @@ import 'package:app/setup_session.dart';
 import 'package:app/start_session.dart';
 // import 'package:app/select_scripts.dart';
 // import 'package:app/sessions.history.dart';
-import 'home_page.dart';
+
 
 String? sessionName;
 List<int> sessionScripts = [];
@@ -102,9 +102,8 @@ class _RoutingState extends State<Routing> {
   }
 
   List routing = [
-    Home(),
+    Current(),
     const BluetoothScreen(),
-    const Current(),
     const History()
   ];
   @override
@@ -125,9 +124,8 @@ class _RoutingState extends State<Routing> {
         : StartSession(startSession: startSession);
 
     List routing = [
-      Home(),
-      const BluetoothScreen(),
       sessionPage,
+      const BluetoothScreen(),
       const History(),
     ];
 
