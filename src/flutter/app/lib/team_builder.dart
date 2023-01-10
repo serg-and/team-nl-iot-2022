@@ -12,7 +12,6 @@ class CreateTeamPage extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar("Settings"),
         body: Container(
-
             child: _CreateTeam()) // Use CustomAppBar with "Settings" as title
         );
 // End Scaffold
@@ -40,6 +39,7 @@ class _CreateTeamState extends State<_CreateTeam> {
 
     });
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
@@ -173,7 +173,9 @@ class _TeamOverViewState extends State<TeamOverView> {
 
                 children: [
                   Text('${widget._teamModel.name}', textAlign: TextAlign.center),
-                  SizedBox(
+                  Row(
+                    children: [
+                    SizedBox(
                     width: 50,
                     height: 50,
                     child: ElevatedButton(
@@ -183,6 +185,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: Text('Create Team'),
+
                                 actions: [
                                   TextField(
                                     controller: _myControllerName,
@@ -195,7 +198,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                                     controller: _myControllerId,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      labelText: 'Team name',
+                                      labelText: 'player ID',
                                     ),
                                   ),
                                   TextButton(
@@ -217,7 +220,42 @@ class _TeamOverViewState extends State<TeamOverView> {
                         size: 20.0,
                         Icons.add
                       )
-                  ),)
+                  ),),
+                  SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                          onPressed: () => {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Are you sure you want remove this team ${widget._teamModel.name}'),
+
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              print('name: ${_myControllerName.text} id: ${_myControllerId}');
+                                              this.widget._teamModel.teamMembers.add(new TeamMemberModel(int.parse(_myControllerId.text), _myControllerName.text));
+                                              Navigator.pop(context);
+                                              print(this.widget._teamModel.teamMembers.map((teamMember) => 'name: ${teamMember.name} id: ${teamMember.id}'));
+                                            });
+                                          },
+                                          child: const Text('Create'))
+                                    ],
+                                  );
+                                })
+                          },
+
+                          child: Icon(
+                              size: 20.0,
+                              Icons.remove,
+                          )
+                      )
+
+                  )])
                 ]
               ),
             )
