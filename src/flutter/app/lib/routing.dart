@@ -1,6 +1,10 @@
+import 'package:app/auth/register_page.dart';
+import 'package:app/constants.dart';
 import 'package:app/current_session.dart';
 import 'package:app/sessions.history.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'bluetooth/bluetooth_screen.dart';
 import 'data.dart';
@@ -23,8 +27,63 @@ class Routing extends StatefulWidget {
 }
 
 class _RoutingState extends State<Routing> {
+  bool isAuthenticated = false;
   var currentIndex = 0;
   bool sessionActive = false;
+
+  @override
+  void initState() {
+    restoreSession();
+    setupAuthListener();
+    super.initState();
+  }
+
+  void restoreSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool exist = prefs.containsKey(PERSIST_SESSION_KEY);
+    if (!exist) return;
+
+    String? jsonStr = prefs.getString(PERSIST_SESSION_KEY);
+    if (jsonStr == null) return;
+
+    /**
+     * TODO: we need a timer to call refresh session before the current session expired. 
+     * The default expiring time is 3600. Only in 1 hour
+     * */
+    final response = await supabase.auth.recoverSession(jsonStr);
+    if (response.session == null) {
+      prefsRemovePersistSessionString();
+      return;
+    }
+  }
+
+  // listen to all authentication state changes and update routing state
+  void setupAuthListener() {
+    // supabase.auth.currentSession.persistSessionString;
+    supabase.auth.onAuthStateChange.listen((data) async {
+      final AuthChangeEvent event = data.event;
+
+      if (event == AuthChangeEvent.signedIn) {
+        setState(() => isAuthenticated = true);
+        prefsSetPersistSessionString(
+            supabase.auth.currentSession?.persistSessionString);
+      } else if (event == AuthChangeEvent.signedOut) {
+        setState(() => isAuthenticated = false);
+        prefsRemovePersistSessionString();
+      }
+    });
+  }
+
+  void prefsSetPersistSessionString(String? sessionString) async {
+    if (sessionString == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(PERSIST_SESSION_KEY, sessionString);
+  }
+
+  void prefsRemovePersistSessionString() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(PERSIST_SESSION_KEY);
+  }
 
   void startSession(String? name, List<int> scriptIds) {
     sessionName = name;
@@ -50,6 +109,11 @@ class _RoutingState extends State<Routing> {
   ];
   @override
   Widget build(BuildContext context) {
+    // set routing to register/login page if user is not authenticated
+    if (!isAuthenticated) {
+      return RegisterPage(isRegistering: true);
+    }
+
     double displayWidth = MediaQuery.of(context).size.width;
     Widget sessionPage = sessionActive
         ? HeartBeatPage(
