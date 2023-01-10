@@ -15,7 +15,6 @@ import 'package:app/start_session.dart';
 // import 'package:app/select_scripts.dart';
 // import 'package:app/sessions.history.dart';
 
-
 String? sessionName;
 List<int> sessionScripts = [];
 
@@ -27,7 +26,7 @@ class Routing extends StatefulWidget {
 }
 
 class _RoutingState extends State<Routing> {
-  bool isAuthenticated = false;
+  bool isAuthenticated = DebugConfig.loginDisabled;
   var currentIndex = 0;
   bool sessionActive = false;
 
@@ -101,11 +100,7 @@ class _RoutingState extends State<Routing> {
     });
   }
 
-  List routing = [
-    Current(),
-    const BluetoothScreen(),
-    const History()
-  ];
+  List routing = [Current(), const BluetoothScreen(), const History()];
   @override
   Widget build(BuildContext context) {
     // set routing to register/login page if user is not authenticated

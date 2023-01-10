@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+abstract class DebugConfig {
+  static const loginDisabled = false;
+}
+
 /// Supabase client
 final supabase = Supabase.instance.client;
 
