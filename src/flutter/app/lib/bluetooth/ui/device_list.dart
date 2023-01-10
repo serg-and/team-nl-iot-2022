@@ -138,7 +138,7 @@ class _DeviceListState extends State<_DeviceList> {
                     (device) => ListTile(
                       title: Text(device.name),
                       subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                      leading: const BluetoothIcon(),
+                      leading: Image.asset("assets/Images/ms.png"),
                       onTap: () async {
                         widget.stopScan();
                         await Navigator.push<void>(
@@ -162,7 +162,7 @@ class _DeviceListState extends State<_DeviceList> {
                         (device) => ListTile(
                           title: Text(device.name),
                           subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                          leading: const BluetoothIcon(),
+                          leading: Image.asset("assets/Images/ms.png"),
                           onTap: () async {
                             widget.stopScan();
                             await Navigator.push<void>(
