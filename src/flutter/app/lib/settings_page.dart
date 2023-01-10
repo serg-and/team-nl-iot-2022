@@ -1,3 +1,4 @@
+import 'package:app/constants.dart';
 import 'package:app/main.dart'; // Import main.dart file
 import 'package:flutter/material.dart'; // Import Material Design package
 
@@ -6,11 +7,28 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // logout user from the supabase session
+    void signOut() {
+      supabase.auth.signOut();
+      Navigator.pop(context);
+    }
+
     return Scaffold(
-      appBar: CustomAppBar("Settings"), // Use CustomAppBar with "Settings" as title
-      body: Center(
-        child: Text('Settings'), // Display "Settings" text in the center of the screen
+      appBar: CustomAppBar(
+        "Settings",
+        showOptions: false,
       ),
-    ); // End Scaffold
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            ElevatedButton(
+              onPressed: signOut,
+              child: Text('Log Out'),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
