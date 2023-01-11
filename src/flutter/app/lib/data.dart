@@ -16,13 +16,14 @@ List bottomBar = [
     Icons.bluetooth,
     color: Colors.white,
   ),
+  //Icon for history page
   const Icon(
     Icons.history,
     color: Colors.white,
   ),
   // Icon for Team Page
   const Icon(
-    Icons.accessibility_sharp,
+    Icons.safety_divider,
     color: Colors.white,
   ),
 ];
