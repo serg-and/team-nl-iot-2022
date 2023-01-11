@@ -84,6 +84,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
             ? Text(deviceModel.accelerometerData)
             : Text(""),
         trailing: Switch(
+          activeColor: Colors.deepOrange,
           value: deviceModel.accelerometerSubscribed,
           onChanged: (value) => {_onAccelerometerButtonPressed(deviceModel)},
         ),
