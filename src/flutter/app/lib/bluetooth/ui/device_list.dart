@@ -107,6 +107,9 @@ class _DeviceListState extends State<_DeviceList> {
                         onPressed: !widget.scannerState.scanIsInProgress
                             ? _startScanning
                             : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                        ),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -126,10 +129,10 @@ class _DeviceListState extends State<_DeviceList> {
                           }
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.deepOrange),
+                          backgroundColor: MaterialStateProperty.all(Colors.orange),
                         ),
                         child: const Text(
-                          "Filter",
+                          "Scan Filter",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -138,6 +141,9 @@ class _DeviceListState extends State<_DeviceList> {
                         onPressed: widget.scannerState.scanIsInProgress
                             ? widget.stopScan
                             : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                        ),
                       ),
                     ],
                   ),
@@ -298,6 +304,7 @@ class FilterPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sensors that you want to connect discover"),
+        backgroundColor: Colors.orange,
       ),
       body: SafeArea(
         child: FilterListWidget<Sensor>(
