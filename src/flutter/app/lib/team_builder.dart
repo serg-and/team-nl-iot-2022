@@ -113,7 +113,7 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
           'coach': uuid,
           'members': [],
         })
-        .select('id, name')
+        .select('id, name, members')
         .single();
 
     setState(() => teams.add(TeamModel.fromMap(res)));
@@ -177,25 +177,31 @@ class _TeamOverViewState extends State<TeamOverView> {
     super.dispose();
   }
 
-  void addMember() async {
-    setState(() {
-      // print('name: ${_myControllerName.text} id: ${_myControllerId.text}');
-
-      this.widget._teamModel.teamMembers.add(
-            new TeamMemberModel(
-              int.parse(_myControllerId.text),
-              _myControllerName.text,
-            ),
-          );
-
-      // print(this.widget._teamModel.teamMembers.map(
-      //     (teamMember) => 'name: ${teamMember.name} id: ${teamMember.id}'));
-    });
-
+  void removeTeam() async {
+    await supabase.from('teams').delete().match({'id': widget._teamModel.id});
+    setState(() => teams.remove(this.widget._teamModel));
+    this.widget._callBack();
     Navigator.pop(context);
   }
 
-  void removeMember() async {}
+  void addMember() async {
+    final TeamMemberModel newTeamMember = new TeamMemberModel(
+      int.parse(_myControllerId.text),
+      _myControllerName.text,
+    );
+
+    final membersData = [...widget._teamModel.teamMembers, newTeamMember]
+        .map((member) => {'id': member.id, 'name': member.name})
+        .toList();
+
+    await supabase
+        .from('teams')
+        .update({'members': membersData}).eq('id', widget._teamModel.id);
+
+    setState(() => this.widget._teamModel.teamMembers.add(newTeamMember));
+
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -263,15 +269,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                                                   'Are you sure you want remove team "${widget._teamModel.name}"'),
                                               actions: [
                                                 TextButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        teams.remove(this
-                                                            .widget
-                                                            ._teamModel);
-                                                        this.widget._callBack();
-                                                        Navigator.pop(context);
-                                                      });
-                                                    },
+                                                    onPressed: removeTeam,
                                                     child:
                                                         const Text('Remove')),
                                                 TextButton(
@@ -323,6 +321,22 @@ class TeamMember extends StatefulWidget {
 }
 
 class _TeamMemberState extends State<TeamMember> {
+  void removeMember() async {
+    final membersData = widget._teamModel.teamMembers
+        .where((member) => member != widget.teamMember)
+        .map((member) => {'id': member.id, 'name': member.name})
+        .toList();
+
+    await supabase
+        .from('teams')
+        .update({'members': membersData}).eq('id', widget._teamModel.id);
+
+    setState(() => widget._teamModel.teamMembers.remove(widget.teamMember));
+
+    this.widget._callback();
+    Navigator.pop(context);
+  }
+
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 16.0),
@@ -350,19 +364,7 @@ class _TeamMemberState extends State<TeamMember> {
                                                 'Are you sure you want remove team member "${widget.teamMember.name}"'),
                                             actions: [
                                               TextButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      this
-                                                          .widget
-                                                          ._teamModel
-                                                          .teamMembers
-                                                          .remove(this
-                                                              .widget
-                                                              .teamMember);
-                                                      this.widget._callback();
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
+                                                  onPressed: removeMember,
                                                   child: const Text('Remove')),
                                               TextButton(
                                                   onPressed: () {
