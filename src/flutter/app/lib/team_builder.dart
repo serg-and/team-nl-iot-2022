@@ -280,15 +280,21 @@ class TeamView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
         children: _teamModel.teamMembers
-            .map((teamMember) => TeamMember(teamMember))
+            .map((teamMember) => TeamMember(teamMember, _teamModel))
             .toList());
   }
 }
 
-class TeamMember extends StatelessWidget {
+class TeamMember extends StatefulWidget {
+  final TeamModel _teamModel;
   final TeamMemberModel teamMember;
-  TeamMember(this.teamMember);
+  TeamMember(this.teamMember, this._teamModel);
 
+  @override
+  State<TeamMember> createState() => _TeamMemberState();
+}
+
+class _TeamMemberState extends State<TeamMember> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 2.0,horizontal: 16.0),
@@ -298,7 +304,44 @@ class TeamMember extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
 
               child: Row(
-                  children: [Text('name: ${teamMember.name} \t\t\t ID: ${teamMember.id}')]
+                  children: [
+                    Text('name: ${widget.teamMember.name} \t\t\t ID: ${widget.teamMember.id}'),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                        onPressed: () => {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Are you sure you want remove team "${widget._teamModel.name}"'),
+
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            this.widget._teamModel.teamMembers.remove(this.widget.teamMember)
+                                            this.widget._callBack();
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: const Text('Remove')),
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: const Text('Cancel')),
+                                  ],
+                                );
+                              })
+                        },
+                        child: Icon(
+                          size: 10.0,
+                          Icons.remove,
+                        )
+                    )
+                  ]
               )
           )
       )
