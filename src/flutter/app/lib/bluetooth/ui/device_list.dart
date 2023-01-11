@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
@@ -81,6 +83,10 @@ class _DeviceListState extends State<_DeviceList> {
   void _startScanning() {
     final text = _uuidController.text;
     widget.startScan(text.isEmpty ? [] : [Uuid.parse(_uuidController.text)]);
+
+    Timer(Duration(seconds: 10), () {
+      widget.stopScan();
+    });
   }
 
   @override
