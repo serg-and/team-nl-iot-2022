@@ -20,6 +20,11 @@ List bottomBar = [
     Icons.history,
     color: Colors.white,
   ),
+  // Icon for Team Page
+  const Icon(
+    Icons.accessibility_sharp,
+    color: Colors.white,
+  ),
 ];
 
 // name of the city, country, rating of the city and image of the path

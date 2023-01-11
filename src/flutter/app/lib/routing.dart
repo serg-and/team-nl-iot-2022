@@ -2,6 +2,7 @@ import 'package:app/auth/register_page.dart';
 import 'package:app/constants.dart';
 import 'package:app/current_session.dart';
 import 'package:app/sessions.history.dart';
+import 'package:app/team_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -103,7 +104,7 @@ class _RoutingState extends State<Routing> {
     });
   }
 
-  List routing = [Current(), const BluetoothScreen(), const History()];
+  // List routing = [Current(), const BluetoothScreen(), const History()];
   @override
   Widget build(BuildContext context) {
     // set routing to register/login page if user is not authenticated
@@ -125,6 +126,7 @@ class _RoutingState extends State<Routing> {
       sessionPage,
       const BluetoothScreen(),
       const History(),
+      const CreateTeamPage(),
     ];
 
     return Scaffold(

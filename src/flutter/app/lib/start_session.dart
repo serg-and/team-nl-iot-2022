@@ -1,5 +1,6 @@
 import 'package:app/main.dart';
 import 'package:app/select_scripts.dart';
+import 'package:app/team_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -70,6 +71,10 @@ class _StartSessionState extends State<StartSession> {
     validateState();
   }
 
+  void configureTeam() async {
+    print('configure team members');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +137,7 @@ class _StartSessionState extends State<StartSession> {
                           ),
                         ),
                         InkWell(
-                          onTap: () => print('confiugre team'),
+                          onTap: configureTeam,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
