@@ -1,3 +1,4 @@
+import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
@@ -183,3 +184,132 @@ class _DeviceListState extends State<_DeviceList> {
         ),
       );
 }
+
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, this.title}) : super(key: key);
+  final String? title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<Sensor>? selectedSensorList = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title!),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final list = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FilterPage(
+                      allTextList: sensorList,
+                      selectedSensorList: selectedSensorList,
+                    ),
+                  ),
+                );
+                if (list != null) {
+                  setState(() {
+                    selectedSensorList = List.from(list);
+                  });
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.deepOrange),
+              ),
+              child: const Text(
+                "Filter",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          if (selectedSensorList == null || selectedSensorList!.isEmpty)
+            const Expanded(
+              child: Center(
+                child: Text('No Sensor selected'),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(selectedSensorList![index].name!),
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: selectedSensorList!.length,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilterPage extends StatelessWidget {
+  const FilterPage({Key? key, this.allTextList, this.selectedSensorList})
+      : super(key: key);
+  final List<Sensor>? allTextList;
+  final List<Sensor>? selectedSensorList;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Sensors that you want to connect discover"),
+      ),
+      body: SafeArea(
+        child: FilterListWidget<Sensor>(
+          themeData: FilterListThemeData(context),
+          hideSelectedTextCount: true,
+          listData: sensorList,
+          selectedListData: selectedSensorList,
+          onApplyButtonClick: (list) {
+            Navigator.pop(context, list);
+          },
+          choiceChipLabel: (item) {
+            /// Used to print text on chip
+            return item!.name;
+          },
+          validateSelectedItem: (list, val) {
+            ///  identify if item is selected or not
+            return list!.contains(val);
+          },
+          onItemSearch: (user, query) {
+            /// When search query change in search bar then this method will be called
+            ///
+            /// Check if items contains query
+            return user.name!.toLowerCase().contains(query.toLowerCase());
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class Sensor {
+  final String? name;
+  Sensor({this.name});
+}
+
+/// Creating a global list for example purpose.
+/// Generally it should be within data class or where ever you want
+List<Sensor> sensorList = [
+  Sensor(name: "MoveSense"),
+  Sensor(name: "Polar"),
+];
