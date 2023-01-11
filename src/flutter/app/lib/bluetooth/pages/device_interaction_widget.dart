@@ -98,6 +98,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         subtitle:
             deviceModel.hrSubscribed ? Text(deviceModel.hrData) : Text(""),
         trailing: Switch(
+          activeColor: Colors.deepOrange,
           value: deviceModel.hrSubscribed,
           onChanged: (value) => {_onHrButtonPressed(deviceModel)},
         ),
