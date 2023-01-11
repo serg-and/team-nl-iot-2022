@@ -50,6 +50,7 @@ class _DeviceList extends StatefulWidget {
 
 class _DeviceListState extends State<_DeviceList> {
   late TextEditingController _uuidController;
+  List<Sensor>? selectedSensorList = [];
 
   @override
   void initState() {
@@ -106,6 +107,31 @@ class _DeviceListState extends State<_DeviceList> {
                         onPressed: !widget.scannerState.scanIsInProgress
                             ? _startScanning
                             : null,
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          final list = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FilterPage(
+                                allTextList: sensorList,
+                                selectedSensorList: selectedSensorList,
+                              ),
+                            ),
+                          );
+                          if (list != null) {
+                            setState(() {
+                              selectedSensorList = List.from(list);
+                            });
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.deepOrange),
+                        ),
+                        child: const Text(
+                          "Filter",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                       ElevatedButton(
                         child: const Text('Stop'),
@@ -208,31 +234,31 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            TextButton(
-              onPressed: () async {
-                final list = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FilterPage(
-                      allTextList: sensorList,
-                      selectedSensorList: selectedSensorList,
-                    ),
-                  ),
-                );
-                if (list != null) {
-                  setState(() {
-                    selectedSensorList = List.from(list);
-                  });
-                }
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.deepOrange),
-              ),
-              child: const Text(
-                "Filter",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            // TextButton(
+            //   onPressed: () async {
+            //     final list = await Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => FilterPage(
+            //           allTextList: sensorList,
+            //           selectedSensorList: selectedSensorList,
+            //         ),
+            //       ),
+            //     );
+            //     if (list != null) {
+            //       setState(() {
+            //         selectedSensorList = List.from(list);
+            //       });
+            //     }
+            //   },
+            //   style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(Colors.deepOrange),
+            //   ),
+            //   child: const Text(
+            //     "Filter",
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            // ),
           ],
         ),
       ),
