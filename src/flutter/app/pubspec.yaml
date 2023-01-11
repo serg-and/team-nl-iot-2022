@@ -50,6 +50,7 @@ dependencies:
   socket_io_client: ^2.0.0
   quickalert: ^1.0.1
   jiffy: ^5.0.0
+  filter_list: ^1.0.2
 
   provider: ^6.0.4
   permission_handler: ^10.2.0
