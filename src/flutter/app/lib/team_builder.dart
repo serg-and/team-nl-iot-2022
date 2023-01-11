@@ -60,7 +60,7 @@ class _CreateTeamState extends State<_CreateTeam> {
                   )
               ),
                   Column(
-                    children: teams.map((team) => TeamOverView(team)).toList()
+                    children: teams.map((team) => TeamOverView(team, callback)).toList()
                   )
                 ],
               ),
@@ -137,7 +137,8 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
 
 class TeamOverView extends StatefulWidget {
   final TeamModel _teamModel;
-  TeamOverView(this._teamModel);
+  final Function _callBack;
+  TeamOverView(this._teamModel, this._callBack);
 
   @override
   State<TeamOverView> createState() => _TeamOverViewState();
@@ -170,7 +171,6 @@ class _TeamOverViewState extends State<TeamOverView> {
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                 children: [
                   Text('${widget._teamModel.name}', textAlign: TextAlign.center),
                   Row(
@@ -231,19 +231,25 @@ class _TeamOverViewState extends State<TeamOverView> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Are you sure you want remove this team ${widget._teamModel.name}'),
+                                    title: Text('Are you sure you want remove team "${widget._teamModel.name}"'),
 
                                     actions: [
                                       TextButton(
                                           onPressed: () {
                                             setState(() {
-                                              print('name: ${_myControllerName.text} id: ${_myControllerId}');
-                                              this.widget._teamModel.teamMembers.add(new TeamMemberModel(int.parse(_myControllerId.text), _myControllerName.text));
+                                              teams.remove(this.widget._teamModel);
+                                              this.widget._callBack();
                                               Navigator.pop(context);
-                                              print(this.widget._teamModel.teamMembers.map((teamMember) => 'name: ${teamMember.name} id: ${teamMember.id}'));
+                                              });
+                                          },
+                                          child: const Text('Remove')),
+                                      TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              Navigator.pop(context);
                                             });
                                           },
-                                          child: const Text('Create'))
+                                          child: const Text('Cancel')),
                                     ],
                                   );
                                 })
