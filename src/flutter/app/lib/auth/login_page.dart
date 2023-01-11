@@ -19,6 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // sign in user and route back to previous page
+  // auth state is automatically updated
   Future<void> _signIn() async {
     setState(() => _isLoading = true);
 
@@ -40,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    // make sure controllers are disposed
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

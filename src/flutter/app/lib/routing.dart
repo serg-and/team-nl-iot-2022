@@ -37,13 +37,14 @@ class _RoutingState extends State<Routing> {
     super.initState();
   }
 
+  // get the session from local storage
   void restoreSession() async {
     final prefs = await SharedPreferences.getInstance();
     bool exist = prefs.containsKey(PERSIST_SESSION_KEY);
-    if (!exist) return;
+    if (!exist) return; // no key in local storage
 
     String? jsonStr = prefs.getString(PERSIST_SESSION_KEY);
-    if (jsonStr == null) return;
+    if (jsonStr == null) return; // session key is empty
 
     /**
      * TODO: we need a timer to call refresh session before the current session expired. 
@@ -73,12 +74,14 @@ class _RoutingState extends State<Routing> {
     });
   }
 
+  // set the session key in local storage
   void prefsSetPersistSessionString(String? sessionString) async {
     if (sessionString == null) return;
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(PERSIST_SESSION_KEY, sessionString);
   }
 
+  // remove the session key from local storage
   void prefsRemovePersistSessionString() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(PERSIST_SESSION_KEY);

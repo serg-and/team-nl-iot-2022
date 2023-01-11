@@ -31,6 +31,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
 
+  // register user, confirmation email is send
+  // auth state is automatically updated
   Future<void> _signUp() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {

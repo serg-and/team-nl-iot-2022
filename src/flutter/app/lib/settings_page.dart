@@ -7,7 +7,7 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // logout user from the supabase session
+    // Logout user from the supabase session
     void signOut() {
       supabase.auth.signOut();
       Navigator.pop(context);
