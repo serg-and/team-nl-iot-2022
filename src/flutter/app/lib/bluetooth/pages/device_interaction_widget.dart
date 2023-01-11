@@ -80,12 +80,13 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
     return Card(
       child: ListTile(
         title: Text("Accelerometer"),
-        subtitle: Text(deviceModel.accelerometerData),
-        trailing: ElevatedButton(
-          child: Text(deviceModel.accelerometerSubscribed
-              ? "Unsubscribe"
-              : "Subscribe"),
-          onPressed: () => _onAccelerometerButtonPressed(deviceModel),
+        subtitle: deviceModel.accelerometerSubscribed
+            ? Text(deviceModel.accelerometerData)
+            : Text(""),
+        trailing: Switch(
+          activeColor: Colors.deepOrange,
+          value: deviceModel.accelerometerSubscribed,
+          onChanged: (value) => {_onAccelerometerButtonPressed(deviceModel)},
         ),
       ),
     );
@@ -98,6 +99,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         subtitle:
             deviceModel.hrSubscribed ? Text(deviceModel.hrData) : Text(""),
         trailing: Switch(
+          activeColor: Colors.deepOrange,
           value: deviceModel.hrSubscribed,
           onChanged: (value) => {_onHrButtonPressed(deviceModel)},
         ),
@@ -110,6 +112,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
       child: ListTile(
         title: Text("Led"),
         trailing: Switch(
+          activeColor: Colors.deepOrange,
           value: deviceModel.ledStatus,
           onChanged: (b) => {deviceModel.switchLed()},
         ),
@@ -125,6 +128,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         trailing: ElevatedButton(
           child: Text("Get"),
           onPressed: () => deviceModel.getTemperature(),
+          style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
         ),
       ),
     );

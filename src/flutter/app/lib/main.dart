@@ -85,6 +85,7 @@ class MyApp extends StatelessWidget {
       home: showHome
           ? Routing()
           : OnBoardingPage(), // If showHome is true, display the Routing widget, otherwise display the OnBoardingPage
+      theme: ThemeData(primarySwatch: Colors.deepOrange),
       debugShowCheckedModeBanner: false, // Don't show the debug banner
     );
   }
