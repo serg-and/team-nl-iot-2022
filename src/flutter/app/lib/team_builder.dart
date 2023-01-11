@@ -267,20 +267,21 @@ class _TeamOverViewState extends State<TeamOverView> {
             )
           )
       ),
-      TeamView(this.widget._teamModel)
+      TeamView(this.widget._teamModel, this.widget._callBack)
     ]);
   }
 }
 
 class TeamView extends StatelessWidget {
   final TeamModel _teamModel;
-  TeamView(this._teamModel);
+  final Function _callBack;
+  TeamView(this._teamModel, this._callBack);
 
   @override
   Widget build(BuildContext context) {
     return Column(
         children: _teamModel.teamMembers
-            .map((teamMember) => TeamMember(teamMember, _teamModel))
+            .map((teamMember) => TeamMember(teamMember, _teamModel, _callBack))
             .toList());
   }
 }
@@ -288,7 +289,8 @@ class TeamView extends StatelessWidget {
 class TeamMember extends StatefulWidget {
   final TeamModel _teamModel;
   final TeamMemberModel teamMember;
-  TeamMember(this.teamMember, this._teamModel);
+  final Function _callback;
+  TeamMember(this.teamMember, this._teamModel, this._callback);
 
   @override
   State<TeamMember> createState() => _TeamMemberState();
@@ -302,25 +304,28 @@ class _TeamMemberState extends State<TeamMember> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-
               child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('name: ${widget.teamMember.name} \t\t\t ID: ${widget.teamMember.id}'),
-                    ElevatedButton(
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                         onPressed: () => {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Are you sure you want remove team "${widget._teamModel.name}"'),
+                                  title: Text('Are you sure you want remove team member "${widget.teamMember.name}"'),
 
                                   actions: [
                                     TextButton(
                                         onPressed: () {
                                           setState(() {
-                                            this.widget._teamModel.teamMembers.remove(this.widget.teamMember)
-                                            this.widget._callBack();
+                                            this.widget._teamModel.teamMembers.remove(this.widget.teamMember);
+                                            this.widget._callback();
                                             Navigator.pop(context);
                                           });
                                         },
@@ -340,7 +345,7 @@ class _TeamMemberState extends State<TeamMember> {
                           size: 10.0,
                           Icons.remove,
                         )
-                    )
+                    ))
                   ]
               )
           )
