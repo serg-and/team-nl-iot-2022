@@ -37,11 +37,11 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
 
   // This method is called when the "Subscribe"/"Unsubscribe" button for the accelerometer is pressed
   void _onAccelerometerButtonPressed(DeviceModel deviceModel) {
-  // If the user is currently subscribed to accelerometer data, unsubscribe them
+    // If the user is currently subscribed to accelerometer data, unsubscribe them
     if (deviceModel.accelerometerSubscribed) {
       deviceModel.unsubscribeFromAccelerometer();
     }
-  // If the user is not currently subscribed to accelerometer data, subscribe them
+    // If the user is not currently subscribed to accelerometer data, subscribe them
     else {
       deviceModel.subscribeToAccelerometer();
     }
@@ -57,23 +57,20 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return ChangeNotifierProvider(
       create: (context) => DeviceModel(device.name, device.serial),
       child: Consumer<DeviceModel>(
         builder: (context, model, child) {
           return Container(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  _accelerometerItem(model),
-                  _hrItem(model),
-                  _ledItem(model),
-                  _temperatureItem(model)
-                ],
-              ));
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              _accelerometerItem(model),
+              _hrItem(model),
+              _ledItem(model),
+              _temperatureItem(model)
+            ],
+          ));
         },
       ),
     );
@@ -98,10 +95,11 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
     return Card(
       child: ListTile(
         title: Text("Heart rate"),
-        subtitle: Text(deviceModel.hrData),
-        trailing: ElevatedButton(
-          child: Text(deviceModel.hrSubscribed ? "Unsubscribe" : "Subscribe"),
-          onPressed: () => _onHrButtonPressed(deviceModel),
+        subtitle:
+            deviceModel.hrSubscribed ? Text(deviceModel.hrData) : Text(""),
+        trailing: Switch(
+          value: deviceModel.hrSubscribed,
+          onChanged: (value) => {_onHrButtonPressed(deviceModel)},
         ),
       ),
     );
