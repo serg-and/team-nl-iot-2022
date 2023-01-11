@@ -151,20 +151,20 @@ class _StartSessionState extends State<StartSession> {
                           ),
                         ),
                         InkWell(
-                          onTap: () => print('Linking sensor with team'),
+                          onTap: () => print('Linking sensor with team member'),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
                                 child: ListTile(
                                   visualDensity: VisualDensity(vertical: 1),
-                                  title: Text('Pair sensor to team ${[].isEmpty ? "❗" : ""}'),
+                                  title: Text('Pair sensor with team member ${[].isEmpty ? "❗" : ""}'),
                                   subtitle: Text([].isEmpty
                                       ? 'Sensor is not paired'
                                       : '${[].length.toString()} Sensor is paired'),
 
                                 ),
-                              ),
+                               ),
                               Icon(Icons.chevron_right)
                             ],
                           ),
