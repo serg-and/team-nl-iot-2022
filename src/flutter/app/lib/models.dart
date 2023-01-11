@@ -4,7 +4,6 @@ class Script {
   String? description;
   String outputType; // bar_chart || line_chart
   String outputName; // Display name of the value
-  
 
   Script(
       this.id, this.name, this.description, this.outputType, this.outputName);
@@ -25,25 +24,40 @@ class ScriptOutput {
   ScriptOutput(this.id, this.script, this.values);
 }
 
-class TeamModel{
+class TeamModel {
+  int id;
   String name;
-  CoachModel? coach;
-  List<TeamMemberModel> teamMembers =  List.empty(growable: true);
-  TeamModel(this.name);
+  // CoachModel? coach;
+  List<TeamMemberModel> teamMembers = List.empty(growable: true);
+
+  TeamModel.fromMap(Map<String, dynamic> map)
+      : id = map['id'],
+        name = map['name'],
+        teamMembers = createTeamMembersList(map['members']);
+
+  TeamModel(this.id, this.name);
 }
 
-class CoachModel{
+class CoachModel {
   int id;
   String name;
 
   CoachModel(this.id, this.name);
 }
 
-class TeamMemberModel{
+class TeamMemberModel {
   int id;
   String name;
 
+  TeamMemberModel.fromMap(Map<String, dynamic> map)
+      : id = map['id'],
+        name = map['name'];
+
   TeamMemberModel(this.id, this.name);
+}
+
+List<TeamMemberModel> createTeamMembersList(List<dynamic> list) {
+  return list.map((member) => TeamMemberModel.fromMap(member)).toList();
 }
 
 class Session {
@@ -52,5 +66,4 @@ class Session {
   var startedAt;
   var endedAt;
   Session(this.id, this.name, this.startedAt, this.endedAt);
-
 }
