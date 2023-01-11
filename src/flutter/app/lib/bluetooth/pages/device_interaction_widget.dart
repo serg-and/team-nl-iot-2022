@@ -80,12 +80,12 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
     return Card(
       child: ListTile(
         title: Text("Accelerometer"),
-        subtitle: Text(deviceModel.accelerometerData),
-        trailing: ElevatedButton(
-          child: Text(deviceModel.accelerometerSubscribed
-              ? "Unsubscribe"
-              : "Subscribe"),
-          onPressed: () => _onAccelerometerButtonPressed(deviceModel),
+        subtitle: deviceModel.accelerometerSubscribed
+            ? Text(deviceModel.accelerometerData)
+            : Text(""),
+        trailing: Switch(
+          value: deviceModel.accelerometerSubscribed,
+          onChanged: (value) => {_onAccelerometerButtonPressed(deviceModel)},
         ),
       ),
     );
