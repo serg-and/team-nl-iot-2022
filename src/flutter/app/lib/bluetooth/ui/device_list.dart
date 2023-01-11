@@ -93,6 +93,8 @@ class _DeviceListState extends State<_DeviceList> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Scan for devices'),
+          centerTitle: true,
+          backgroundColor: Color(0xFFF59509), // S
         ),
         body: Column(
           children: [
