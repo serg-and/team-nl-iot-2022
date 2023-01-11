@@ -128,6 +128,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         trailing: ElevatedButton(
           child: Text("Get"),
           onPressed: () => deviceModel.getTemperature(),
+          style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
         ),
       ),
     );
