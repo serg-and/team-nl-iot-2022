@@ -111,6 +111,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
       child: ListTile(
         title: Text("Led"),
         trailing: Switch(
+          activeColor: Colors.deepOrange,
           value: deviceModel.ledStatus,
           onChanged: (b) => {deviceModel.switchLed()},
         ),
