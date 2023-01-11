@@ -35,20 +35,22 @@ theme:
     - navigation.instant 
     - content.code.annotate 
 nav:
-    - 'index.md'
-    - Usage:
-      - 'usage/web-application.md'
-      - 'usage/writing-scripts.md'
+    - index.md
+    - Features:
+      - features/mobile-app.md
+      - features/web-application.md
+      - features/writing-scripts.md
     - Technical Documentation:
-      - 'flutter.md'
-      - 'database.md'
+      - running-the-project.md
+      - devops.md
+      - database.md
       - Web Application:
-        - 'web-application/getting-started.md'
-        - 'web-application/code-documentation.md'
+        - web-application/getting-started.md
+        - web-application/code-documentation.md
       - App documentation:
-        - 'App/Packages.md'
-        - 'features.md'
-      - 'api-documentation.md'
+        - flutter.md
+        - App/Packages.md
+      - api-documentation.md
       
 plugins:
   - search

@@ -1,13 +1,15 @@
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider } from '@supabase/auth-helpers-react'
 import { useState } from 'react'
-import Alerts, { AlertsContext } from '../components/Alerts'
 import Layout from '../components/Layout'
 import '../styles/globals.css'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+import { appTheme } from '../core/theme'
+import { SnackbarProvider } from 'notistack'
+
 
 function MyApp({ Component, pageProps }) {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient())
-
   const [alerts, setAlerts] = useState([])
 
   return (
@@ -15,12 +17,14 @@ function MyApp({ Component, pageProps }) {
       supabaseClient={supabaseClient}
       initialSession={pageProps.initialSession}
     >
-      <AlertsContext.Provider value={pushAlert}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        <Alerts alerts={alerts} popAlert={popAlert} />
-      </AlertsContext.Provider>
+      <ThemeProvider theme={appTheme}>
+        <CssBaseline enableColorScheme />
+        <SnackbarProvider maxSnack={3}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </SnackbarProvider>
+      </ThemeProvider>
     </SessionContextProvider>
   )
 

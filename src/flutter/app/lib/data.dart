@@ -16,9 +16,8 @@ List bottomBar = [
     Icons.bluetooth,
     color: Colors.white,
   ),
-  // Icon for Accessibility page
   const Icon(
-    Icons.accessibility_sharp,
+    Icons.history,
     color: Colors.white,
   ),
 ];

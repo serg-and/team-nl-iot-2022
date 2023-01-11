@@ -1,8 +1,8 @@
 import { useSupabaseClient, useSession } from '@supabase/auth-helpers-react'
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
-import { Anchor, Box, Footer, Grommet, Text } from 'grommet'
+import { Footer } from 'grommet'
+import { Box } from '@mui/material'
 import NavBar from './NavBar'
-import theme from '../core/theme'
 
 export default function Layout({ children }) {
   const session = useSession()
@@ -11,15 +11,19 @@ export default function Layout({ children }) {
   if (!session) return <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme="dark" />
 
   return (
-    <Grommet full theme={theme}>
+    <Box sx={{ width: '100vw', height: '100vh' }}>
       <NavBar />
-      <Box as='main' pad='medium' style={{ minHeight: '100%' }} >
+      <Box component='main' sx={{
+        marginTop: '64px',
+        padding: 3,
+        minHeight: '100%'
+      }}>
         {children}
       </Box>
       <Footer pad='medium' background='grey'>
-        <Text>Copyright 2022 **** SOME LICENSE!!! ****</Text>
+        Copyright 2022 **** SOME LICENSE!!! ****
         {/* <Anchor color='focus' label='GitHub' target='_blank' href="https://github.com/serg-and/IoT-2022-next-fire"/> */}
       </Footer>
-    </Grommet>
+    </Box>
   )
 }

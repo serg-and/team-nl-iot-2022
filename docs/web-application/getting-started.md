@@ -10,24 +10,17 @@ First clone the project repository
 ```
 git clone https://github.com/serg-and/team-nl-iot-2022.git
 ```
-The source code of the web application is housed under `src/next`.
-To start the web application run:
-```shell
-npm i
-npm run dev
+From the projects source directory run
+```
+make next-dev
 ```
 This starts a local development server for testing.
 
 
 ## Deployment
 To start the web application in production mode run:
-```shell
-# install all depenencies
-npm i
-# create a build of the web application
-npm run build
-# start the created build
-npm run start
+```
+make next-production
 ```
 This generates an optimized version of your application for production. This standard output includes:
 

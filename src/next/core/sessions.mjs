@@ -1,5 +1,6 @@
 import { spawn } from 'child_process'
 import { supabaseService } from './supabase.mjs'
+import { getFormattedDateTime } from './utils.mjs'
 
 const programs = {
   py: 'python3',
@@ -11,11 +12,14 @@ const entrypoints = {
 }
 
 // Starts a session and creates processes to run scripts.
-export async function startSession(scriptIds) {
+export async function startSession({ name, scriptIds }) {
+  // generate default name if no session name is given
+  if (!name?.length) name = `Session ${getFormattedDateTime()}`
+
   // Create a session in the database.
   const { data: { id: sessionId }, error: sessionError } = await supabaseService
     .from('sessions')
-    .insert({ name: 'No Script Name' })
+    .insert({ name })
     .select('id')
     .single()
   

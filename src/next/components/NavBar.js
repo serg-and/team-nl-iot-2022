@@ -1,40 +1,54 @@
-import { Box, Header, Text } from 'grommet';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import styles from '../styles/NavBar.module.css';
+import { AppBar, Container, Stack, Tab, Tabs, Toolbar } from '@mui/material';
+
+const tabs = {
+  '/scripts': 'Scripts',
+  '/sessions': 'Sessions',
+  '/start-fake-session': 'Start Fake Session',
+}
 
 export default function NavBar() {
   const router = useRouter()
-
-  const pageButton = (name, route) => (
-    <Box border={{ side: 'bottom', size: 'small', color: router.route === route ? 'white' : 'transparent' }}>
-      <Link href={route} className={styles.pageLink}>
-        <Text color='white' weight={600}>{name}</Text>
-      </Link>
-    </Box>
-  )
+  const tabsValue = Object.keys(tabs).includes(router.route) && router.route
 
   return (
-    <Header
-      className={styles.container}
-      pad='small'
-      border={{ color: 'focus', side: 'bottom', size: 'small' }}
-      style={{ flex: '0 1 auto' }}
-    >
-      <Box direction='row' gap='large' align='center'>
-        <Link href='/scripts'>
-          <Image
-            src={'/splash_image_new.png'}
-            width={80}
-            height={80}
-          />
-        </Link>
-        <Box direction='row' gap='medium'>
-          {pageButton('Scripts', '/scripts')}
-          {pageButton('Start Fake Session', '/start-fake-session')}
-        </Box>
-      </Box>
-    </Header>
+    <AppBar component="nav">
+      <Container maxWidth='xl'>
+        <Toolbar disableGutters>
+          <Stack direction='row' spacing={2} alignItems='center'>
+            <Link href='/scripts'>
+              <Image
+                src='/teamnl-logo-black-and-white.png'
+                alt='logo'
+                width={131}
+                height={25}
+              />
+            </Link>
+            <Tabs
+              textColor='inherit'
+              indicatorColor='secondary'
+              value={tabsValue}
+              onChange={(e, route) => router.push(route)}
+              sx={{
+                color: 'white',
+                '.MuiTab-root': {
+                  opacity: '0.8',
+                  padding: '0px 10px'
+                },
+                '.MuiTabs-indicator': {
+                  backgroundColor: 'white'
+                }
+              }}
+            >
+              {Object.entries(tabs).map(([path, name]) => (
+                <Tab key={path} value={path} label={name} />
+              ))}
+            </Tabs>
+          </Stack>
+        </Toolbar>
+      </Container>
+    </AppBar>
   )
 }

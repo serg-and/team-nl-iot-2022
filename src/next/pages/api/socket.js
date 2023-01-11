@@ -14,19 +14,26 @@ export default function SocketHandler (req, res) {
       console.log('connection started')
 
       socket.on('start-session', async message => {
-        const scripts = message.scripts
+        console.log('got start-session request with message: ', message)
+
         // sessions must specify atleast one script to run.
-        if (!scripts || !scripts.length) return
+        if (!message.scripts?.length) return
         
         // Start a new session and get functions to control it.
-        const { sessionId, sendMessage, endSession } = await startSession(scripts)
+        const { sessionId, sendMessage, endSession } = await startSession({
+          name: message.name,
+          scriptIds: message.scripts
+        })
+
+        console.log('succesfully started session: ', sessionId)
   
         socket.emit('sessionId', sessionId)
   
         // Listen for 'data-point' messages from the client.
-        socket.on('data-point', msg => sendMessage(msg))      
+        socket.on('data-point', msg => sendMessage(msg))
         
         // Listen for disconnect events from the client.
+        socket.on('stop-session', () => endSession())
         socket.on('disconnect', () => endSession())
       })
     })
