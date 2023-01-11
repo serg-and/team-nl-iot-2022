@@ -25,6 +25,27 @@ class ScriptOutput {
   ScriptOutput(this.id, this.script, this.values);
 }
 
+class TeamModel{
+  String name;
+  CoachModel? coach;
+  List<TeamMemberModel> teamMembers =  List.empty(growable: true);
+  TeamModel(this.name);
+}
+
+class CoachModel{
+  int id;
+  String name;
+
+  CoachModel(this.id, this.name);
+}
+
+class TeamMemberModel{
+  int id;
+  String name;
+
+  TeamMemberModel(this.id, this.name);
+}
+
 class Session {
   int id;
   String name;
