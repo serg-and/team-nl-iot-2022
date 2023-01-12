@@ -44,6 +44,7 @@ class _StartSessionState extends State<StartSession> {
     setState(() {
       scriptIds = ids.map((String id) => int.parse(id)).toList();
     });
+    validateState();
   }
 
   void savePreferredScripts() async {

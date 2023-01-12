@@ -4,13 +4,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'constants.dart';
 
 Future configureApp() async {
-  print(Constants.supabaseUrl);
-  print(Constants.supabaseAnnonKey);
+  print('Connecting to database at: ${Secrets.supabaseUrl}');
 
   // init Supabase singleton
   await Supabase.initialize(
-    url: Constants.supabaseUrl,
-    anonKey: Constants.supabaseAnnonKey,
+    url: Secrets.supabaseUrl,
+    anonKey: Secrets.supabaseAnnonKey,
     authCallbackUrlHostname: 'login-callback',
     debug: true,
     localStorage: SecureLocalStorage(),

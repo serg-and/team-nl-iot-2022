@@ -5,11 +5,10 @@ import 'dart:async';
 import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
+import 'package:app/constants.dart';
 import 'models.dart';
 import 'graph_builder.dart';
 
-const String SERVER = 'https://team-nl-iot-2022.onrender.com/';
 const int MAX_GRAPH_VALUES = 30;
 
 int index = 0;
@@ -29,7 +28,7 @@ Timer startSendingFakeData(int sessionId) {
   print('starting fake data for session session: ${sessionId}');
   Random random = new Random();
 
-  return Timer.periodic(Duration(milliseconds: 100), (Timer t) {
+  return Timer.periodic(Duration(milliseconds: 1), (Timer t) {
     int heartBeat = 40 + random.nextInt(150 - 40);
     socket?.emit(
         'data-point',
@@ -70,8 +69,11 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
 
 // start session by opening a websocket
 Future<void> createSession(
-    String? name, List<int> scriptIds, Function callback) async {
-  IO.Socket _socket = IO.io(SERVER, <String, dynamic>{
+  String? name,
+  List<int> scriptIds,
+  Function callback,
+) async {
+  IO.Socket _socket = IO.io(Secrets.server, <String, dynamic>{
     'path': '/socket.io',
     'autoConnect': false,
     'transports': ['websocket'],
@@ -123,6 +125,12 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
 
   @override
   void initState() {
+    // reset variables
+    index = 0;
+    fakeDataTimer = null;
+    subscriptions = [];
+    socket = null;
+
     super.initState();
     createSession(
         widget.name,
@@ -142,10 +150,16 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
     });
 
     // send signal to stop session
-    if (socket != null) {
-      socket?.emit('stop-session');
-    }
+    socket?.emit('stop-session');
+    socket?.disconnect();
+
     super.dispose();
+  }
+
+  // stop the current session,
+  // navigates back to start session page
+  void stopSession() {
+    widget.stopSession();
   }
 
   @override
@@ -163,11 +177,7 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 80),
                 child: ElevatedButton(
-                  onPressed: () {
-                    // stop the current session,
-                    // navigates back to start session page
-                    widget.stopSession();
-                  },
+                  onPressed: stopSession,
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   child: Text('Stop session'),
