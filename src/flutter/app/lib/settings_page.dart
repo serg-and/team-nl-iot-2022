@@ -13,6 +13,9 @@ class Settings extends StatelessWidget {
       Navigator.pop(context);
     }
 
+    String? email = supabase.auth.currentSession?.user.email;
+    if (email == null) email = 'Not Autheticated';
+
     return Scaffold(
       appBar: CustomAppBar(
         "Settings",
@@ -22,6 +25,10 @@ class Settings extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            Text(
+              'Logged in with: ${email}',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
             ElevatedButton(
               onPressed: signOut,
               child: Text('Log Out'),
