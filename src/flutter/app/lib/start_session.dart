@@ -72,12 +72,11 @@ class _StartSessionState extends State<StartSession> {
     validateState();
   }
 
-  void configureTeam() async{
+  void pairSensors() async {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PairSensorPage(
-        ),
+        builder: (context) => PairSensorPage(),
       ),
     );
   }
@@ -144,7 +143,7 @@ class _StartSessionState extends State<StartSession> {
                           ),
                         ),
                         InkWell(
-                          onTap: configureTeam,
+                          onTap: pairSensors,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -152,31 +151,12 @@ class _StartSessionState extends State<StartSession> {
                                 child: ListTile(
                                   visualDensity: VisualDensity(vertical: 1),
                                   title: Text(
-                                      'Configure Team Members  ${[].isEmpty ? "❗" : ""}'),
+                                      'Pair Team Members  ${[].isEmpty ? "❗" : ""}'),
                                   subtitle: Text([].isEmpty
-                                      ? 'No team members'
-                                      : '${[].length.toString()} Team Members'),
+                                      ? 'No team members paired'
+                                      : '${[].length.toString()} team members paired'),
                                 ),
                               ),
-                              Icon(Icons.chevron_right)
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () => print('Linking sensor with team member'),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: ListTile(
-                                  visualDensity: VisualDensity(vertical: 1),
-                                  title: Text('Pair sensor with team member ${[].isEmpty ? "❗" : ""}'),
-                                  subtitle: Text([].isEmpty
-                                      ? 'Sensor is not paired'
-                                      : '${[].length.toString()} Sensor is paired'),
-
-                                ),
-                               ),
                               Icon(Icons.chevron_right)
                             ],
                           ),
@@ -185,7 +165,6 @@ class _StartSessionState extends State<StartSession> {
                     ),
                   ),
                 ),
-
                 SizedBox(
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(16, 0, 16, 90),
