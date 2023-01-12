@@ -1,13 +1,13 @@
 import 'package:app/main.dart'; // Import main.dart file
 import 'package:flutter/material.dart'; // Import Material Design package
-
+import 'package:app/constants.dart';
 import 'models.dart';
 
 List<TeamModel> teams = [];
 
 
-class CreateTeamPage extends StatelessWidget {
-  const CreateTeamPage({super.key}); // Constructor for Settings class
+class PairSensorPage extends StatelessWidget {
+  const PairSensorPage({super.key}); // Constructor for Settings class
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,18 @@ class _CreateTeam extends StatefulWidget {
 }
 
 class _CreateTeamState extends State<_CreateTeam> {
-  late Widget teamButtonWidget;
-  @override
+
   void initState() {
     super.initState();
+    fetchTeams();
 
+  }
+
+  void fetchTeams() async {
+    final data = await supabase.from('teams').select('id, name, members');
+    setState(() {
+      data.forEach((record) => teams.add(TeamModel.fromMap(record)));
+    });
   }
 
   void callback() {
@@ -47,7 +54,7 @@ class _CreateTeamState extends State<_CreateTeam> {
         children: [
           Column(
               children:
-              teams.map((team) => TeamOverView( callback)).toList())
+              teams.map((team) => TeamOverView(team, callback)).toList())
         ],
       ),
     );
@@ -55,8 +62,9 @@ class _CreateTeamState extends State<_CreateTeam> {
 }
 
 class TeamOverView extends StatefulWidget {
+  final TeamModel _teamModel;
   final Function _callBack;
-  TeamOverView(this._callBack);
+  TeamOverView(this._teamModel, this._callBack);
 
   @override
   State<TeamOverView> createState() => _TeamOverViewState();
@@ -93,9 +101,6 @@ class _TeamOverViewState extends State<TeamOverView> {
                     children: [
                       Text('${widget._teamModel.name}',
                           textAlign: TextAlign.center),
-                      Row(children: [
-
-                      ])
                     ]),
               ))),
       TeamView(this.widget._teamModel, this.widget._callBack)
