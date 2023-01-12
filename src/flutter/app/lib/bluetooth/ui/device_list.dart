@@ -258,7 +258,7 @@ class FilterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sensors that you want to connect discover"),
+        title: const Text("Sensors to connect"),
         backgroundColor: Colors.orange,
       ),
       body: SafeArea(
@@ -278,11 +278,11 @@ class FilterPage extends StatelessWidget {
             ///  identify if item is selected or not
             return list!.contains(val);
           },
-          onItemSearch: (user, query) {
+          onItemSearch: (item, query) {
             /// When search query change in search bar then this method will be called
             ///
             /// Check if items contains query
-            return user.name!.toLowerCase().contains(query.toLowerCase());
+            return item.name!.toLowerCase().contains(query.toLowerCase());
           },
         ),
       ),
