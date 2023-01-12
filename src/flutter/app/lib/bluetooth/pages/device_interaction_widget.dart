@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:mdsflutter/Mds.dart';
 import 'package:provider/provider.dart';
 import '../models/device.dart';
@@ -8,9 +9,13 @@ import '../models/device_model.dart';
 // such as subscribing to accelerometer data, heart rate data, and controlling the LED
 class DeviceInteractionWidget extends StatefulWidget {
   final Device device;
+  final List<DiscoveredService> discoveredServices;
+  final Future<List<int>> Function(QualifiedCharacteristic characteristic)
+      readCharacteristic;
 
   // Constructor that initializes the device field
-  const DeviceInteractionWidget(this.device);
+  const DeviceInteractionWidget(
+      this.device, this.discoveredServices, this.readCharacteristic);
 
   // Creates the state for this widget
   @override
@@ -65,12 +70,38 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
               child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              _batteryLevelItem(model),
               _accelerometerItem(model),
               _hrItem(model),
               _ledItem(model),
               _temperatureItem(model)
             ],
           ));
+        },
+      ),
+    );
+  }
+
+  Widget _batteryLevelItem(DeviceModel deviceModel) {
+    var char = widget.discoveredServices[3].characteristics.first;
+    var level = "";
+    var ft = widget.readCharacteristic(new QualifiedCharacteristic(
+        characteristicId: char.characteristicId,
+        serviceId: char.serviceId,
+        deviceId: device.address.toString()));
+    return Card(
+      child: FutureBuilder<List<int>>(
+        future: ft,
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            return ListTile(
+              title: Text("Battery Level"),
+              subtitle: Text(snapshot.data!.first.toString()),
+            );
+          }
+
+          return CircularProgressIndicator();
         },
       ),
     );

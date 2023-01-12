@@ -17,7 +17,7 @@ const formPadding = EdgeInsets.symmetric(vertical: 20, horizontal: 16);
 const PERSIST_SESSION_KEY = 'PERSIST_SESSION_KEY';
 
 /// Environment variables and shared app constants.
-abstract class Constants {
+abstract class Secrets {
   static const String supabaseUrl = String.fromEnvironment(
     'SUPABASE_URL',
     defaultValue: '',
@@ -26,6 +26,11 @@ abstract class Constants {
   static const String supabaseAnnonKey = String.fromEnvironment(
     'SUPABASE_ANNON_KEY',
     defaultValue: '',
+  );
+
+  static const String server = String.fromEnvironment(
+    'SERVER',
+    defaultValue: 'http://teamnl-t-iot-vm.westeurope.cloudapp.azure.com',
   );
 }
 
