@@ -3,6 +3,7 @@ import 'package:app/onboarding_page.dart';
 import 'package:app/routing.dart';
 import 'package:app/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +15,7 @@ import 'bluetooth/ble/ble_scanner.dart';
 import 'bluetooth/ble/ble_status_monitor.dart';
 
 Future<void> main() async {
+  // This line ensures that the Flutter framework is initialized and ready to run
   WidgetsFlutterBinding.ensureInitialized();
 
   final _ble = FlutterReactiveBle();
@@ -30,6 +32,10 @@ Future<void> main() async {
     subscribeToCharacteristic: _ble.subscribeToCharacteristic,
     logMessage: _bleLogger.addToLog,
   );
+
+  // Sets the preferred device orientations to portrait up and portrait down
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   await configureApp(); // Awaiting the configuration of the app
 
@@ -82,9 +88,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: showHome
-          ? Routing()
-          : OnBoardingPage(), // If showHome is true, display the Routing widget, otherwise display the OnBoardingPage
+      home: showHome ? Routing() : OnBoardingPage(),
+      // If showHome is true, display the Routing widget, otherwise display the OnBoardingPage
       debugShowCheckedModeBanner: false, // Don't show the debug banner
     );
   }
@@ -99,8 +104,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool showOptions;
 
   CustomAppBar(this.title, {Key? key, this.showOptions = true})
-      : preferredSize =
-            Size.fromHeight(50.0), // Set the app bar's preferred height to 50.0
+      : preferredSize = Size.fromHeight(50.0),
+        // Set the app bar's preferred height to 50.0
         super(key: key);
 
   @override
@@ -116,7 +121,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               itemBuilder: (ctx) => [
                     const PopupMenuItem(
                         value: "Settings", child: Text("Settings"))
-                  ], // Set the items in the popup menu to a single 'Settings' option
+                  ],
+              // Set the items in the popup menu to a single 'Settings' option
               onSelected: (result) {
                 if (title != "Settings") {
                   // If the selected item is not 'Settings'
