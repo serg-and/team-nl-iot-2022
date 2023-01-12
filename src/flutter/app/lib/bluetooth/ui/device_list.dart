@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
 
+import '../../sensor.dart';
 import '../ble/ble_logger.dart';
 import '../ble/ble_scanner.dart';
 import '../widgets.dart';
@@ -347,16 +348,3 @@ class FilterPage extends StatelessWidget {
     );
   }
 }
-
-class Sensor {
-  final String? name;
-  Sensor({this.name});
-}
-
-/// Creating a global list for example purpose.
-/// Generally it should be within data class or where ever you want
-List<Sensor> sensorList = [
-  Sensor(name: "MoveSense"),
-  Sensor(name: "Polar"),
-  Sensor(name: "Huiskamer"),
-];
