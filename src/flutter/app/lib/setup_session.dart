@@ -8,6 +8,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:app/constants.dart';
 import 'models.dart';
 import 'graph_builder.dart';
+import 'package:http/http.dart' as http;
 
 const int MAX_GRAPH_VALUES = 30;
 
@@ -73,6 +74,9 @@ Future<void> createSession(
   List<int> scriptIds,
   Function callback,
 ) async {
+  // initialize the Socket.io server
+  await http.get(Uri.parse('${Secrets.server}/api/socket'));
+
   IO.Socket _socket = IO.io(Secrets.server, <String, dynamic>{
     'path': '/socket.io',
     'autoConnect': false,
