@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -129,7 +131,8 @@ class _DeviceListState extends State<_DeviceList> {
                           }
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.orange),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.orange),
                         ),
                         child: const Text(
                           "Scan Filter",
@@ -205,9 +208,8 @@ class _DeviceListState extends State<_DeviceList> {
                                         DeviceDetailScreen(device: device)));
                           },
                         ),
-                      )
-                      .where((element) =>
-                          element.title.toString().contains("Movesense"))
+                      ).where((element) =>
+                          element.title.toString().contains("MoveSense"))
                       .toList(),
                 ],
               ),
@@ -216,7 +218,6 @@ class _DeviceListState extends State<_DeviceList> {
         ),
       );
 }
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, this.title}) : super(key: key);
@@ -299,6 +300,7 @@ class FilterPage extends StatelessWidget {
       : super(key: key);
   final List<Sensor>? allTextList;
   final List<Sensor>? selectedSensorList;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -345,4 +347,5 @@ class Sensor {
 List<Sensor> sensorList = [
   Sensor(name: "MoveSense"),
   Sensor(name: "Polar"),
+  Sensor(name: "Huiskamer"),
 ];
