@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:filter_list/filter_list.dart';
@@ -54,6 +55,8 @@ class _DeviceList extends StatefulWidget {
 class _DeviceListState extends State<_DeviceList> {
   late TextEditingController _uuidController;
   List<Sensor>? selectedSensorList = [];
+  Future<List<FileSystemEntity>> deviceIcons =
+      Directory('assets\device_icons').list().toList();
 
   @override
   void initState() {
@@ -176,7 +179,9 @@ class _DeviceListState extends State<_DeviceList> {
                     (device) => ListTile(
                       title: Text(device.name),
                       subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                      leading: Image.asset("assets/Images/ms.png"),
+                      leading: Image.asset("assets/Images/" +
+                          device.manufacturerData.toString() +
+                          ".png"),
                       onTap: () async {
                         widget.stopScan();
                         await Navigator.push<void>(
@@ -191,7 +196,7 @@ class _DeviceListState extends State<_DeviceList> {
                     trailing: (widget.scannerState.scanIsInProgress ||
                             widget.scannerState.discoveredDevices.isNotEmpty)
                         ? Text(
-                            'count: ${widget.scannerState.discoveredDevices.where((element) => selectedSensorList!.length <= 0 ? true : selectedSensorList!.where((selected) => element.name.toString().toLowerCase().contains(selected.name.toString().toLowerCase())).length > 0).length}',
+                            'count: ${widget.scannerState.discoveredDevices.where((element) => selectedSensorList!.length == 0 ? sensorList.where((selected) => element.name.toString().toLowerCase().contains(selected.name.toString().toLowerCase())).length > 0 : selectedSensorList!.where((selected) => element.name.toString().toLowerCase().contains(selected.name.toString().toLowerCase())).length > 0).length}',
                           )
                         : null,
                   ),
@@ -200,7 +205,9 @@ class _DeviceListState extends State<_DeviceList> {
                         (device) => ListTile(
                           title: Text(device.name),
                           subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                          leading: Image.asset("assets/Images/ms.png"),
+                          leading: Image.asset("assets/Images/" +
+                              device.name.toLowerCase() +
+                              ".png"),
                           onTap: () async {
                             widget.stopScan();
                             await Navigator.push<void>(
@@ -211,8 +218,16 @@ class _DeviceListState extends State<_DeviceList> {
                           },
                         ),
                       )
-                      .where((element) => selectedSensorList!.length <= 0
-                          ? true
+                      .where((element) => selectedSensorList!.length == 0
+                          ? sensorList
+                                  .where((selected) => element.title
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(selected.name
+                                          .toString()
+                                          .toLowerCase()))
+                                  .length >
+                              0
                           : selectedSensorList!
                                   .where((selected) => element.title
                                       .toString()

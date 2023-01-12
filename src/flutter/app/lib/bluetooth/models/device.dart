@@ -4,13 +4,14 @@ class Device {
   String? _address;
   String? _name;
   String? _serial;
-  DeviceConnectionStatus _connectionStatus = DeviceConnectionStatus.NOT_CONNECTED;
+  DeviceConnectionStatus _connectionStatus =
+      DeviceConnectionStatus.NOT_CONNECTED;
 
   Device(String? name, String? address) {
     _name = name;
     _address = address;
     if (name != null) {
-      onMdsConnected(name.replaceAll(new RegExp(r'[^0-9]'),''));
+      onMdsConnected(name.replaceAll(new RegExp(r'[^0-9]'), ''));
     }
   }
 
@@ -24,8 +25,11 @@ class Device {
     _serial = serial;
     _connectionStatus = DeviceConnectionStatus.CONNECTED;
   }
-  void onDisconnected() => _connectionStatus = DeviceConnectionStatus.NOT_CONNECTED;
 
-  bool operator ==(o) => o is Device && o._address == _address && o._name == _name;
+  void onDisconnected() =>
+      _connectionStatus = DeviceConnectionStatus.NOT_CONNECTED;
+
+  bool operator ==(o) =>
+      o is Device && o._address == _address && o._name == _name;
   int get hashCode => _address.hashCode * _name.hashCode;
 }
