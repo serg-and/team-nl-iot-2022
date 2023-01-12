@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -159,11 +156,6 @@ class _DeviceListState extends State<_DeviceList> {
             Flexible(
               child: ListView(
                 children: [
-                  SwitchListTile(
-                    title: const Text("Verbose logging"),
-                    value: widget.verboseLogging,
-                    onChanged: (_) => setState(widget.toggleVerboseLogging),
-                  ),
                   ListTile(
                     trailing: (widget.scannerState.scanIsInProgress ||
                             widget.scannerState.discoveredDevices.isNotEmpty)
