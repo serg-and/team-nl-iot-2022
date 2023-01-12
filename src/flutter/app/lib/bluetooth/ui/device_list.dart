@@ -54,8 +54,6 @@ class _DeviceList extends StatefulWidget {
 class _DeviceListState extends State<_DeviceList> {
   late TextEditingController _uuidController;
   List<Sensor>? selectedSensorList = [];
-  Future<List<FileSystemEntity>> deviceIcons =
-      Directory('assets\device_icons').list().toList();
 
   @override
   void initState() {
@@ -88,7 +86,6 @@ class _DeviceListState extends State<_DeviceList> {
   void _startScanning() {
     final text = _uuidController.text;
     widget.startScan(text.isEmpty ? [] : [Uuid.parse(_uuidController.text)]);
-    print(selectedSensorList?.first.name);
   }
 
   @override
@@ -204,9 +201,23 @@ class _DeviceListState extends State<_DeviceList> {
                         (device) => ListTile(
                           title: Text(device.name),
                           subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                          leading: Image.asset("assets/Images/" +
-                              device.name.toLowerCase() +
-                              ".png"),
+                          leading: sensorList
+                                      .where((sensor) => device.name
+                                          .toLowerCase()
+                                          .contains(sensor.name!.toLowerCase()))
+                                      .length >
+                                  0
+                              ? Image.asset("assets/Images/" +
+                                  sensorList
+                                      .where((sensor) => device.name
+                                          .toLowerCase()
+                                          .contains(sensor.name!.toLowerCase()))
+                                      .first
+                                      .name!
+                                      .toLowerCase()
+                                      .toString() +
+                                  ".png")
+                              : BluetoothIcon(),
                           onTap: () async {
                             widget.stopScan();
                             await Navigator.push<void>(
