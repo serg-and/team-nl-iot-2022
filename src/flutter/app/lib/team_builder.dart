@@ -1,3 +1,4 @@
+import 'package:app/constants.dart';
 import 'package:app/main.dart'; // Import main.dart file
 import 'package:flutter/material.dart'; // Import Material Design package
 import 'models.dart';
@@ -9,6 +10,8 @@ class CreateTeamPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    teams = [];
+
     return Scaffold(
         appBar: CustomAppBar("Team Settings"),
         body: Container(
@@ -27,10 +30,19 @@ class _CreateTeam extends StatefulWidget {
 
 class _CreateTeamState extends State<_CreateTeam> {
   late Widget teamButtonWidget;
+
   @override
   void initState() {
     super.initState();
+    fetchTeams();
     teamButtonWidget = _CreateTeamButton(this.callback);
+  }
+
+  void fetchTeams() async {
+    final data = await supabase.from('teams').select('id, name, members');
+    setState(() {
+      data.forEach((record) => teams.add(TeamModel.fromMap(record)));
+    });
   }
 
   void callback() {
@@ -65,7 +77,7 @@ class _CreateTeamState extends State<_CreateTeam> {
 }
 
 class _CreateTeamButton extends StatefulWidget {
-  Function callback;
+  final Function callback;
 
   _CreateTeamButton(this.callback, {super.key});
 
@@ -84,6 +96,30 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
     // widget tree.
     myController.dispose();
     super.dispose();
+  }
+
+  void createTeam() async {
+    if (supabase.auth.currentSession?.user.id == null) {
+      throw 'USER NOT AUTHENTICATED';
+    }
+
+    // get user uuid
+    String uuid = supabase.auth.currentSession!.user.id;
+
+    final res = await supabase
+        .from('teams')
+        .insert({
+          'name': myController.text,
+          'coach': uuid,
+          'members': [],
+        })
+        .select('id, name, members')
+        .single();
+
+    setState(() => teams.add(TeamModel.fromMap(res)));
+
+    Navigator.pop(context);
+    this.widget.callback();
   }
 
   @override
@@ -108,16 +144,7 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
                         ),
                       ),
                       TextButton(
-                          onPressed: () {
-                            setState(() {
-                              print('Team name: ' + myController.text);
-                              teams.add(new TeamModel(myController.text));
-                              Navigator.pop(context);
-                              print(teams.map((team) => team.name));
-                              this.widget.callback();
-                            });
-                          },
-                          child: const Text('Create'))
+                          onPressed: createTeam, child: const Text('Create'))
                     ],
                   );
                 })
@@ -148,6 +175,32 @@ class _TeamOverViewState extends State<TeamOverView> {
     _myControllerName.dispose();
     _myControllerId.dispose();
     super.dispose();
+  }
+
+  void removeTeam() async {
+    await supabase.from('teams').delete().match({'id': widget._teamModel.id});
+    setState(() => teams.remove(this.widget._teamModel));
+    this.widget._callBack();
+    Navigator.pop(context);
+  }
+
+  void addMember() async {
+    final TeamMemberModel newTeamMember = new TeamMemberModel(
+      int.parse(_myControllerId.text),
+      _myControllerName.text,
+    );
+
+    final membersData = [...widget._teamModel.teamMembers, newTeamMember]
+        .map((member) => {'id': member.id, 'name': member.name})
+        .toList();
+
+    await supabase
+        .from('teams')
+        .update({'members': membersData}).eq('id', widget._teamModel.id);
+
+    setState(() => this.widget._teamModel.teamMembers.add(newTeamMember));
+
+    Navigator.pop(context);
   }
 
   @override
@@ -193,29 +246,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                                                 ),
                                               ),
                                               TextButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      print(
-                                                          'name: ${_myControllerName.text} id: ${_myControllerId}');
-                                                      this
-                                                          .widget
-                                                          ._teamModel
-                                                          .teamMembers
-                                                          .add(new TeamMemberModel(
-                                                              int.parse(
-                                                                  _myControllerId
-                                                                      .text),
-                                                              _myControllerName
-                                                                  .text));
-                                                      Navigator.pop(context);
-                                                      print(this
-                                                          .widget
-                                                          ._teamModel
-                                                          .teamMembers
-                                                          .map((teamMember) =>
-                                                              'name: ${teamMember.name} id: ${teamMember.id}'));
-                                                    });
-                                                  },
+                                                  onPressed: addMember,
                                                   child: const Text('Create'))
                                             ],
                                           );
@@ -238,15 +269,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                                                   'Are you sure you want remove team "${widget._teamModel.name}"'),
                                               actions: [
                                                 TextButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        teams.remove(this
-                                                            .widget
-                                                            ._teamModel);
-                                                        this.widget._callBack();
-                                                        Navigator.pop(context);
-                                                      });
-                                                    },
+                                                    onPressed: removeTeam,
                                                     child:
                                                         const Text('Remove')),
                                                 TextButton(
@@ -298,6 +321,22 @@ class TeamMember extends StatefulWidget {
 }
 
 class _TeamMemberState extends State<TeamMember> {
+  void removeMember() async {
+    final membersData = widget._teamModel.teamMembers
+        .where((member) => member != widget.teamMember)
+        .map((member) => {'id': member.id, 'name': member.name})
+        .toList();
+
+    await supabase
+        .from('teams')
+        .update({'members': membersData}).eq('id', widget._teamModel.id);
+
+    setState(() => widget._teamModel.teamMembers.remove(widget.teamMember));
+
+    this.widget._callback();
+    Navigator.pop(context);
+  }
+
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 16.0),
@@ -325,19 +364,7 @@ class _TeamMemberState extends State<TeamMember> {
                                                 'Are you sure you want remove team member "${widget.teamMember.name}"'),
                                             actions: [
                                               TextButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      this
-                                                          .widget
-                                                          ._teamModel
-                                                          .teamMembers
-                                                          .remove(this
-                                                              .widget
-                                                              .teamMember);
-                                                      this.widget._callback();
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
+                                                  onPressed: removeMember,
                                                   child: const Text('Remove')),
                                               TextButton(
                                                   onPressed: () {
