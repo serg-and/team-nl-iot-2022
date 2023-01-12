@@ -85,6 +85,7 @@ class _DeviceListState extends State<_DeviceList> {
   void _startScanning() {
     final text = _uuidController.text;
     widget.startScan(text.isEmpty ? [] : [Uuid.parse(_uuidController.text)]);
+    print(selectedSensorList?.first.name);
   }
 
   @override
@@ -189,7 +190,7 @@ class _DeviceListState extends State<_DeviceList> {
                     trailing: (widget.scannerState.scanIsInProgress ||
                             widget.scannerState.discoveredDevices.isNotEmpty)
                         ? Text(
-                            'count: ${widget.scannerState.discoveredDevices.where((element) => element.name.contains("Movesense")).length}',
+                            'count: ${widget.scannerState.discoveredDevices.where((element) => selectedSensorList!.length <= 0 ? true : selectedSensorList!.where((selected) => element.name.toString().toLowerCase().contains(selected.name.toString().toLowerCase())).length > 0).length}',
                           )
                         : null,
                   ),
@@ -208,8 +209,18 @@ class _DeviceListState extends State<_DeviceList> {
                                         DeviceDetailScreen(device: device)));
                           },
                         ),
-                      ).where((element) =>
-                          element.title.toString().contains("MoveSense"))
+                      )
+                      .where((element) => selectedSensorList!.length <= 0
+                          ? true
+                          : selectedSensorList!
+                                  .where((selected) => element.title
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(selected.name
+                                          .toString()
+                                          .toLowerCase()))
+                                  .length >
+                              0)
                       .toList(),
                 ],
               ),
