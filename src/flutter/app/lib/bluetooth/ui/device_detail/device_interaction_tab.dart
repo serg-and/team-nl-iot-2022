@@ -10,9 +10,6 @@ import '../../ble/ble_device_connector.dart';
 import '../../ble/ble_device_interactor.dart';
 import 'characteristic_interaction_dialog.dart';
 
-part 'device_interaction_tab.g.dart';
-//ignore_for_file: annotate_overrides
-
 class DeviceInteractionTab extends StatelessWidget {
   final DiscoveredDevice device;
   final void Function(String deviceId) disconnect;
@@ -30,6 +27,7 @@ class DeviceInteractionTab extends StatelessWidget {
                 __) =>
             _DeviceInteractionTab(
           viewModel: DeviceInteractionViewModel(
+              readCharacteristic: serviceDiscoverer.readCharacteristic,
               device: device,
               deviceId: device.id,
               connectionStatus: connectionStateUpdate.connectionState,
@@ -42,14 +40,14 @@ class DeviceInteractionTab extends StatelessWidget {
 
 @immutable
 @FunctionalData()
-class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
-  const DeviceInteractionViewModel({
-    this.device,
-    required this.deviceId,
-    required this.connectionStatus,
-    required this.deviceConnector,
-    required this.discoverServices,
-  });
+class DeviceInteractionViewModel {
+  const DeviceInteractionViewModel(
+      {this.device,
+      required this.deviceId,
+      required this.connectionStatus,
+      required this.deviceConnector,
+      required this.discoverServices,
+      required this.readCharacteristic});
 
   final DiscoveredDevice? device;
   final String deviceId;
@@ -57,6 +55,8 @@ class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
   final BleDeviceConnector deviceConnector;
   @CustomEquality(Ignore())
   final Future<List<DiscoveredService>> Function() discoverServices;
+  final Future<List<int>> Function(QualifiedCharacteristic characteristic)
+      readCharacteristic;
 
   bool get deviceConnected =>
       connectionStatus == DeviceConnectionState.connected;
@@ -87,10 +87,13 @@ class _DeviceInteractionTab extends StatefulWidget {
 
 class _DeviceInteractionTabState extends State<_DeviceInteractionTab> {
   late List<DiscoveredService> discoveredServices;
+  late final Future<List<int>> Function(QualifiedCharacteristic characteristic)
+      readCharacteristic;
 
   @override
   void initState() {
     discoveredServices = [];
+    discoverServices();
     super.initState();
   }
 
@@ -154,8 +157,11 @@ class _DeviceInteractionTabState extends State<_DeviceInteractionTab> {
                     discoveredServices: discoveredServices,
                   ),
                 if (widget.viewModel.deviceConnected)
-                  DeviceInteractionWidget(Device(widget.viewModel.device!.name,
-                      '${widget.viewModel.deviceId}'))
+                  DeviceInteractionWidget(
+                      Device(widget.viewModel.device!.name,
+                          '${widget.viewModel.deviceId}'),
+                      discoveredServices,
+                      widget.viewModel.readCharacteristic)
               ],
             ),
           ),
