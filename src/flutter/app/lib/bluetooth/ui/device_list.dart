@@ -175,9 +175,8 @@ class _DeviceListState extends State<_DeviceList> {
                     (device) => ListTile(
                       title: Text(device.name),
                       subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                      leading: Image.asset("assets/Images/" +
-                          device.manufacturerData.toString() +
-                          ".png"),
+                      // The connected devices can only be movesense right now
+                      leading: Image.asset("assets/Images/movesense.png"),
                       onTap: () async {
                         widget.stopScan();
                         await Navigator.push<void>(
