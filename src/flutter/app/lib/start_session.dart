@@ -1,5 +1,7 @@
 import 'package:app/main.dart';
 import 'package:app/select_scripts.dart';
+import 'package:app/pair_sensor.dart';
+import 'package:app/team_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -71,6 +73,15 @@ class _StartSessionState extends State<StartSession> {
     validateState();
   }
 
+  void pairSensors() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PairSensorPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,7 +144,7 @@ class _StartSessionState extends State<StartSession> {
                           ),
                         ),
                         InkWell(
-                          onTap: () => print('confiugre team'),
+                          onTap: pairSensors,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -141,10 +152,10 @@ class _StartSessionState extends State<StartSession> {
                                 child: ListTile(
                                   visualDensity: VisualDensity(vertical: 1),
                                   title: Text(
-                                      'Configure Team Members  ${[].isEmpty ? "❗" : ""}'),
+                                      'Pair Team Members  ${[].isEmpty ? "❗" : ""}'),
                                   subtitle: Text([].isEmpty
-                                      ? 'No team members'
-                                      : '${[].length.toString()} Team Members'),
+                                      ? 'No team members paired'
+                                      : '${[].length.toString()} team members paired'),
                                 ),
                               ),
                               Icon(Icons.chevron_right)
