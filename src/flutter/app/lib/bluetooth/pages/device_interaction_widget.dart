@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:mdsflutter/Mds.dart';
 import 'package:provider/provider.dart';
 import '../models/device.dart';
@@ -8,9 +9,13 @@ import '../models/device_model.dart';
 // such as subscribing to accelerometer data, heart rate data, and controlling the LED
 class DeviceInteractionWidget extends StatefulWidget {
   final Device device;
+  final List<DiscoveredService> discoveredServices;
+  final Future<List<int>> Function(QualifiedCharacteristic characteristic)
+      readCharacteristic;
 
   // Constructor that initializes the device field
-  const DeviceInteractionWidget(this.device);
+  const DeviceInteractionWidget(
+      this.device, this.discoveredServices, this.readCharacteristic);
 
   // Creates the state for this widget
   @override
@@ -37,11 +42,11 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
 
   // This method is called when the "Subscribe"/"Unsubscribe" button for the accelerometer is pressed
   void _onAccelerometerButtonPressed(DeviceModel deviceModel) {
-  // If the user is currently subscribed to accelerometer data, unsubscribe them
+    // If the user is currently subscribed to accelerometer data, unsubscribe them
     if (deviceModel.accelerometerSubscribed) {
       deviceModel.unsubscribeFromAccelerometer();
     }
-  // If the user is not currently subscribed to accelerometer data, subscribe them
+    // If the user is not currently subscribed to accelerometer data, subscribe them
     else {
       deviceModel.subscribeToAccelerometer();
     }
@@ -57,23 +62,46 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return ChangeNotifierProvider(
       create: (context) => DeviceModel(device.name, device.serial),
       child: Consumer<DeviceModel>(
         builder: (context, model, child) {
           return Container(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  _accelerometerItem(model),
-                  _hrItem(model),
-                  _ledItem(model),
-                  _temperatureItem(model)
-                ],
-              ));
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              _batteryLevelItem(model),
+              _accelerometerItem(model),
+              _hrItem(model),
+              _ledItem(model),
+              _temperatureItem(model)
+            ],
+          ));
+        },
+      ),
+    );
+  }
+
+  Widget _batteryLevelItem(DeviceModel deviceModel) {
+    var char = widget.discoveredServices[3].characteristics.first;
+    var level = "";
+    var ft = widget.readCharacteristic(new QualifiedCharacteristic(
+        characteristicId: char.characteristicId,
+        serviceId: char.serviceId,
+        deviceId: device.address.toString()));
+    return Card(
+      child: FutureBuilder<List<int>>(
+        future: ft,
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            return ListTile(
+              title: Text("Battery Level"),
+              subtitle: Text(snapshot.data!.first.toString()),
+            );
+          }
+
+          return CircularProgressIndicator();
         },
       ),
     );
@@ -83,12 +111,13 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
     return Card(
       child: ListTile(
         title: Text("Accelerometer"),
-        subtitle: Text(deviceModel.accelerometerData),
-        trailing: ElevatedButton(
-          child: Text(deviceModel.accelerometerSubscribed
-              ? "Unsubscribe"
-              : "Subscribe"),
-          onPressed: () => _onAccelerometerButtonPressed(deviceModel),
+        subtitle: deviceModel.accelerometerSubscribed
+            ? Text(deviceModel.accelerometerData)
+            : Text(""),
+        trailing: Switch(
+          activeColor: Colors.deepOrange,
+          value: deviceModel.accelerometerSubscribed,
+          onChanged: (value) => {_onAccelerometerButtonPressed(deviceModel)},
         ),
       ),
     );
@@ -98,10 +127,12 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
     return Card(
       child: ListTile(
         title: Text("Heart rate"),
-        subtitle: Text(deviceModel.hrData),
-        trailing: ElevatedButton(
-          child: Text(deviceModel.hrSubscribed ? "Unsubscribe" : "Subscribe"),
-          onPressed: () => _onHrButtonPressed(deviceModel),
+        subtitle:
+            deviceModel.hrSubscribed ? Text(deviceModel.hrData) : Text(""),
+        trailing: Switch(
+          activeColor: Colors.deepOrange,
+          value: deviceModel.hrSubscribed,
+          onChanged: (value) => {_onHrButtonPressed(deviceModel)},
         ),
       ),
     );
@@ -112,6 +143,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
       child: ListTile(
         title: Text("Led"),
         trailing: Switch(
+          activeColor: Colors.deepOrange,
           value: deviceModel.ledStatus,
           onChanged: (b) => {deviceModel.switchLed()},
         ),
@@ -127,6 +159,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         trailing: ElevatedButton(
           child: Text("Get"),
           onPressed: () => deviceModel.getTemperature(),
+          style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
         ),
       ),
     );

@@ -276,7 +276,7 @@ packages:
     dependency: transitive
     description:
       name: functions_client
-      sha256: e446f7524aadbc99bd06095a619c8c5ed5aa90b7510243d9449eb48805310403
+      sha256: "1cd3af45489d397de11c9049193466766fdc63834b7e7a135e89c1bbaea586d3"
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
@@ -284,10 +284,10 @@ packages:
     dependency: transitive
     description:
       name: gotrue
-      sha256: ab3b819494dcd89940c1fdce917534d1debbb81dc071fd35e081f6e144d6802b
+      sha256: "537ce3759d395c18e0138223a6c0cba5b0a9d23ad036dd916921ae57aeb844bb"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.0"
   hive:
     dependency: transitive
     description:
@@ -429,7 +429,7 @@ packages:
     dependency: transitive
     description:
       name: mime
-      sha256: e4ff8e8564c03f255408decd16e7899da1733852a9110a58fe6d1b817684a63e
+      sha256: "52e38f7e1143ef39daf532117d6b8f8f617bf4bcd6044ed8c29040d20d269630"
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
@@ -914,7 +914,7 @@ packages:
     dependency: transitive
     description:
       name: web_socket_channel
-      sha256: ca49c0bc209c687b887f30527fb6a9d80040b072cc2990f34b9bec3e7663101b
+      sha256: "3a969ddcc204a3e34e863d204b29c0752716f78b6f9cc8235083208d268a4ccd"
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"

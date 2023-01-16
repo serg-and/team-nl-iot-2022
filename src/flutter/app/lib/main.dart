@@ -88,8 +88,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: showHome ? Routing() : OnBoardingPage(),
-      // If showHome is true, display the Routing widget, otherwise display the OnBoardingPage
+      home: showHome
+          ? Routing()
+          : OnBoardingPage(), // If showHome is true, display the Routing widget, otherwise display the OnBoardingPage
+      theme: ThemeData(primarySwatch: Colors.deepOrange),
       debugShowCheckedModeBanner: false, // Don't show the debug banner
     );
   }

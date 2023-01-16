@@ -59,9 +59,13 @@ export async function startSession({ name, scriptIds }) {
         if (parsed.type === 'error')
           // Log the error message.
           console.log(data.error)
-      } catch {
+      } catch (err) {
         // If the data could not be parsed as JSON, log the data as a string.
-        console.log('from script:', data.toString())
+        console.log(
+          'failed to handle message from scirpt -->\n',
+          'message: ', data.toString(), '\n',
+          'error: ', err
+        )
       }
     })
 

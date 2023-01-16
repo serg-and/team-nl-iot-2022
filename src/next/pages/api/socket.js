@@ -9,6 +9,8 @@ export default function SocketHandler (req, res) {
     const io = new Server(res.socket.server)
     res.socket.server.io = io
 
+    console.log('socket.io server started')
+
     // Listen for new connections.
     io.on('connection', async (socket) => {
       console.log('connection started')
