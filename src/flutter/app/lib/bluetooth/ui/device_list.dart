@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
@@ -68,19 +69,6 @@ class _DeviceListState extends State<_DeviceList> {
     super.dispose();
   }
 
-  bool _isValidUuidInput() {
-    final uuidText = _uuidController.text;
-    if (uuidText.isEmpty) {
-      return true;
-    } else {
-      try {
-        Uuid.parse(uuidText);
-        return true;
-      } on Exception {
-        return false;
-      }
-    }
-  }
 
   void _startScanning() {
     final text = _uuidController.text;
