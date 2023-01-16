@@ -9,6 +9,7 @@ class OnBoardingPage extends StatefulWidget {
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
 }
+
 // PageController for managing page views
 class _OnboardingPageState extends State<OnBoardingPage> {
   final controller = PageController();

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
 
+import '../../sensor.dart';
 import '../ble/ble_logger.dart';
 import '../ble/ble_scanner.dart';
 import '../widgets.dart';
@@ -51,6 +52,7 @@ class _DeviceList extends StatefulWidget {
 
 class _DeviceListState extends State<_DeviceList> {
   late TextEditingController _uuidController;
+  List<Sensor>? selectedSensorList = [];
 
   @override
   void initState() {
@@ -113,12 +115,44 @@ class _DeviceListState extends State<_DeviceList> {
                         onPressed: !widget.scannerState.scanIsInProgress
                             ? _startScanning
                             : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          final list = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FilterPage(
+                                allTextList: sensorList,
+                                selectedSensorList: selectedSensorList,
+                              ),
+                            ),
+                          );
+                          if (list != null) {
+                            setState(() {
+                              selectedSensorList = List.from(list);
+                            });
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.orange),
+                        ),
+                        child: const Text(
+                          "Scan Filter",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                       ElevatedButton(
                         child: const Text('Stop'),
                         onPressed: widget.scannerState.scanIsInProgress
                             ? widget.stopScan
                             : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                        ),
                       ),
                     ],
                   ),
@@ -129,11 +163,6 @@ class _DeviceListState extends State<_DeviceList> {
             Flexible(
               child: ListView(
                 children: [
-                  SwitchListTile(
-                    title: const Text("Verbose logging"),
-                    value: widget.verboseLogging,
-                    onChanged: (_) => setState(widget.toggleVerboseLogging),
-                  ),
                   ListTile(
                     trailing: (widget.scannerState.scanIsInProgress ||
                             widget.scannerState.discoveredDevices.isNotEmpty)
@@ -146,7 +175,8 @@ class _DeviceListState extends State<_DeviceList> {
                     (device) => ListTile(
                       title: Text(device.name),
                       subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                      leading: Image.asset("assets/Images/ms.png"),
+                      // The connected devices can only be movesense right now
+                      leading: Image.asset("assets/Images/movesense.png"),
                       onTap: () async {
                         widget.stopScan();
                         await Navigator.push<void>(
@@ -161,7 +191,7 @@ class _DeviceListState extends State<_DeviceList> {
                     trailing: (widget.scannerState.scanIsInProgress ||
                             widget.scannerState.discoveredDevices.isNotEmpty)
                         ? Text(
-                            'count: ${widget.scannerState.discoveredDevices.where((element) => element.name.contains("Movesense")).length}',
+                            'count: ${widget.scannerState.discoveredDevices.where((element) => selectedSensorList!.length == 0 ? sensorList.where((selected) => element.name.toString().toLowerCase().contains(selected.name.toString().toLowerCase())).length > 0 : selectedSensorList!.where((selected) => element.name.toString().toLowerCase().contains(selected.name.toString().toLowerCase())).length > 0).length}',
                           )
                         : null,
                   ),
@@ -170,7 +200,23 @@ class _DeviceListState extends State<_DeviceList> {
                         (device) => ListTile(
                           title: Text(device.name),
                           subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                          leading: Image.asset("assets/Images/ms.png"),
+                          leading: sensorList
+                                      .where((sensor) => device.name
+                                          .toLowerCase()
+                                          .contains(sensor.name!.toLowerCase()))
+                                      .length >
+                                  0
+                              ? Image.asset("assets/Images/" +
+                                  sensorList
+                                      .where((sensor) => device.name
+                                          .toLowerCase()
+                                          .contains(sensor.name!.toLowerCase()))
+                                      .first
+                                      .name!
+                                      .toLowerCase()
+                                      .toString() +
+                                  ".png")
+                              : BluetoothIcon(),
                           onTap: () async {
                             widget.stopScan();
                             await Navigator.push<void>(
@@ -181,8 +227,25 @@ class _DeviceListState extends State<_DeviceList> {
                           },
                         ),
                       )
-                      .where((element) =>
-                          element.title.toString().contains("Movesense"))
+                      .where((element) => selectedSensorList!.length == 0
+                          ? sensorList
+                                  .where((selected) => element.title
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(selected.name
+                                          .toString()
+                                          .toLowerCase()))
+                                  .length >
+                              0
+                          : selectedSensorList!
+                                  .where((selected) => element.title
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(selected.name
+                                          .toString()
+                                          .toLowerCase()))
+                                  .length >
+                              0)
                       .toList(),
                 ],
               ),
@@ -190,4 +253,46 @@ class _DeviceListState extends State<_DeviceList> {
           ],
         ),
       );
+}
+
+class FilterPage extends StatelessWidget {
+  const FilterPage({Key? key, this.allTextList, this.selectedSensorList})
+      : super(key: key);
+  final List<Sensor>? allTextList;
+  final List<Sensor>? selectedSensorList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Sensors to connect"),
+        backgroundColor: Colors.orange,
+      ),
+      body: SafeArea(
+        child: FilterListWidget<Sensor>(
+          themeData: FilterListThemeData(context),
+          hideSelectedTextCount: true,
+          listData: sensorList,
+          selectedListData: selectedSensorList,
+          onApplyButtonClick: (list) {
+            Navigator.pop(context, list);
+          },
+          choiceChipLabel: (item) {
+            /// Used to print text on chip
+            return item!.name;
+          },
+          validateSelectedItem: (list, val) {
+            ///  identify if item is selected or not
+            return list!.contains(val);
+          },
+          onItemSearch: (item, query) {
+            /// When search query change in search bar then this method will be called
+            ///
+            /// Check if items contains query
+            return item.name!.toLowerCase().contains(query.toLowerCase());
+          },
+        ),
+      ),
+    );
+  }
 }

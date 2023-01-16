@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  filter_list:
+    dependency: "direct main"
+    description:
+      name: filter_list
+      sha256: "2d80d6d19beb7847c1176e8bf6fe06d302b23eb7d1bf48c231dd730409ff9b4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   fixnum:
     dependency: transitive
     description:
@@ -271,7 +279,7 @@ packages:
       sha256: "1cd3af45489d397de11c9049193466766fdc63834b7e7a135e89c1bbaea586d3"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   gotrue:
     dependency: transitive
     description:
@@ -424,7 +432,7 @@ packages:
       sha256: "52e38f7e1143ef39daf532117d6b8f8f617bf4bcd6044ed8c29040d20d269630"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   nested:
     dependency: transitive
     description:
@@ -909,7 +917,7 @@ packages:
       sha256: "3a969ddcc204a3e34e863d204b29c0752716f78b6f9cc8235083208d268a4ccd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.0"
   win32:
     dependency: transitive
     description:
