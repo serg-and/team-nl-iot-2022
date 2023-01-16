@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ede8b63c-6a97-4190-b143-ee47ba998306" name="Changes" comment="Add features to nav">
-      <change beforePath="$PROJECT_DIR$/src/flutter/app/lib/HeartbeatData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/src/flutter/app/lib/HeartbeatData.dart" afterDir="false" />
-    </list>
+    <list default="true" id="ede8b63c-6a97-4190-b143-ee47ba998306" name="Changes" comment="Add features to nav" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

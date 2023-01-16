@@ -1,5 +1,6 @@
 class Sensor {
   final String? name;
+
   Sensor({this.name});
 }
 
