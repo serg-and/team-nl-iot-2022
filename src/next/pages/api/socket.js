@@ -18,13 +18,17 @@ export default function SocketHandler (req, res) {
       socket.on('start-session', async message => {
         console.log('got start-session request with message: ', message)
 
-        // sessions must specify atleast one script to run.
-        if (!message.scripts?.length) return
+        // sessions must specify atleast one script and teammember to run.
+        if (!message.scripts?.length || !message.members?.length) {
+          socket.disconnect()
+          return
+        }
         
         // Start a new session and get functions to control it.
         const { sessionId, sendMessage, endSession } = await startSession({
           name: message.name,
-          scriptIds: message.scripts
+          scriptIds: message.scripts,
+          memberIds: message.members,
         })
 
         console.log('succesfully started session: ', sessionId)
