@@ -38,40 +38,40 @@ class ScriptOutput {
   ScriptOutput(this.id, this.script, this.values);
 }
 
-class TeamModel {
+class Team {
   int id;
   String name;
   // CoachModel? coach;
-  List<TeamMemberModel> teamMembers = List.empty(growable: true);
+  List<TeamMember> teamMembers = List.empty(growable: true);
 
-  TeamModel.fromMap(Map<String, dynamic> map)
+  Team.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         name = map['name'],
         teamMembers = createTeamMembersList(map['team_members']);
 
-  TeamModel(this.id, this.name);
+  Team(this.id, this.name);
 }
 
-class CoachModel {
+class Coach {
   int id;
   String name;
 
-  CoachModel(this.id, this.name);
+  Coach(this.id, this.name);
 }
 
-class TeamMemberModel {
+class TeamMember {
   int id;
   String name;
 
-  TeamMemberModel.fromMap(Map<String, dynamic> map)
+  TeamMember.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         name = map['name'];
 
-  TeamMemberModel(this.id, this.name);
+  TeamMember(this.id, this.name);
 }
 
-List<TeamMemberModel> createTeamMembersList(List<dynamic> list) {
-  return list.map((member) => TeamMemberModel.fromMap(member)).toList();
+List<TeamMember> createTeamMembersList(List<dynamic> list) {
+  return list.map((member) => TeamMember.fromMap(member)).toList();
 }
 
 class Session {

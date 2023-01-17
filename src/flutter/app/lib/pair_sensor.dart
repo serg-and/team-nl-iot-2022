@@ -3,7 +3,7 @@ import 'package:flutter/material.dart'; // Import Material Design package
 import 'package:app/constants.dart';
 import 'models.dart';
 
-List<TeamModel> teams = [];
+List<Team> teams = [];
 
 class PairSensorPage extends StatelessWidget {
   const PairSensorPage({super.key}); // Constructor for Settings class
@@ -37,7 +37,7 @@ class _CreateTeamState extends State<_CreateTeam> {
     final data =
         await supabase.from('teams').select('id, name, team_members(id, name)');
     setState(() {
-      data.forEach((record) => teams.add(TeamModel.fromMap(record)));
+      data.forEach((record) => teams.add(Team.fromMap(record)));
     });
   }
 
@@ -113,9 +113,9 @@ class _CreateTeamState extends State<_CreateTeam> {
 }
 
 class TeamOverView extends StatefulWidget {
-  final TeamModel _teamModel;
+  final Team _team;
   final Function _callBack;
-  TeamOverView(this._teamModel, this._callBack);
+  TeamOverView(this._team, this._callBack);
 
   @override
   State<TeamOverView> createState() => _TeamOverViewState();
@@ -150,40 +150,39 @@ class _TeamOverViewState extends State<TeamOverView> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${widget._teamModel.name}',
-                          textAlign: TextAlign.center),
+                      Text('${widget._team.name}', textAlign: TextAlign.center),
                     ]),
               ))),
-      TeamView(this.widget._teamModel, this.widget._callBack)
+      TeamView(this.widget._team, this.widget._callBack)
     ]);
   }
 }
 
 class TeamView extends StatelessWidget {
-  final TeamModel _teamModel;
+  final Team _team;
   final Function _callBack;
-  TeamView(this._teamModel, this._callBack);
+  TeamView(this._team, this._callBack);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-        children: _teamModel.teamMembers
-            .map((teamMember) => TeamMember(teamMember, _teamModel, _callBack))
+        children: _team.teamMembers
+            .map((teamMember) => TeamMemberWidget(teamMember, _team, _callBack))
             .toList());
   }
 }
 
-class TeamMember extends StatefulWidget {
-  final TeamModel _teamModel;
-  final TeamMemberModel teamMember;
+class TeamMemberWidget extends StatefulWidget {
+  final Team _team;
+  final TeamMember teamMember;
   final Function _callback;
-  TeamMember(this.teamMember, this._teamModel, this._callback);
+  TeamMemberWidget(this.teamMember, this._team, this._callback);
 
   @override
-  State<TeamMember> createState() => _TeamMemberState();
+  State<TeamMemberWidget> createState() => _TeamMemberState();
 }
 
-class _TeamMemberState extends State<TeamMember> {
+class _TeamMemberState extends State<TeamMemberWidget> {
   void pairSensor() {}
 
   Widget build(BuildContext context) {
