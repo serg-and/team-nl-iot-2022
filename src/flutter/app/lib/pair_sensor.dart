@@ -192,9 +192,9 @@ class DropdownButtonExample extends StatefulWidget {
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   String dropdownValue = TeamModel(id!,name!) as String;
 
-  static int? get id => null;
+  static int? get id => id;
 
-  static String? get name => null;
+  static String? get name => name;
 
   get list => null;
 
@@ -204,21 +204,21 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
       value: dropdownValue,
       icon: const Icon(Icons.arrow_downward),
       elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
+      style: const TextStyle(color: Colors.orange),
       underline: Container(
         height: 2,
-        color: Colors.deepPurpleAccent,
+        color: Colors.orange,
       ),
-      onChanged: (String? value) {
+      onChanged: (String? id) {
         // This is called when the user selects an item.
         setState(() {
-          dropdownValue = value!;
+          dropdownValue = name!;
         });
       },
-      items: list.map<DropdownMenuItem<String>>((String value) {
+      items: list.map<DropdownMenuItem<String>>((String id) {
         return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
+          value: name,
+          child: Text(id),
         );
       }).toList(),
     );
@@ -226,7 +226,8 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
 }
 
 class _TeamMemberState extends State<TeamMember> {
-  void pairSensor() {}
+  void pairSensor() {
+  }
 
   Widget build(BuildContext context) {
     return Container(
