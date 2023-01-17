@@ -33,7 +33,7 @@ class TeamModel {
   TeamModel.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         name = map['name'],
-        teamMembers = createTeamMembersList(map['members']);
+        teamMembers = createTeamMembersList(map['team_members']);
 
   TeamModel(this.id, this.name);
 }

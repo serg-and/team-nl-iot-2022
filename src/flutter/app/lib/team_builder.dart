@@ -39,7 +39,8 @@ class _CreateTeamState extends State<_CreateTeam> {
   }
 
   void fetchTeams() async {
-    final data = await supabase.from('teams').select('id, name, members');
+    final data =
+        await supabase.from('teams').select('id, name, team_members(id, name)');
     setState(() {
       data.forEach((record) => teams.add(TeamModel.fromMap(record)));
     });
@@ -111,9 +112,8 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
         .insert({
           'name': myController.text,
           'coach': uuid,
-          'members': [],
         })
-        .select('id, name, members')
+        .select('id, name, team_members(id, name)')
         .single();
 
     setState(() => teams.add(TeamModel.fromMap(res)));
@@ -178,25 +178,41 @@ class _TeamOverViewState extends State<TeamOverView> {
   }
 
   void removeTeam() async {
-    await supabase.from('teams').delete().match({'id': widget._teamModel.id});
+    await supabase
+        .from('team_members')
+        .delete()
+        .eq('team', widget._teamModel.id);
+    await supabase.from('teams').delete().eq('id', widget._teamModel.id);
     setState(() => teams.remove(this.widget._teamModel));
     this.widget._callBack();
     Navigator.pop(context);
   }
 
   void addMember() async {
-    final TeamMemberModel newTeamMember = new TeamMemberModel(
-      int.parse(_myControllerId.text),
-      _myControllerName.text,
-    );
+    // final TeamMemberModel newTeamMember = new TeamMemberModel(
+    //   int.parse(_myControllerId.text),
+    //   _myControllerName.text,
+    // );
+    final String name = _myControllerName.text;
 
-    final membersData = [...widget._teamModel.teamMembers, newTeamMember]
-        .map((member) => {'id': member.id, 'name': member.name})
-        .toList();
+    // final membersData = [...widget._teamModel.teamMembers, newTeamMember]
+    //     .map((member) => {'id': member.id, 'name': member.name})
+    //     .toList();
 
-    await supabase
-        .from('teams')
-        .update({'members': membersData}).eq('id', widget._teamModel.id);
+    // await supabase
+    //     .from('teams')
+    //     .update({'members': membersData}).eq('id', widget._teamModel.id);
+
+    final _newMember = await supabase
+        .from('team_members')
+        .insert({
+          'name': name,
+          'team': widget._teamModel.id,
+        })
+        .select()
+        .single();
+
+    final TeamMemberModel newTeamMember = TeamMemberModel.fromMap(_newMember);
 
     setState(() => this.widget._teamModel.teamMembers.add(newTeamMember));
 
@@ -322,14 +338,16 @@ class TeamMember extends StatefulWidget {
 
 class _TeamMemberState extends State<TeamMember> {
   void removeMember() async {
-    final membersData = widget._teamModel.teamMembers
-        .where((member) => member != widget.teamMember)
-        .map((member) => {'id': member.id, 'name': member.name})
-        .toList();
+    // final membersData = widget._teamModel.teamMembers
+    //     .where((member) => member != widget.teamMember)
+    //     .map((member) => {'id': member.id, 'name': member.name})
+    //     .toList();
 
-    await supabase
-        .from('teams')
-        .update({'members': membersData}).eq('id', widget._teamModel.id);
+    // await supabase
+    //     .from('teams')
+    //     .update({'members': membersData}).eq('id', widget._teamModel.id);
+
+    await supabase.from('team_members').delete().eq('id', widget.teamMember.id);
 
     setState(() => widget._teamModel.teamMembers.remove(widget.teamMember));
 

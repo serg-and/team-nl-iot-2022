@@ -34,7 +34,8 @@ class _CreateTeamState extends State<_CreateTeam> {
   }
 
   void fetchTeams() async {
-    final data = await supabase.from('teams').select('id, name, members');
+    final data =
+        await supabase.from('teams').select('id, name, team_members(id, name)');
     setState(() {
       data.forEach((record) => teams.add(TeamModel.fromMap(record)));
     });
