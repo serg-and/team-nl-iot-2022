@@ -54,15 +54,8 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
   List<ScriptOutput> scriptOutputs = [];
 
   sessionOutputs['script_outputs'].forEach((record) {
-    scriptOutputs.add(ScriptOutput(
-        record['id'],
-        Script(
-            record['scripts']['id'],
-            record['scripts']['name'],
-            record['scripts']['description'],
-            record['scripts']['output_type'],
-            record['scripts']['output_name']),
-        []));
+    scriptOutputs
+        .add(ScriptOutput.fromMap(record, Script.fromMap(record['scripts'])));
   });
 
   return scriptOutputs;

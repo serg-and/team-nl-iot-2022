@@ -50,9 +50,7 @@ class _SelectScriptsState extends State<SelectScripts> {
     final _scripts = await supabase.from('scripts').select();
 
     setState(() {
-      _scripts.forEach((s) => allScripts.add(Script(s['id'], s['name'],
-          s['description'], s['output_type'], s['output_name'])));
-
+      _scripts.forEach((s) => allScripts.add(Script.fromMap(s)));
       filteredScripts = allScripts;
     });
   }
@@ -226,7 +224,8 @@ class _SelectScriptsState extends State<SelectScripts> {
                             fontSize: 20,
                           ),
                         ),
-                      ),],
+                      ),
+                    ],
                   ),
                 ),
               ],
