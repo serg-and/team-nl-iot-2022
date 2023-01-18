@@ -90,6 +90,10 @@ class _RoutingState extends State<Routing> {
   }
 
   void startSession(String? name, List<int> scriptIds, List<int> memberIds) {
+    print(sessionName);
+    print(sessionScripts);
+    print(sessionMembers);
+
     sessionName = name;
     sessionScripts = scriptIds;
     sessionMembers = memberIds;

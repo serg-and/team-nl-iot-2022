@@ -29,7 +29,7 @@ Timer startSendingFakeData(int sessionId) {
   print('starting fake data for session session: ${sessionId}');
   Random random = new Random();
 
-  return Timer.periodic(Duration(milliseconds: 1), (Timer t) {
+  return Timer.periodic(Duration(milliseconds: 100), (Timer t) {
     int heartBeat = 40 + random.nextInt(150 - 40);
     socket?.emit(
         'data-point',
