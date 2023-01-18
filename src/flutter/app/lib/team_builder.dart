@@ -166,14 +166,12 @@ class _TeamOverViewState extends State<TeamOverView> {
   // Create a text controller. Later, use it to retrieve the
   // current value of the TextField.
   final _myControllerName = TextEditingController();
-  final _myControllerId = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
     _myControllerName.dispose();
-    _myControllerId.dispose();
     super.dispose();
   }
 
@@ -248,13 +246,6 @@ class _TeamOverViewState extends State<TeamOverView> {
                                                 decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
                                                   labelText: 'name',
-                                                ),
-                                              ),
-                                              TextField(
-                                                controller: _myControllerId,
-                                                decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  labelText: 'player ID',
                                                 ),
                                               ),
                                               TextButton(
