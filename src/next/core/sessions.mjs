@@ -16,7 +16,7 @@ export async function startSession({ name, scriptIds, memberIds }) {
   // generate default name if no session name is given
   if (!name?.length) name = `Session ${getFormattedDateTime()}`
 
-  const { members, error } = await supabaseService
+  const { data: members, error } = await supabaseService
     .from('team_members')
     .select('id, name')
     .in('id', memberIds)
@@ -37,33 +37,18 @@ export async function startSession({ name, scriptIds, memberIds }) {
     .in('id', scriptIds)
     
   // Create output records for each script for each member in the database.
-  const insertScriptOutputs = []
-  for (const member of members) {
-    for (const script of scripts) {
-      insertScriptOutputs.push(
-        { script: script.id, session: sessionId, member: member.id, values: [] }
-      )
-    }
-  }
-
-  const insertScriptOutputsB = members.map(member => scripts.map(script => ({
+  const insertScriptOutputs = members.map(member => scripts.map(script => ({
       script: script.id,
       session: sessionId,
-      member: member.id,
+      team_member: member.id,
       values: [],
     })))
     .flat()
-  
-  console.log(insertScriptOutputs)
-  console.log(insertScriptOutputsB)
-
+  // Insert script_outputs in database
   const { data: scriptOutputs, error: scriptOutputsError } = await supabaseService
     .from('script_outputs')
     .insert(insertScriptOutputs)
     .select('id, team_member, script(id, language, output_type)')
-  
-  // // Create a list of script outputs and their corresponding scripts.
-  // const outputs = scriptOutputs.map((scriptOutput, i) => ({ ...scriptOutput, script: scripts[i] }))
 
   // Spawn a process for each of (members * scripts) to run it.
   const processes = scriptOutputs.map(output => {
@@ -103,7 +88,9 @@ export async function startSession({ name, scriptIds, memberIds }) {
     return {
       output: output,
       // Create a function to send a message to the script.
-      sendMessage: (msg) => child.stdin.write(`${msg}\n`),
+      sendMessage: (msg) => {
+        child.stdin.write(`${msg}\n`)
+      },
       // Create a function to kill the script.
       kill: () => child.kill()
     }

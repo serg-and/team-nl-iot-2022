@@ -1,11 +1,13 @@
 import Head from 'next/head'
 import io from 'socket.io-client'
 import { useEffect, useState } from 'react'
-import { Box, Button, Stack, TextField } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 
 export default function StartSessionPage() {
   const [socket, setSocket] = useState()
   const [script, setScript] = useState('')
+  const [memberId, setMemberId] = useState('')
+  const [members, setMembers] = useState([])
 
   useEffect(() => {
     if (!socket) return
@@ -40,7 +42,7 @@ export default function StartSessionPage() {
             <Stack spacing={2}>
               <Button
                 onClick={startSession}
-                disabled={!script}
+                disabled={(!script || !members.length)}
                 variant='contained'
               >Start Session</Button>
               <TextField
@@ -50,6 +52,22 @@ export default function StartSessionPage() {
                 value={script}
                 onChange={e => setScript(e.target.value)}
               />
+              <Stack direction='row' spacing={2}>
+                <TextField
+                  label='Member ID'
+                  type='number'
+                  variant='outlined'
+                  value={memberId}
+                  onChange={e => setMemberId(e.target.value)}
+                />
+                <Button
+                  onClick={addMember}
+                  variant='contained'
+                >Add Member</Button>
+              </Stack>
+              <Typography>
+                Members: {members.join(', ')}
+              </Typography>
             </Stack>
           )}
         </Box>
@@ -57,16 +75,28 @@ export default function StartSessionPage() {
     </>
   )
 
+  function addMember() {
+    const id = Number(memberId)
+    if (!id || members.includes(id)) return
+
+    setMembers([...members, Number(memberId)])
+    setMemberId('')
+  }
+
   async function startSession() {
     await fetch('/api/socket')
     const socket = io({ transports: ["websocket"] })
+    
     socket.on("connect", () => {
       socket.emit('start-session', {
-        scripts: [script]
+        scripts: [script],
+        members: members
       })
       socket.on('sessionId', sessionId => console.log('Started session:', sessionId))
       setSocket(socket)
     })
+    
+    socket.on("disconnect", () => console.log('socket disconnected'))
   }
 
   async function stopSession() {
@@ -74,10 +104,20 @@ export default function StartSessionPage() {
     setSocket(null)
   }
 
-  async function sendMessage() {
-    socket.emit('data-point', JSON.stringify({
+  function fakeDataPoint () {
+    return JSON.stringify({
       timestamp: new Date().getTime(),
       value: Math.random() * 1000
-    }))
+    })
   }
+
+  async function sendMessage() {
+    members.forEach(id => 
+      socket.emit('data-point', {
+        member: id,
+        data: fakeDataPoint()
+      })
+    )
+  }
+  
 }
