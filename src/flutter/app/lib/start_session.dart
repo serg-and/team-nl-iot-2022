@@ -1,3 +1,4 @@
+import 'package:app/constants.dart';
 import 'package:app/main.dart';
 import 'package:app/select_scripts.dart';
 import 'package:app/pair_sensor.dart';
@@ -15,12 +16,18 @@ class StartSession extends StatefulWidget {
 class _StartSessionState extends State<StartSession> {
   static TextEditingController sessionNameController = TextEditingController();
   List<int> scriptIds = [];
+  List<int> memberIds = [];
   bool validState = false;
 
   @override
   void initState() {
     getPreferredScripts();
+    getDummyMembers();
     super.initState();
+  }
+
+  void getDummyMembers() async {
+    final members = await supabase.from('team_members').select('id').limit(3);
   }
 
   void validateState() {
@@ -32,7 +39,7 @@ class _StartSessionState extends State<StartSession> {
   void onStartSession() {
     if (!validState) return;
     savePreferredScripts();
-    widget.startSession(sessionNameController.text, scriptIds);
+    widget.startSession(sessionNameController.text, scriptIds, memberIds);
   }
 
   void getPreferredScripts() async {
