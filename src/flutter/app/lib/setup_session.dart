@@ -65,6 +65,7 @@ Future<List<ScriptOutput>> getOutputs(int sessionId) async {
 Future<void> createSession(
   String? name,
   List<int> scriptIds,
+  List<int> memberIds,
   Function callback,
 ) async {
   // initialize the Socket.io server
@@ -86,6 +87,7 @@ Future<void> createSession(
     _socket.emit('start-session', {
       'name': name,
       'scripts': scriptIds,
+      'members': memberIds,
     });
 
     // session started, start retrieving outputs
@@ -102,22 +104,24 @@ Future<void> createSession(
   _socket.onError((err) => print('onError: ${err}'));
 }
 
-class HeartBeatPage extends StatefulWidget {
+class LiveSession extends StatefulWidget {
   final String? name;
   final List<int> scriptIds;
+  final List<int> memberIds;
   final Function stopSession;
-  const HeartBeatPage({
+  const LiveSession({
     super.key,
     this.name,
     required this.scriptIds,
+    required this.memberIds,
     required this.stopSession,
   });
 
   @override
-  State<HeartBeatPage> createState() => _HeartBeatPageState();
+  State<LiveSession> createState() => _LiveSessionState();
 }
 
-class _HeartBeatPageState extends State<HeartBeatPage> {
+class _LiveSessionState extends State<LiveSession> {
   List<ScriptOutput> outputs = [];
 
   @override
@@ -132,6 +136,7 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
     createSession(
         widget.name,
         widget.scriptIds,
+        widget.memberIds,
         (List<ScriptOutput> sessionOutputs) => setState(() {
               outputs = sessionOutputs;
             }));
