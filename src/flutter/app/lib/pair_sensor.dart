@@ -27,6 +27,8 @@ class _CreateTeam extends StatefulWidget {
 }
 
 class _CreateTeamState extends State<_CreateTeam> {
+  Team? selected = null;
+
   void initState() {
     teams = []; // reset teams
     super.initState();
@@ -54,61 +56,66 @@ class _CreateTeamState extends State<_CreateTeam> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
+    return Column(
       children: [
-        Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.only(
-                    bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
-                children: [
-                  Column(
-                      children: teams
-                          .map((team) => TeamOverView(team, callback))
-                          .toList())
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: unpairAll,
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                    icon: Icon(Icons.close),
-                    label: Text(
-                      'Unpair All',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
+        DropdownButtonExample(
+          setTeam: (Team team) => setState(() => selected = team),
+        ),
+        Expanded(
+          child: (selected == null)
+              ? SizedBox.shrink()
+              : ListView(
+                  padding: EdgeInsets.only(
+                      bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
+                  children: [
+                    Column(
+                        children: selected!
+                                .teamMembers.isEmpty //Shows the teams
+                            ? [
+                                Text('Team has no team members')
+                              ] // Shows that there are no team members in the teams, the user have to create them
+                            : selected!.teamMembers
+                                .map((member) => TeamMemberWidget(
+                                    member, selected!, callback))
+                                .toList())
+                  ],
+                ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton.icon(
+                onPressed: unpairAll,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                icon: Icon(Icons.close),
+                label: Text(
+                  'Unpair All',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                  ElevatedButton.icon(
-                    onPressed: onConfirm,
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFF59509)),
-                    icon: Icon(Icons.check),
-                    label: Text(
-                      'Ok',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+              ElevatedButton.icon(
+                onPressed: onConfirm,
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFF59509)),
+                icon: Icon(Icons.check),
+                label: Text(
+                  'Ok',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
-    ));
+    );
   }
 }
 
@@ -180,6 +187,55 @@ class TeamMemberWidget extends StatefulWidget {
 
   @override
   State<TeamMemberWidget> createState() => _TeamMemberState();
+}
+
+class DropdownButtonExample extends StatefulWidget {
+  final Function setTeam;
+  const DropdownButtonExample({super.key, required this.setTeam});
+
+  @override
+  State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
+}
+
+class _DropdownButtonExampleState extends State<DropdownButtonExample> {
+  String selected = '';
+
+  @override
+  Widget build(BuildContext context) {
+    // Dropdown options
+    List<DropdownMenuItem<String>>? items = teams.map((Team item) {
+      return DropdownMenuItem<String>(
+        value: item.id.toString(),
+        child: Text(item.name),
+      );
+    }).toList();
+
+    // add empty value option of no value is selected
+    if (selected == '')
+      items.insert(
+          0,
+          DropdownMenuItem<String>(
+            value: '',
+            child: Text('Select Team'), //Text
+          ));
+
+    return DropdownButton<String>(
+      value: selected,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.black, fontSize: 20),
+      underline: Container(
+        height: 4,
+        color: Colors.orange,
+      ),
+      onChanged: (String? id) {
+        // This is called when the user selects an item.
+        setState(() => selected = id!);
+        widget.setTeam(teams.firstWhere((team) => team.id.toString() == id));
+      },
+      items: items,
+    );
+  }
 }
 
 class _TeamMemberState extends State<TeamMemberWidget> {
