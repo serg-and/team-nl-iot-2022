@@ -59,18 +59,20 @@ class _CreateTeamState extends State<_CreateTeam> {
       children: [
         Column(
           children: [
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.only(
-                    bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
-                children: [
-                  Column(
-                      children: teams
-                          .map((team) => TeamOverView(team, callback))
-                          .toList())
-                ],
-              ),
-            ),
+            //Expanded(
+            //   child: ListView(
+            //     padding: EdgeInsets.only(
+            //         bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
+            //     children: [
+            //       Column(
+            //           children: teams
+            //               .map((team) => TeamOverView(team, callback))
+            //               .toList())
+            //     ],
+            //   ),
+             DropdownButtonExample(),
+
+
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
               child: Row(
@@ -185,6 +187,8 @@ class TeamMember extends StatefulWidget {
 class DropdownButtonExample extends StatefulWidget {
   const DropdownButtonExample({super.key});
 
+
+
   @override
   State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
 }
@@ -196,7 +200,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
 
   static String? get name => name;
 
-  get list => null;
+  get list => teams;
 
   @override
   Widget build(BuildContext context) {
@@ -215,10 +219,10 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
           dropdownValue = name!;
         });
       },
-      items: list.map<DropdownMenuItem<String>>((String id) {
+      items: list.map((TeamModel item) {
         return DropdownMenuItem<String>(
-          value: name,
-          child: Text(id),
+          value: item.id.toString(),
+          child: Text(item.name),
         );
       }).toList(),
     );
