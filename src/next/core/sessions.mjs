@@ -12,9 +12,16 @@ const entrypoints = {
 }
 
 // Starts a session and creates processes to run scripts.
-export async function startSession({ name, scriptIds }) {
+export async function startSession({ name, scriptIds, memberIds }) {
   // generate default name if no session name is given
   if (!name?.length) name = `Session ${getFormattedDateTime()}`
+
+  const { data: members, error } = await supabaseService
+    .from('team_members')
+    .select('id, name')
+    .in('id', memberIds)
+
+  if (!members) throw Error(`no team members found, used IDs: ${memberIds}`)
 
   // Create a session in the database.
   const { data: { id: sessionId }, error: sessionError } = await supabaseService
@@ -26,22 +33,25 @@ export async function startSession({ name, scriptIds }) {
   // Get the given scripts from the database.
   const { data: scripts, error: scriptsError } = await supabaseService
     .from('scripts')
-    .select('id, language, output_type')
+    .select('id')
     .in('id', scriptIds)
-  
-  // Create output records for each script in the database.
+    
+  // Create output records for each script for each member in the database.
+  const insertScriptOutputs = members.map(member => scripts.map(script => ({
+      script: script.id,
+      session: sessionId,
+      team_member: member.id,
+      values: [],
+    })))
+    .flat()
+  // Insert script_outputs in database
   const { data: scriptOutputs, error: scriptOutputsError } = await supabaseService
     .from('script_outputs')
-    .insert(scripts.map(script => (
-      { script: script.id, session: sessionId, values: [] }
-    )))
-    .select('id')
-  
-  // Create a list of script outputs and their corresponding scripts.
-  const outputs = scriptOutputs.map((scriptOutput, i) => ({ ...scriptOutput, script: scripts[i] }))
+    .insert(insertScriptOutputs)
+    .select('id, team_member, script(id, language, output_type)')
 
-  // Spawn a process for each script to run it.
-  const processes = outputs.map(output => {
+  // Spawn a process for each of (members * scripts) to run it.
+  const processes = scriptOutputs.map(output => {
     const script_path = `storage/uploads/scripts/${output.script.id}.${output.script.language}`
     const child = spawn(
       programs[output.script.language],
@@ -76,17 +86,28 @@ export async function startSession({ name, scriptIds }) {
     })
 
     return {
+      output: output,
       // Create a function to send a message to the script.
-      sendMessage: (msg) => child.stdin.write(`${msg}\n`),
+      sendMessage: (msg) => {
+        child.stdin.write(`${msg}\n`)
+      },
       // Create a function to kill the script.
       kill: () => child.kill()
     }
   })
 
+  // sort processes by member for performance reasons
+  const processesMemberMapping = {}
+  processes.forEach(process => {
+    const list = processesMemberMapping[process.output.team_member]
+    if (list) list.push(process)
+    else processesMemberMapping[process.output.team_member] = [process]
+  })
+
   // Create a function to send a message to all scripts.
-  function sendMessage
-  (msg) {
-    processes.forEach(process => process.sendMessage(msg))
+  function sendMessage(memberId, msg) {
+    processesMemberMapping[memberId]
+      .forEach(process => process.sendMessage(msg))
   }
 
   // This function ends the session and kills all running scripts.
@@ -114,4 +135,5 @@ async function appendValueToOutput(script_output_id, value) {
     })
   
   if (error) console.error(error)
+
 }

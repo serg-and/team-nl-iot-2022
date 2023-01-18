@@ -1,7 +1,7 @@
+import 'package:app/constants.dart';
 import 'package:app/main.dart';
 import 'package:app/select_scripts.dart';
 import 'package:app/pair_sensor.dart';
-import 'package:app/team_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,24 +16,30 @@ class StartSession extends StatefulWidget {
 class _StartSessionState extends State<StartSession> {
   static TextEditingController sessionNameController = TextEditingController();
   List<int> scriptIds = [];
+  List<int> memberIds = [];
   bool validState = false;
 
   @override
   void initState() {
     getPreferredScripts();
+    getDummyMembers();
     super.initState();
+  }
+
+  void getDummyMembers() async {
+    final members = await supabase.from('team_members').select('id').limit(3);
   }
 
   void validateState() {
     setState(() {
-      validState = scriptIds.isNotEmpty;
+      validState = (scriptIds.isNotEmpty && memberIds.isNotEmpty);
     });
   }
 
   void onStartSession() {
     if (!validState) return;
     savePreferredScripts();
-    widget.startSession(sessionNameController.text, scriptIds);
+    widget.startSession(sessionNameController.text, scriptIds, memberIds);
   }
 
   void getPreferredScripts() async {
@@ -66,20 +72,20 @@ class _StartSessionState extends State<StartSession> {
       ),
     );
 
-    setState(() {
-      scriptIds = newScriptIds != null ? newScriptIds : scriptIds;
-    });
-
+    setState(() => scriptIds = newScriptIds != null ? newScriptIds : scriptIds);
     validateState();
   }
 
   void pairSensors() async {
-    await Navigator.push(
+    List<int>? newMemberIds = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PairSensorPage(),
       ),
     );
+
+    setState(() => memberIds = newMemberIds != null ? newMemberIds : memberIds);
+    validateState();
   }
 
   @override
@@ -152,10 +158,10 @@ class _StartSessionState extends State<StartSession> {
                                 child: ListTile(
                                   visualDensity: VisualDensity(vertical: 1),
                                   title: Text(
-                                      'Pair Team Members  ${[].isEmpty ? "❗" : ""}'),
-                                  subtitle: Text([].isEmpty
+                                      'Pair Team Members  ${memberIds.isEmpty ? "❗" : ""}'),
+                                  subtitle: Text(memberIds.isEmpty
                                       ? 'No team members paired'
-                                      : '${[].length.toString()} team members paired'),
+                                      : '${memberIds.length.toString()} team members paired'),
                                 ),
                               ),
                               Icon(Icons.chevron_right)

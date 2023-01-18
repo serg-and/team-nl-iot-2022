@@ -18,6 +18,7 @@ import 'package:app/start_session.dart';
 
 String? sessionName;
 List<int> sessionScripts = [];
+List<int> sessionMembers = [];
 
 class Routing extends StatefulWidget {
   const Routing({Key? key}) : super(key: key);
@@ -88,9 +89,14 @@ class _RoutingState extends State<Routing> {
     prefs.remove(PERSIST_SESSION_KEY);
   }
 
-  void startSession(String? name, List<int> scriptIds) {
+  void startSession(String? name, List<int> scriptIds, List<int> memberIds) {
+    print(sessionName);
+    print(sessionScripts);
+    print(sessionMembers);
+
     sessionName = name;
     sessionScripts = scriptIds;
+    sessionMembers = memberIds;
     setState(() {
       sessionActive = true;
     });
@@ -99,6 +105,7 @@ class _RoutingState extends State<Routing> {
   void stopSession() {
     sessionName = null;
     sessionScripts = [];
+    sessionMembers = [];
     setState(() {
       sessionActive = false;
     });
@@ -114,9 +121,10 @@ class _RoutingState extends State<Routing> {
 
     double displayWidth = MediaQuery.of(context).size.width;
     Widget sessionPage = sessionActive
-        ? HeartBeatPage(
+        ? LiveSession(
             name: sessionName,
             scriptIds: sessionScripts,
+            memberIds: sessionMembers,
             stopSession: stopSession,
           )
         // : SelectScripts(startSession: startSession);

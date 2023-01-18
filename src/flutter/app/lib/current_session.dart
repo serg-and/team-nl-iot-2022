@@ -48,13 +48,14 @@ class _CurrentState extends State<Current> {
             child: Align(
               alignment: FractionalOffset.centerLeft,
               child: ElevatedButton(
-                // When the button is pressed, it will navigate to the `HeartBeatPage`
+                // When the button is pressed, it will navigate to the `LiveSession`
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => HeartBeatPage(
+                          builder: (context) => LiveSession(
                                 scriptIds: [],
+                                memberIds: [],
                                 stopSession: () => null,
                               )));
                 },

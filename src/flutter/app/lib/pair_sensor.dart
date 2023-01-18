@@ -3,7 +3,7 @@ import 'package:flutter/material.dart'; // Import Material Design package
 import 'package:app/constants.dart';
 import 'models.dart';
 
-List<TeamModel> teams = [];
+List<Team> teams = [];
 
 class PairSensorPage extends StatelessWidget {
   const PairSensorPage({super.key}); // Constructor for Settings class
@@ -27,7 +27,7 @@ class _CreateTeam extends StatefulWidget {
 }
 
 class _CreateTeamState extends State<_CreateTeam> {
-  TeamModel? selected = null;
+  Team? selected = null;
 
   void initState() {
     teams = []; // reset teams
@@ -39,7 +39,7 @@ class _CreateTeamState extends State<_CreateTeam> {
     final data =
         await supabase.from('teams').select('id, name, team_members(id, name)');
     setState(() {
-      data.forEach((record) => teams.add(TeamModel.fromMap(record)));
+      data.forEach((record) => teams.add(Team.fromMap(record)));
     });
   }
 
@@ -47,8 +47,12 @@ class _CreateTeamState extends State<_CreateTeam> {
     setState(() {});
   }
 
+  // send the IDs of the members back to the start_session page
   void onConfirm() {
-    Navigator.pop(context, 'data from page');
+    Navigator.pop(
+      context,
+      selected?.teamMembers.map((member) => member.id).toList(),
+    );
   }
 
   void unpairAll() {
@@ -59,7 +63,7 @@ class _CreateTeamState extends State<_CreateTeam> {
     return Column(
       children: [
         DropdownButtonExample(
-          setTeam: (TeamModel team) => setState(() => selected = team),
+          setTeam: (Team team) => setState(() => selected = team),
         ),
         Expanded(
           child: (selected == null)
@@ -69,11 +73,14 @@ class _CreateTeamState extends State<_CreateTeam> {
                       bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
                   children: [
                     Column(
-                        children: selected!.teamMembers.isEmpty //Shows the teams
-                            ? [Text('Team has no team members')] // Shows that there are no team members in the teams, the user have to create them
+                        children: selected!
+                                .teamMembers.isEmpty //Shows the teams
+                            ? [
+                                Text('Team has no team members')
+                              ] // Shows that there are no team members in the teams, the user have to create them
                             : selected!.teamMembers
-                                .map((member) =>
-                                    TeamMember(member, selected!, callback))
+                                .map((member) => TeamMemberWidget(
+                                    member, selected!, callback))
                                 .toList())
                   ],
                 ),
@@ -117,9 +124,9 @@ class _CreateTeamState extends State<_CreateTeam> {
 }
 
 class TeamOverView extends StatefulWidget {
-  final TeamModel _teamModel;
+  final Team _team;
   final Function _callBack;
-  TeamOverView(this._teamModel, this._callBack);
+  TeamOverView(this._team, this._callBack);
 
   @override
   State<TeamOverView> createState() => _TeamOverViewState();
@@ -154,37 +161,36 @@ class _TeamOverViewState extends State<TeamOverView> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${widget._teamModel.name}',
-                          textAlign: TextAlign.center),
+                      Text('${widget._team.name}', textAlign: TextAlign.center),
                     ]),
               ))),
-      TeamView(this.widget._teamModel, this.widget._callBack)
+      TeamView(this.widget._team, this.widget._callBack)
     ]);
   }
 }
 
 class TeamView extends StatelessWidget {
-  final TeamModel _teamModel;
+  final Team _team;
   final Function _callBack;
-  TeamView(this._teamModel, this._callBack);
+  TeamView(this._team, this._callBack);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-        children: _teamModel.teamMembers
-            .map((teamMember) => TeamMember(teamMember, _teamModel, _callBack))
+        children: _team.teamMembers
+            .map((teamMember) => TeamMemberWidget(teamMember, _team, _callBack))
             .toList());
   }
 }
 
-class TeamMember extends StatefulWidget {
-  final TeamModel _teamModel;
-  final TeamMemberModel teamMember;
+class TeamMemberWidget extends StatefulWidget {
+  final Team _team;
+  final TeamMember teamMember;
   final Function _callback;
-  TeamMember(this.teamMember, this._teamModel, this._callback);
+  TeamMemberWidget(this.teamMember, this._team, this._callback);
 
   @override
-  State<TeamMember> createState() => _TeamMemberState();
+  State<TeamMemberWidget> createState() => _TeamMemberState();
 }
 
 class DropdownButtonExample extends StatefulWidget {
@@ -201,7 +207,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   @override
   Widget build(BuildContext context) {
     // Dropdown options
-    List<DropdownMenuItem<String>>? items = teams.map((TeamModel item) {
+    List<DropdownMenuItem<String>>? items = teams.map((Team item) {
       return DropdownMenuItem<String>(
         value: item.id.toString(),
         child: Text(item.name),
@@ -236,7 +242,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   }
 }
 
-class _TeamMemberState extends State<TeamMember> {
+class _TeamMemberState extends State<TeamMemberWidget> {
   void pairSensor() {}
 
   Widget build(BuildContext context) {

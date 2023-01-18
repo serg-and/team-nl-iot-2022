@@ -3,7 +3,7 @@ import 'package:app/main.dart'; // Import main.dart file
 import 'package:flutter/material.dart'; // Import Material Design package
 import 'models.dart';
 
-List<TeamModel> teams = [];
+List<Team> teams = [];
 
 class CreateTeamPage extends StatelessWidget {
   const CreateTeamPage({super.key}); // Constructor for Settings class
@@ -42,7 +42,7 @@ class _CreateTeamState extends State<_CreateTeam> {
     final data =
         await supabase.from('teams').select('id, name, team_members(id, name)');
     setState(() {
-      data.forEach((record) => teams.add(TeamModel.fromMap(record)));
+      data.forEach((record) => teams.add(Team.fromMap(record)));
     });
   }
 
@@ -116,7 +116,7 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
         .select('id, name, team_members(id, name)')
         .single();
 
-    setState(() => teams.add(TeamModel.fromMap(res)));
+    setState(() => teams.add(Team.fromMap(res)));
 
     Navigator.pop(context);
     this.widget.callback();
@@ -154,9 +154,9 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
 }
 
 class TeamOverView extends StatefulWidget {
-  final TeamModel _teamModel;
+  final Team _team;
   final Function _callBack;
-  TeamOverView(this._teamModel, this._callBack);
+  TeamOverView(this._team, this._callBack);
 
   @override
   State<TeamOverView> createState() => _TeamOverViewState();
@@ -166,55 +166,50 @@ class _TeamOverViewState extends State<TeamOverView> {
   // Create a text controller. Later, use it to retrieve the
   // current value of the TextField.
   final _myControllerName = TextEditingController();
-  final _myControllerId = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
     _myControllerName.dispose();
-    _myControllerId.dispose();
     super.dispose();
   }
 
   void removeTeam() async {
-    await supabase
-        .from('team_members')
-        .delete()
-        .eq('team', widget._teamModel.id);
-    await supabase.from('teams').delete().eq('id', widget._teamModel.id);
-    setState(() => teams.remove(this.widget._teamModel));
+    await supabase.from('team_members').delete().eq('team', widget._team.id);
+    await supabase.from('teams').delete().eq('id', widget._team.id);
+    setState(() => teams.remove(this.widget._team));
     this.widget._callBack();
     Navigator.pop(context);
   }
 
   void addMember() async {
-    // final TeamMemberModel newTeamMember = new TeamMemberModel(
+    // final TeamMember newTeamMember = new TeamMember(
     //   int.parse(_myControllerId.text),
     //   _myControllerName.text,
     // );
     final String name = _myControllerName.text;
 
-    // final membersData = [...widget._teamModel.teamMembers, newTeamMember]
+    // final membersData = [...widget._team.teamMembers, newTeamMember]
     //     .map((member) => {'id': member.id, 'name': member.name})
     //     .toList();
 
     // await supabase
     //     .from('teams')
-    //     .update({'members': membersData}).eq('id', widget._teamModel.id);
+    //     .update({'members': membersData}).eq('id', widget._team.id);
 
     final _newMember = await supabase
         .from('team_members')
         .insert({
           'name': name,
-          'team': widget._teamModel.id,
+          'team': widget._team.id,
         })
         .select()
         .single();
 
-    final TeamMemberModel newTeamMember = TeamMemberModel.fromMap(_newMember);
+    final TeamMember newTeamMember = TeamMember.fromMap(_newMember);
 
-    setState(() => this.widget._teamModel.teamMembers.add(newTeamMember));
+    setState(() => this.widget._team.teamMembers.add(newTeamMember));
 
     Navigator.pop(context);
   }
@@ -233,8 +228,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${widget._teamModel.name}',
-                          textAlign: TextAlign.center),
+                      Text('${widget._team.name}', textAlign: TextAlign.center),
                       Row(children: [
                         SizedBox(
                           width: 50,
@@ -252,13 +246,6 @@ class _TeamOverViewState extends State<TeamOverView> {
                                                 decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
                                                   labelText: 'name',
-                                                ),
-                                              ),
-                                              TextField(
-                                                controller: _myControllerId,
-                                                decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  labelText: 'player ID',
                                                 ),
                                               ),
                                               TextButton(
@@ -282,7 +269,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                                           builder: (BuildContext context) {
                                             return AlertDialog(
                                               title: Text(
-                                                  'Are you sure you want remove team "${widget._teamModel.name}"'),
+                                                  'Are you sure you want remove team "${widget._team.name}"'),
                                               actions: [
                                                 TextButton(
                                                     onPressed: removeTeam,
@@ -307,36 +294,36 @@ class _TeamOverViewState extends State<TeamOverView> {
                       ])
                     ]),
               ))),
-      TeamView(this.widget._teamModel, this.widget._callBack)
+      TeamView(this.widget._team, this.widget._callBack)
     ]);
   }
 }
 
 class TeamView extends StatelessWidget {
-  final TeamModel _teamModel;
+  final Team _team;
   final Function _callBack;
-  TeamView(this._teamModel, this._callBack);
+  TeamView(this._team, this._callBack);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-        children: _teamModel.teamMembers
-            .map((teamMember) => TeamMember(teamMember, _teamModel, _callBack))
+        children: _team.teamMembers
+            .map((teamMember) => TeamMemberWidget(teamMember, _team, _callBack))
             .toList());
   }
 }
 
-class TeamMember extends StatefulWidget {
-  final TeamModel _teamModel;
-  final TeamMemberModel teamMember;
+class TeamMemberWidget extends StatefulWidget {
+  final Team _team;
+  final TeamMember teamMember;
   final Function _callback;
-  TeamMember(this.teamMember, this._teamModel, this._callback);
+  TeamMemberWidget(this.teamMember, this._team, this._callback);
 
   @override
-  State<TeamMember> createState() => _TeamMemberState();
+  State<TeamMemberWidget> createState() => _TeamMemberState();
 }
 
-class _TeamMemberState extends State<TeamMember> {
+class _TeamMemberState extends State<TeamMemberWidget> {
   void removeMember() async {
     // final membersData = widget._teamModel.teamMembers
     //     .where((member) => member != widget.teamMember)
@@ -349,7 +336,7 @@ class _TeamMemberState extends State<TeamMember> {
 
     await supabase.from('team_members').delete().eq('id', widget.teamMember.id);
 
-    setState(() => widget._teamModel.teamMembers.remove(widget.teamMember));
+    setState(() => widget._team.teamMembers.remove(widget.teamMember));
 
     this.widget._callback();
     Navigator.pop(context);

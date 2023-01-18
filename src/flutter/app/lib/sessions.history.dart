@@ -54,15 +54,7 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
     final _sessions = await supabase.from('sessions').select();
 
     setState(() {
-      _sessions.forEach((s) => allSessions.add(models.Session(
-            s['id'],
-            s['name'],
-            // format for the day, date & time
-            Jiffy(s['stated_at']),
-            Jiffy(s['ended_at']),
-
-          )));
-
+      _sessions.forEach((s) => allSessions.add(models.Session.fromMap(s)));
       filteredSessions = allSessions;
     });
   }
@@ -170,27 +162,26 @@ class SessionListing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     print(session.startedAt);
+    print(session.startedAt);
 
     return Container(
       width: 367.7,
       height: 103.3,
       decoration: BoxDecoration(),
       child: Container(
-        child:
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Shows the sessions from the database
-                Text( '${session.name}',
-                    style: Theme.of(context).textTheme.bodyMedium),
-                Text('${session.startedAt.yMMMMEEEEdjm} '),
-                Text('${session.endedAt.yMMMMEEEEdjm}'),
-              ],
-            ),
-    ),
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Shows the sessions from the database
+              Text('${session.name}',
+                  style: Theme.of(context).textTheme.bodyMedium),
+              Text('${session.startedAt.yMMMMEEEEdjm} '),
+              Text('${session.endedAt.yMMMMEEEEdjm}'),
+            ],
+          ),
+        ),
       ),
     );
   }
