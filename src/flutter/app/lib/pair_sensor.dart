@@ -69,8 +69,8 @@ class _CreateTeamState extends State<_CreateTeam> {
                       bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
                   children: [
                     Column(
-                        children: selected!.teamMembers.isEmpty
-                            ? [Text('Team has no team members')]
+                        children: selected!.teamMembers.isEmpty //Shows the teams
+                            ? [Text('Team has no team members')] // Shows that there are no team members in the teams, the user have to create them
                             : selected!.teamMembers
                                 .map((member) =>
                                     TeamMember(member, selected!, callback))
@@ -214,7 +214,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
           0,
           DropdownMenuItem<String>(
             value: '',
-            child: Text('Select Team'),
+            child: Text('Select Team'), //Text
           ));
 
     return DropdownButton<String>(
