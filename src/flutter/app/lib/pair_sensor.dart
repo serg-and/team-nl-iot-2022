@@ -221,9 +221,9 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
       value: selected,
       icon: const Icon(Icons.arrow_downward),
       elevation: 16,
-      style: const TextStyle(color: Colors.orange),
+      style: const TextStyle(color: Colors.black, fontSize: 20),
       underline: Container(
-        height: 2,
+        height: 4,
         color: Colors.orange,
       ),
       onChanged: (String? id) {
