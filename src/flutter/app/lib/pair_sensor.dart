@@ -47,8 +47,12 @@ class _CreateTeamState extends State<_CreateTeam> {
     setState(() {});
   }
 
+  // send the IDs of the members back to the start_session page
   void onConfirm() {
-    Navigator.pop(context, 'data from page');
+    Navigator.pop(
+      context,
+      selected?.teamMembers.map((member) => member.id).toList(),
+    );
   }
 
   void unpairAll() {

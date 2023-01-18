@@ -32,7 +32,7 @@ class _StartSessionState extends State<StartSession> {
 
   void validateState() {
     setState(() {
-      validState = scriptIds.isNotEmpty;
+      validState = (scriptIds.isNotEmpty && memberIds.isNotEmpty);
     });
   }
 
@@ -72,20 +72,20 @@ class _StartSessionState extends State<StartSession> {
       ),
     );
 
-    setState(() {
-      scriptIds = newScriptIds != null ? newScriptIds : scriptIds;
-    });
-
+    setState(() => scriptIds = newScriptIds != null ? newScriptIds : scriptIds);
     validateState();
   }
 
   void pairSensors() async {
-    await Navigator.push(
+    List<int>? newMemberIds = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PairSensorPage(),
       ),
     );
+
+    setState(() => memberIds = newMemberIds != null ? newMemberIds : memberIds);
+    validateState();
   }
 
   @override
@@ -158,10 +158,10 @@ class _StartSessionState extends State<StartSession> {
                                 child: ListTile(
                                   visualDensity: VisualDensity(vertical: 1),
                                   title: Text(
-                                      'Pair Team Members  ${[].isEmpty ? "❗" : ""}'),
-                                  subtitle: Text([].isEmpty
+                                      'Pair Team Members  ${memberIds.isEmpty ? "❗" : ""}'),
+                                  subtitle: Text(memberIds.isEmpty
                                       ? 'No team members paired'
-                                      : '${[].length.toString()} team members paired'),
+                                      : '${memberIds.length.toString()} team members paired'),
                                 ),
                               ),
                               Icon(Icons.chevron_right)
