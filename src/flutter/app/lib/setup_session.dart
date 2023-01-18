@@ -1,11 +1,20 @@
 import 'dart:convert';
+import 'package:app/bluetooth/bluetooth_screen.dart';
+import 'package:app/bluetooth/models/device.dart';
+import 'package:app/bluetooth/models/device_model.dart';
 import 'package:app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:mdsflutter/Mds.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:app/constants.dart';
+import 'bluetooth/ble/ble_logger.dart';
+import 'bluetooth/ble/ble_scanner.dart';
+import 'bluetooth/ui/device_detail/device_detail_screen.dart';
+import 'bluetooth/ui/device_list.dart';
 import 'models.dart';
 import 'graph_builder.dart';
 import 'package:http/http.dart' as http;
@@ -175,6 +184,17 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
           ListView(
             children: outputs.map((output) => Output(output: output)).toList(),
           ),
+          Consumer3<BleScanner, BleScannerState?, BleLogger>(
+            builder: (_, bleScanner, bleScannerState, bleLogger, __) =>
+                _DeviceList(
+              scannerState: bleScannerState ??
+                  const BleScannerState(
+                    connectedDevices: [],
+                    discoveredDevices: [],
+                    scanIsInProgress: false,
+                  ),
+            ),
+          ),
           Positioned(
             child: Align(
               alignment: FractionalOffset.bottomCenter,
@@ -193,6 +213,101 @@ class _HeartBeatPageState extends State<HeartBeatPage> {
       ),
     );
   }
+}
+
+class _DeviceList extends StatefulWidget {
+  const _DeviceList({
+    required this.scannerState,
+  });
+
+  final BleScannerState scannerState;
+
+  @override
+  _DeviceListState createState() => _DeviceListState();
+}
+
+class _DeviceListState extends State<_DeviceList> {
+  late TextEditingController _uuidController;
+  late DeviceModel deviceModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _uuidController = TextEditingController()
+      ..addListener(() => setState(() {}));
+
+    widget.scannerState.connectedDevices.forEach((element) {
+      deviceModel =
+          DeviceModel(element.name, Device(element.name, element.id).serial);
+      Mds.subscribe(
+          Mds.createSubscriptionUri(
+              Device(element.name, element.id).serial.toString(),
+              "/Meas/Acc/104"),
+          "{}",
+          (d, c) => {},
+          (e, c) => {},
+          (data) => sendData(data),
+          (e, c) => {});
+
+      Mds.subscribe(
+          Mds.createSubscriptionUri(
+              Device(element.name, element.id).serial.toString(), "/Meas/HR"),
+          "{}",
+          (d, c) => {},
+          (e, c) => {},
+          (data) => sendData(data),
+          (e, c) => {});
+    });
+  }
+
+  void sendData(String data) {
+    print("Data sent");
+    print(data);
+    socket?.emit(
+        'data-point',
+        jsonEncode({
+          'value': data,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        }));
+  }
+
+  Widget _accelerometerItem(DeviceModel deviceModel) {
+    return Card(
+      child: ListTile(
+        title: Text("Accelerometer"),
+        subtitle: Text(deviceModel.accelerometerData),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => Container(
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            Flexible(
+              child: ListView(
+                children: [
+                  ...widget.scannerState.connectedDevices.map(
+                    (device) => ChangeNotifierProvider(
+                      create: (context) => deviceModel,
+                      child: Consumer<DeviceModel>(
+                        builder: (context, model, child) {
+                          return Container(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[_accelerometerItem(model)],
+                          ));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 class Output extends StatefulWidget {
