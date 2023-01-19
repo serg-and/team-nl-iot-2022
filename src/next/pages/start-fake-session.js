@@ -9,6 +9,8 @@ export default function StartSessionPage() {
   const [memberId, setMemberId] = useState('')
   const [members, setMembers] = useState([])
 
+  console.log(fakeDataPoint())
+
   useEffect(() => {
     if (!socket) return
 
@@ -105,18 +107,30 @@ export default function StartSessionPage() {
   }
 
   function fakeDataPoint () {
+    const randFlipNegative = () => Math.random() > 0.5 ? 1 : -1
+    const randAccValue = () => Math.random() * randFlipNegative()
+
     return JSON.stringify({
-      timestamp: new Date().getTime(),
-      value: Math.random() * 1000
+      Timestamp: new Date().getTime(),
+      ArrayAcc: [
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
+        {x: randAccValue(), y: randAccValue(), z: randAccValue()}
+      ]
     })
   }
 
   async function sendMessage() {
     members.forEach(id => 
-      socket.emit('data-point', {
+      socket.emit('data-point', JSON.stringify({
         member: id,
         data: fakeDataPoint()
-      })
+      }))
     )
   }
   
