@@ -10,6 +10,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app/main.dart';
 import 'package:app/models.dart';
 
+// This page Creates the list of all the scripts in the data base
+// and makes them selectable to use in a session
 const Map<String, String> outputTypeDisplayNames = {
   'line_chart': 'Line Chart',
   'bar_chart': 'Bar Chart',

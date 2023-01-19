@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'models.dart';
 
+// This file makes the graphs for the data
+
+// This is for displaying data as text
 class DataText extends StatelessWidget {
   final String name;
   final OutputValue? lastValue;
@@ -18,6 +21,7 @@ class DataText extends StatelessWidget {
   }
 }
 
+// Creates the line graph with one data type
 class DataLineGraph extends StatelessWidget {
   final List<OutputValue> values;
   const DataLineGraph({super.key, required this.values});
@@ -179,7 +183,7 @@ class DataLineGraph extends StatelessWidget {
   }
 }
 
-
+//Creates the bar chart with one data type
 class BarChartBuilder extends StatelessWidget {
   final List<OutputValue> values;
   const BarChartBuilder({super.key, required this.values});
