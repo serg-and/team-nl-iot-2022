@@ -39,8 +39,6 @@ export default function SocketHandler (req, res) {
         // socket.on('data-point', ({ member, data }) => {
           socket.on('data-point', (msg) => {
             const parsed = JSON.parse(msg)
-
-            console.log('parsed data-point:  ', parsed)
   
             if (!Number(parsed.member) || !parsed.data ) {
               console.log('bad data-point')
