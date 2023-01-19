@@ -23,9 +23,13 @@ class _OnboardingPageState extends State<OnBoardingPage> {
   }
 
   Widget buildPage({
+    //The color of the background container
     required Color color,
+    //The asset path of the image to be displayed
     required String urlImage,
+    //The title text to be displayed
     required String title,
+    //The subtitle text to be displayed
     required String subtitle,
   }) =>
       Container(
@@ -35,6 +39,7 @@ class _OnboardingPageState extends State<OnBoardingPage> {
           children: [
             Image.asset(
               urlImage,
+              //Scales the image down while maintaining its aspect ratio
               fit: BoxFit.scaleDown,
               width: 275,
               height: 200,
@@ -51,6 +56,7 @@ class _OnboardingPageState extends State<OnBoardingPage> {
               ),
               textAlign: TextAlign.center,
             ),
+
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Text(
@@ -71,17 +77,22 @@ class _OnboardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
       body: Container(
+        //Padding for the bottom of the container
         padding: const EdgeInsets.only(bottom: 80),
         child: PageView(
           controller: controller,
+          //Updates the state when the page changes
           onPageChanged: (index) {
             setState(() => isLastPage = index == 2);
           },
           children: [
             buildPage(
                 color: Colors.white,
+                //The asset path of the image to be displayed
                 urlImage: 'assets/onboardingscreen/connect.png',
+                //The title text to be displayed
                 title: "Connect with the sensor",
+                //The subtitle text to be displayed
                 subtitle:
                     "You can connect your device with the build in bluetooth functionalities in the app. Search, add, remove and view bluetooth devices."),
             buildPage(

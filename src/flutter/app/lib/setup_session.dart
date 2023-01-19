@@ -21,25 +21,38 @@ import 'package:http/http.dart' as http;
 
 const int MAX_GRAPH_VALUES = 30;
 
+//index variable
 int index = 0;
+//variable for the fake data timer
 Timer? fakeDataTimer;
+//list to store subscriptions
 List<dynamic> subscriptions = [];
+//variable for the socket
 IO.Socket? socket;
 
+//function to initialize the output values
 List<OutputValue> initOutputValues(jsonValues) {
+  //list to store the output values
   List<OutputValue> outputValues = [];
+  //iterate through the jsonValues
   jsonValues.forEach((item) =>
+      //add the output value to the outputValues list
       outputValues.add(OutputValue(item['value'], item['timestamp'])));
 
+  //return the outputValues list
   return outputValues;
 }
-
+//function to start sending fake data
 Timer startSendingFakeData(int sessionId) {
   print('starting fake data for session session: ${sessionId}');
+  //create a new random object
   Random random = new Random();
 
+  //return a timer that runs periodically
   return Timer.periodic(Duration(milliseconds: 100), (Timer t) {
+    //generate a random heart rate between 40 and 150
     int heartBeat = 40 + random.nextInt(150 - 40);
+    //emit the data-point event with the heart rate and current timestamp
     socket?.emit(
         'data-point',
         jsonEncode({
@@ -220,7 +233,9 @@ class _DeviceList extends StatefulWidget {
     required this.memberIds,
   });
 
+  //scannerState variable
   final BleScannerState scannerState;
+  //list of member ids
   final List<int> memberIds;
 
   @override
@@ -228,32 +243,41 @@ class _DeviceList extends StatefulWidget {
 }
 
 class _DeviceListState extends State<_DeviceList> {
+  //controller for the uuid text field
   late TextEditingController _uuidController;
+  //variable for the device model
   late DeviceModel deviceModel;
 
   @override
   void initState() {
     super.initState();
+    //initializing the controller
     _uuidController = TextEditingController()
       ..addListener(() => setState(() {}));
 
+    //iterating through the connected devices
     widget.scannerState.connectedDevices.forEach((element) {
+      //creating a device model
       deviceModel =
           DeviceModel(element.name, Device(element.name, element.id).serial);
+      //subscribing to the Meas/Acc/104 topic
       Mds.subscribe(
           Mds.createSubscriptionUri(
               Device(element.name, element.id).serial.toString(),
               "/Meas/Acc/104"),
           "{}",
+          //callbacks for success, error and data
           (d, c) => {},
           (e, c) => {},
           (data) => sendData(data),
           (e, c) => {});
 
+      //subscribing to the Meas/HR topic
       Mds.subscribe(
           Mds.createSubscriptionUri(
               Device(element.name, element.id).serial.toString(), "/Meas/HR"),
           "{}",
+          //callbacks for success, error and data
           (d, c) => {},
           (e, c) => {},
           (data) => sendData(data),
@@ -323,20 +347,26 @@ class Output extends StatefulWidget {
 }
 
 class _Output extends State<Output> {
+  //list to store the output values
   List<OutputValue> values = [];
 
   void subscribeToData() async {
+    //get the supabase instance
     final supabase = Supabase.instance.client;
+    //subscribe to the script_outputs table for the output with the given id
     final subscription = await supabase
         .from('script_outputs')
         .stream(primaryKey: ['id'])
         .eq('id', widget.output.id)
+        //when data is received, update the state
         .listen((List<Map<String, dynamic>> data) {
           if (!data.isEmpty) {
             setState(() {
+              //get the last MAX_GRAPH_VALUES values
               final int start = data[0]['values'].length - MAX_GRAPH_VALUES;
               final range = data[0]['values']
                   .getRange(start >= 0 ? start : 0, data[0]['values'].length);
+              //initialize the output values
               values = initOutputValues(range);
             });
           }
@@ -353,19 +383,27 @@ class _Output extends State<Output> {
 
   @override
   Widget build(BuildContext context) {
+    //builds the DropDownBar with the given title and dataWidget
     return DropDownBar(
         widget.output.script.name,
         HeartBeatData(
+          //outputName of the script
             outputName: widget.output.script.outputName,
+            //values of the script
             values: values,
+            //outputType of the script
             outputType: widget.output.script.outputType));
   }
 }
 
 class DropDownBar extends StatefulWidget {
+  //title of the dropdown bar
   final String title;
+  //widget to be shown when the bar is pressed
   final Widget dataWidget;
+  //constructor
   const DropDownBar(this.title, this.dataWidget);
+  //create the state
   _DropDownBarState createState() => _DropDownBarState();
 }
 
