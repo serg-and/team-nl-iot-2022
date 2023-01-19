@@ -37,7 +37,7 @@ class _CreateTeamState extends State<_CreateTeam> {
     fetchTeams();
     teamButtonWidget = _CreateTeamButton(this.callback);
   }
-
+  // fetches the teams from supa base
   void fetchTeams() async {
     final data =
         await supabase.from('teams').select('id, name, team_members(id, name)');
@@ -45,11 +45,11 @@ class _CreateTeamState extends State<_CreateTeam> {
       data.forEach((record) => teams.add(Team.fromMap(record)));
     });
   }
-
+  // callback function to update higher in the widget tree
   void callback() {
     setState(() {});
   }
-
+ // list view of the hole page
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
@@ -68,6 +68,7 @@ class _CreateTeamState extends State<_CreateTeam> {
                     )),
                     Container(child: teamButtonWidget),
                   ])),
+          // creates a column with all the teams fetched from supabase
           Column(
               children:
                   teams.map((team) => TeamOverView(team, callback)).toList())
@@ -99,6 +100,7 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
     super.dispose();
   }
 
+  // sends data to supabase when creating a team
   void createTeam() async {
     if (supabase.auth.currentSession?.user.id == null) {
       throw 'USER NOT AUTHENTICATED';
@@ -122,6 +124,7 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
     this.widget.callback();
   }
 
+  // creates the button to create a team
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -162,6 +165,7 @@ class TeamOverView extends StatefulWidget {
   State<TeamOverView> createState() => _TeamOverViewState();
 }
 
+// The team bar with button to add team members. Adds teammembers to team in supabase
 class _TeamOverViewState extends State<TeamOverView> {
   // Create a text controller. Later, use it to retrieve the
   // current value of the TextField.
@@ -183,6 +187,7 @@ class _TeamOverViewState extends State<TeamOverView> {
     Navigator.pop(context);
   }
 
+  // makes a teammember card with a remove button
   void addMember() async {
     // final TeamMember newTeamMember = new TeamMember(
     //   int.parse(_myControllerId.text),
