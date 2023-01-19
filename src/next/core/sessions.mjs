@@ -89,6 +89,7 @@ export async function startSession({ name, scriptIds, memberIds }) {
       output: output,
       // Create a function to send a message to the script.
       sendMessage: (msg) => {
+        console.log('sending message to script:  ', msg)
         child.stdin.write(`${msg}\n`)
       },
       // Create a function to kill the script.
@@ -128,6 +129,8 @@ export async function startSession({ name, scriptIds, memberIds }) {
 
 // This function appends a value to a script output in the database.
 async function appendValueToOutput(script_output_id, value) {
+  console.log(`saving data from output:${script_output_id} :  `, value)
+  
   const { error } = await supabaseService
     .rpc('output_append_value', {
       script_output_id, 
