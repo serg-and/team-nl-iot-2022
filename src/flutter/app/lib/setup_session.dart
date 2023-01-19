@@ -185,6 +185,7 @@ class _LiveSessionState extends State<LiveSession> {
           Consumer3<BleScanner, BleScannerState?, BleLogger>(
             builder: (_, bleScanner, bleScannerState, bleLogger, __) =>
                 _DeviceList(
+              memberIds: widget.memberIds,
               scannerState: bleScannerState ??
                   const BleScannerState(
                     connectedDevices: [],
@@ -216,9 +217,11 @@ class _LiveSessionState extends State<LiveSession> {
 class _DeviceList extends StatefulWidget {
   const _DeviceList({
     required this.scannerState,
+    required this.memberIds,
   });
 
   final BleScannerState scannerState;
+  final List<int> memberIds;
 
   @override
   _DeviceListState createState() => _DeviceListState();
@@ -261,12 +264,15 @@ class _DeviceListState extends State<_DeviceList> {
   void sendData(String data) {
     print("Data sent");
     print(data);
-    socket?.emit(
+
+    widget.memberIds.forEach((id) => socket?.emit(
         'data-point',
         jsonEncode({
-          'value': data,
-          'timestamp': DateTime.now().millisecondsSinceEpoch
-        }));
+          'member': id,
+          'data': data,
+          // 'value': data,
+          // 'timestamp': DateTime.now().millisecondsSinceEpoch
+        })));
   }
 
   Widget _accelerometerItem(DeviceModel deviceModel) {
