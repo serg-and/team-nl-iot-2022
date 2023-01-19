@@ -36,10 +36,17 @@ export default function SocketHandler (req, res) {
         socket.emit('sessionId', sessionId)
   
         // Listen for 'data-point' messages from the client.
-        socket.on('data-point', ({ member, data }) => {
-          if (!Number(member) || !data ) return
-          sendMessage(Number(member), data)
-        })
+        // socket.on('data-point', ({ member, data }) => {
+          socket.on('data-point', (msg) => {
+            console.log('data-point:  ', msg)
+  
+            if (!Number(msg.member) || !msg.data ) {
+              console.log('bad data-point')
+              return
+            }
+            sendMessage(Number(msg.member), msg.data)
+          })
+  
         
         // Listen for disconnect events from the client.
         socket.on('stop-session', () => endSession())
