@@ -41,7 +41,6 @@ export default function SocketHandler (req, res) {
             const parsed = JSON.parse(msg)
   
             if (!Number(parsed.member) || !parsed.data ) {
-              console.log('bad data-point')
               return
             }
             sendMessage(Number(parsed.member), parsed.data)
