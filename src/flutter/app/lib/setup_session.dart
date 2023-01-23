@@ -105,7 +105,6 @@ Future<void> createSession(
         (sessionId) async => {
               print('started session: ${sessionId}'),
               callback(await getOutputs(sessionId)),
-              fakeDataTimer = startSendingFakeData(sessionId),
             });
   });
   _socket.onDisconnect((_) => print('Connection Disconnection'));
@@ -171,6 +170,9 @@ class _LiveSessionState extends State<LiveSession> {
   // navigates back to start session page
   void stopSession() {
     widget.stopSession();
+    subscriptions.forEach((element) {
+      Mds.unsubscribe(element);
+    });
   }
 
   @override
@@ -231,6 +233,8 @@ class _DeviceListState extends State<_DeviceList> {
   late TextEditingController _uuidController;
   late DeviceModel deviceModel;
 
+  List<int> subscriptions = [];
+
   @override
   void initState() {
     super.initState();
@@ -240,7 +244,8 @@ class _DeviceListState extends State<_DeviceList> {
     widget.scannerState.connectedDevices.forEach((element) {
       deviceModel =
           DeviceModel(element.name, Device(element.name, element.id).serial);
-      Mds.subscribe(
+
+      subscriptions.add(Mds.subscribe(
           Mds.createSubscriptionUri(
               Device(element.name, element.id).serial.toString(),
               "/Meas/Acc/104"),
@@ -248,28 +253,28 @@ class _DeviceListState extends State<_DeviceList> {
           (d, c) => {},
           (e, c) => {},
           (data) => sendData(data),
-          (e, c) => {});
+          (e, c) => {}));
 
-      Mds.subscribe(
+      subscriptions.add(Mds.subscribe(
           Mds.createSubscriptionUri(
               Device(element.name, element.id).serial.toString(), "/Meas/HR"),
           "{}",
           (d, c) => {},
           (e, c) => {},
           (data) => sendData(data),
-          (e, c) => {});
+          (e, c) => {}));
     });
   }
 
   void sendData(String data) {
     print("Data sent");
-    print(data);
+    print(jsonDecode(data)['Body'].toString());
 
     widget.memberIds.forEach((id) => socket?.emit(
         'data-point',
         jsonEncode({
           'member': id,
-          'data': data,
+          'data': jsonDecode(data)['Body'].toString(),
           // 'value': data,
           // 'timestamp': DateTime.now().millisecondsSinceEpoch
         })));
