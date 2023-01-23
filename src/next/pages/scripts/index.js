@@ -27,6 +27,7 @@ export default () => {
       const { data, error } = await supabase
         .from('scripts')
         .select('id, name, language, output_type, created_at')
+        .order('id', { ascending: false })
       
       if (data) setScripts(data)
     }

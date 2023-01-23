@@ -50,7 +50,8 @@ class _SelectScriptsState extends State<SelectScripts> {
   }
 
   void getScripts() async {
-    final _scripts = await supabase.from('scripts').select();
+    final _scripts =
+        await supabase.from('scripts').select().order('id', ascending: false);
 
     setState(() {
       _scripts.forEach((s) => allScripts.add(Script.fromMap(s)));

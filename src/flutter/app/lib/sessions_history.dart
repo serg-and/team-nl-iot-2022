@@ -53,7 +53,10 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
   }
 
   void getSessions() async {
-    final _sessions = await supabase.from('sessions').select('*');
+    final _sessions = await supabase
+        .from('sessions')
+        .select('*')
+        .order('id', ascending: false);
 
     setState(() {
       _sessions.forEach((s) => allSessions.add(models.Session.fromMap(s)));

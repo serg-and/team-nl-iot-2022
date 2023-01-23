@@ -15,6 +15,7 @@ export default function Sessions() {
         .from('sessions')
         .select('id, name, ended_at')
         .not('ended_at', 'is', null)
+        .order('id', { ascending: false })
       
       if (data) setSessions(data)
       if (error) console.error(error)
