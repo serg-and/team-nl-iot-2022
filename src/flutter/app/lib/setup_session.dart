@@ -23,7 +23,7 @@ const int MAX_GRAPH_VALUES = 30;
 
 int index = 0;
 Timer? fakeDataTimer;
-List<dynamic> subscriptions = [];
+List<int> subscriptions = [];
 IO.Socket? socket;
 
 List<OutputValue> initOutputValues(jsonValues) {
@@ -156,7 +156,8 @@ class _LiveSessionState extends State<LiveSession> {
     fakeDataTimer?.cancel();
     // cancel all database subscriptions
     subscriptions.forEach((subscribtion) {
-      subscribtion.cancel();
+      Mds.unsubscribe(subscribtion);
+      // subscribtion.cancel();
     });
 
     // send signal to stop session
@@ -171,6 +172,8 @@ class _LiveSessionState extends State<LiveSession> {
   void stopSession() {
     widget.stopSession();
     subscriptions.forEach((element) {
+      print(element);
+      print("TEST");
       Mds.unsubscribe(element);
     });
   }
@@ -274,7 +277,7 @@ class _DeviceListState extends State<_DeviceList> {
         'data-point',
         jsonEncode({
           'member': id,
-          'data': jsonDecode(data)['Body'].toString(),
+          'data': jsonEncode(jsonDecode(data)['Body']),
           // 'value': data,
           // 'timestamp': DateTime.now().millisecondsSinceEpoch
         })));
@@ -305,7 +308,7 @@ class _DeviceListState extends State<_DeviceList> {
                           return Container(
                               child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[_accelerometerItem(model)],
+                            children: [],
                           ));
                         },
                       ),
@@ -347,7 +350,7 @@ class _Output extends State<Output> {
           }
         });
     // add to subscritions so that subscription can be cancled on page dispaose
-    subscriptions.add(subscription);
+    // subscriptions.add(subscription);
   }
 
   @override
