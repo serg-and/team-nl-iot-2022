@@ -1,7 +1,7 @@
 import 'package:app/auth/register_page.dart';
 import 'package:app/constants.dart';
 import 'package:app/current_session.dart';
-import 'package:app/sessions.history.dart';
+import 'package:app/sessions_history.dart';
 import 'package:app/team_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
