@@ -21,13 +21,14 @@ class _StartSessionState extends State<StartSession> {
 
   @override
   void initState() {
-    getPreferredScripts();
-    getDummyMembers();
+    getPreferredScripts(); // function to get the scripts
+    getDummyMembers();     // function to get the members
     super.initState();
   }
 
   void getDummyMembers() async {
     final members = await supabase.from('team_members').select('id').limit(3);
+    // get the members from the supabase
   }
 
   void validateState() {
@@ -35,24 +36,27 @@ class _StartSessionState extends State<StartSession> {
       validState = (scriptIds.isNotEmpty && memberIds.isNotEmpty);
     });
   }
-
+  //Check if the validState is true and both scriptIds and memberIds are not empty
+  //If true, save the preferred scripts and call the startSession function
+  //passing the sessionName, scriptIds and memberIds as arguments
   void onStartSession() {
     if (!validState) return;
     savePreferredScripts();
     widget.startSession(sessionNameController.text, scriptIds, memberIds);
   }
-
+  //Retrieve the preferred scripts from shared preferences
   void getPreferredScripts() async {
     final prefs = await SharedPreferences.getInstance();
     List<String>? ids = prefs.getStringList('scripts');
     if (ids == null) return;
 
+    //Convert the list of strings to list of integers
     setState(() {
       scriptIds = ids.map((String id) => int.parse(id)).toList();
     });
     validateState();
   }
-
+  //Save the selected scripts to shared preferences
   void savePreferredScripts() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> ids = scriptIds.map((int id) => id.toString()).toList();

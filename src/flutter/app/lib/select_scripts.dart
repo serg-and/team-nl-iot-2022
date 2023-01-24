@@ -4,12 +4,15 @@
 // import '../flutter_flow/flutter_flow_widgets.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
+import 'package:app/widgets/items.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:app/main.dart';
 import 'package:app/models.dart';
 
+// This page Creates the list of all the scripts in the data base
+// and makes them selectable to use in a session
 const Map<String, String> outputTypeDisplayNames = {
   'line_chart': 'Line Chart',
   'bar_chart': 'Bar Chart',
@@ -47,7 +50,8 @@ class _SelectScriptsState extends State<SelectScripts> {
   }
 
   void getScripts() async {
-    final _scripts = await supabase.from('scripts').select();
+    final _scripts =
+        await supabase.from('scripts').select().order('id', ascending: false);
 
     setState(() {
       _scripts.forEach((s) => allScripts.add(Script.fromMap(s)));
@@ -249,76 +253,58 @@ class ScriptListing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: AlignmentDirectional(0, 0),
+    return LiftedCard(
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 5,
-                color: Color(0x34111417),
-                offset: Offset(0, 2),
-              )
-            ],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
-                  child: Theme(
-                    data: ThemeData(
-                      checkboxTheme: CheckboxThemeData(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      unselectedWidgetColor: Color(0xFF95A1AC),
+        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+              child: Theme(
+                data: ThemeData(
+                  checkboxTheme: CheckboxThemeData(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    child: CheckboxListTile(
-                      value: selected,
-                      onChanged: (value) => onClick(),
-                      title: Text(
-                        script.name,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      tileColor: Color(0xFFF1F4F8),
-                      subtitle: Text(
-                          outputTypeDisplayNames[script.outputType] ?? '',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      activeColor: Color(0xFFF59509),
-                      checkColor: Colors.white,
-                      dense: false,
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                        ),
-                      ),
+                  ),
+                  unselectedWidgetColor: Color(0xFF95A1AC),
+                ),
+                child: CheckboxListTile(
+                  value: selected,
+                  onChanged: (value) => onClick(),
+                  title: Text(
+                    script.name,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  tileColor: Color(0xFFF1F4F8),
+                  subtitle: Text(
+                      outputTypeDisplayNames[script.outputType] ?? '',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  activeColor: Color(0xFFF59509),
+                  checkColor: Colors.white,
+                  dense: false,
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(0),
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
                     ),
                   ),
                 ),
-                if (script.description != '')
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
-                    child: Text(script.description ?? '',
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  ),
-              ],
+              ),
             ),
-          ),
+            if (script.description != '')
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
+                child: Text(script.description ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ),
+          ],
         ),
       ),
     );

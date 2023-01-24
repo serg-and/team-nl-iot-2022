@@ -1,5 +1,6 @@
 import 'package:jiffy/jiffy.dart';
 
+// Model for the scripts that can be used to create data
 class Script {
   int id; // ID of the script
   String name; // Name of the script
@@ -38,10 +39,10 @@ class ScriptOutput {
   ScriptOutput(this.id, this.script, this.values);
 }
 
+//Model of the team
 class Team {
   int id;
   String name;
-  // CoachModel? coach;
   List<TeamMember> teamMembers = List.empty(growable: true);
 
   Team.fromMap(Map<String, dynamic> map)
@@ -74,6 +75,7 @@ List<TeamMember> createTeamMembersList(List<dynamic> list) {
   return list.map((member) => TeamMember.fromMap(member)).toList();
 }
 
+//Model of the session with end time and start time
 class Session {
   int id;
   String name;

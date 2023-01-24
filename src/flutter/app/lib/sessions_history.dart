@@ -1,4 +1,6 @@
 import 'package:app/main.dart';
+import 'package:app/previous_session.dart';
+import 'package:app/widgets/items.dart';
 import 'package:flutter/material.dart';
 import 'package:app/models.dart' as models;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -51,7 +53,10 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
   }
 
   void getSessions() async {
-    final _sessions = await supabase.from('sessions').select();
+    final _sessions = await supabase
+        .from('sessions')
+        .select('*')
+        .order('id', ascending: false);
 
     setState(() {
       _sessions.forEach((s) => allSessions.add(models.Session.fromMap(s)));
@@ -162,25 +167,27 @@ class SessionListing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(session.startedAt);
+    void navigateToSession() {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PreviousSession(session: session),
+      ));
+    }
 
-    return Container(
-      width: 367.7,
-      height: 103.3,
-      decoration: BoxDecoration(),
-      child: Container(
-        child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 24, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Shows the sessions from the database
-              Text('${session.name}',
-                  style: Theme.of(context).textTheme.bodyMedium),
-              Text('${session.startedAt.yMMMMEEEEdjm} '),
-              Text('${session.endedAt.yMMMMEEEEdjm}'),
-            ],
-          ),
+    return LiftedCard(
+      onTap: navigateToSession,
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Shows the sessions from the database
+            Text(
+              '${session.name}',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            Text('${session.startedAt.yMMMMEEEEdjm} '),
+            Text('${session.endedAt.yMMMMEEEEdjm}'),
+          ],
         ),
       ),
     );

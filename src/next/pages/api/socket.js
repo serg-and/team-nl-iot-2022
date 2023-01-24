@@ -38,13 +38,12 @@ export default function SocketHandler (req, res) {
         // Listen for 'data-point' messages from the client.
         // socket.on('data-point', ({ member, data }) => {
           socket.on('data-point', (msg) => {
-            console.log('data-point:  ', msg)
+            const parsed = JSON.parse(msg)
   
-            if (!Number(msg.member) || !msg.data ) {
-              console.log('bad data-point')
+            if (!Number(parsed.member) || !parsed.data ) {
               return
             }
-            sendMessage(Number(msg.member), msg.data)
+            sendMessage(Number(parsed.member), parsed.data)
           })
   
         

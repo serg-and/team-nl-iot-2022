@@ -1,3 +1,4 @@
+install.packages("rjson", repos="https://cloud.r-project.org")
 library('rjson')
 
 # Get the script path from the command line
