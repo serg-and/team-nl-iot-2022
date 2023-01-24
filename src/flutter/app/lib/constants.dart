@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class DebugConfig {
   static const loginDisabled = false;
+  static const sendFakeData = false;
 }
 
 /// Supabase client

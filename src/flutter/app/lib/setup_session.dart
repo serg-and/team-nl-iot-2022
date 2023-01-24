@@ -26,6 +26,7 @@ int index = 0;
 //variable for the fake data timer
 Timer? fakeDataTimer;
 List<int> subscriptions = [];
+List dbSubscriptions = [];
 IO.Socket? socket;
 
 //function to initialize the output values
@@ -41,23 +42,46 @@ List<OutputValue> initOutputValues(jsonValues) {
   return outputValues;
 }
 
-//function to start sending fake data
-Timer startSendingFakeData(int sessionId) {
+// function to start sending fake data
+// only if enabled in DebugConfig
+Timer? startSendingFakeData(int sessionId, List<int> memberIds) {
+  if (!DebugConfig.sendFakeData) return null;
+
   print('starting fake data for session session: ${sessionId}');
   //create a new random object
   Random random = new Random();
 
+  // generate random acceleration value
+  double randAccValue() {
+    double value = (random.nextInt(4000) - 2000) / 100; // -10 >= value > 10
+    return value;
+  }
+
+  String getData() {
+    return jsonEncode({
+      'Timestamp': DateTime.now().millisecondsSinceEpoch,
+      'ArrayAcc': [
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
+        {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()}
+      ]
+    });
+  }
+
   //return a timer that runs periodically
   return Timer.periodic(Duration(milliseconds: 100), (Timer t) {
-    //generate a random heart rate between 40 and 150
-    int heartBeat = 40 + random.nextInt(150 - 40);
     //emit the data-point event with the heart rate and current timestamp
-    socket?.emit(
+    memberIds.forEach((id) => socket?.emit(
         'data-point',
         jsonEncode({
-          'value': heartBeat,
-          'timestamp': DateTime.now().millisecondsSinceEpoch
-        }));
+          'member': id,
+          'data': getData(),
+        })));
   });
 }
 
@@ -112,12 +136,11 @@ Future<void> createSession(
     });
 
     // session started, start retrieving outputs
-    _socket.on(
-        'sessionId',
-        (sessionId) async => {
-              print('started session: ${sessionId}'),
-              callback(await getOutputs(sessionId)),
-            });
+    _socket.on('sessionId', (sessionId) async {
+      print('started session: ${sessionId}');
+      callback(await getOutputs(sessionId));
+      fakeDataTimer = startSendingFakeData(sessionId, memberIds);
+    });
   });
   _socket.onDisconnect((_) => print('Connection Disconnection'));
   _socket.onConnectError((err) => print('onConnectError: ${err}'));
@@ -150,26 +173,30 @@ class _LiveSessionState extends State<LiveSession> {
     index = 0;
     fakeDataTimer = null;
     subscriptions = [];
+    dbSubscriptions = [];
     socket = null;
 
     super.initState();
     createSession(
-        widget.name,
-        widget.scriptIds,
-        widget.memberIds,
-        (List<ScriptOutput> sessionOutputs) => setState(() {
-              outputs = sessionOutputs;
-            }));
+      widget.name,
+      widget.scriptIds,
+      widget.memberIds,
+      onSessionStart,
+    );
   }
 
   @override
   void dispose() {
     // stop sending fake data before diposing of page
     fakeDataTimer?.cancel();
-    // cancel all database subscriptions
+
     subscriptions.forEach((subscribtion) {
       Mds.unsubscribe(subscribtion);
-      // subscribtion.cancel();
+    });
+
+    // cancel all database subscriptions
+    dbSubscriptions.forEach((subscribtion) {
+      subscribtion.cancel();
     });
 
     // send signal to stop session
@@ -177,6 +204,10 @@ class _LiveSessionState extends State<LiveSession> {
     socket?.disconnect();
 
     super.dispose();
+  }
+
+  void onSessionStart(List<ScriptOutput> sessionOutputs) {
+    setState(() => outputs = sessionOutputs);
   }
 
   // stop the current session,
@@ -291,16 +322,11 @@ class _DeviceListState extends State<_DeviceList> {
   }
 
   void sendData(String data) {
-    // print("Data sent");
-    // print(data);
-
     widget.memberIds.forEach((id) => socket?.emit(
         'data-point',
         jsonEncode({
           'member': id,
           'data': jsonEncode(jsonDecode(data)['Body']),
-          // 'value': data,
-          // 'timestamp': DateTime.now().millisecondsSinceEpoch
         })));
   }
 
@@ -376,8 +402,8 @@ class _Output extends State<Output> {
             });
           }
         });
-    // add to subscritions so that subscription can be cancled on page dispaose
-    // subscriptions.add(subscription);
+    // add to subscritions so that subscription can be cancled on page dispose
+    dbSubscriptions.add(subscription);
   }
 
   @override
