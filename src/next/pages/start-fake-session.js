@@ -9,8 +9,6 @@ export default function StartSessionPage() {
   const [memberId, setMemberId] = useState('')
   const [members, setMembers] = useState([])
 
-  console.log(fakeDataPoint())
-
   useEffect(() => {
     if (!socket) return
 
