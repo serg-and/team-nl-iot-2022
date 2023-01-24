@@ -98,7 +98,12 @@ export default function Sessions() {
           <Stack spacing={3}>
           <Typography variant='h6'>{session.name}</Typography>
             {sessionMembers.map(member => (
-              <Stack direction='row' justifyContent='space-between' alignItems='center'>
+              <Stack
+                key={member.id}
+                direction='row'
+                justifyContent='space-between'
+                alignItems='center'
+              >
                 <Typography>{member.name}</Typography>
                 <IconButton onClick={() => onDownload(member)}>
                   <Download />
