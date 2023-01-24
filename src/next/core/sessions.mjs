@@ -1,4 +1,5 @@
 import { spawn } from 'child_process'
+import { createMemberSessionStorage, updateMemberSessionStorage } from './session_storage.mjs'
 import { supabaseService } from './supabase.mjs'
 import { getFormattedDateTime } from './utils.mjs'
 
@@ -26,7 +27,7 @@ export async function startSession({ name, scriptIds, memberIds }) {
   // Create a session in the database.
   const { data: { id: sessionId }, error: sessionError } = await supabaseService
     .from('sessions')
-    .insert({ name })
+    .insert({ name, team_member_ids: memberIds })
     .select('id')
     .single()
   
@@ -49,6 +50,9 @@ export async function startSession({ name, scriptIds, memberIds }) {
     .from('script_outputs')
     .insert(insertScriptOutputs)
     .select('id, team_member, script(id, language, output_type)')
+  
+  // create the file to store the incoming raw data
+  members.forEach(async (member) => await createMemberSessionStorage(sessionId, member.id))
 
   // Spawn a process for each of (members * scripts) to run it.
   const processes = scriptOutputs.map(output => {
@@ -88,6 +92,7 @@ export async function startSession({ name, scriptIds, memberIds }) {
     return {
       output: output,
       // Create a function to send a message to the script.
+      // And update the sensor data storage
       sendMessage: (msg) => {
         child.stdin.write(`${msg}\n`)
       },
@@ -108,6 +113,8 @@ export async function startSession({ name, scriptIds, memberIds }) {
   function sendMessage(memberId, msg) {
     processesMemberMapping[memberId]
       .forEach(process => process.sendMessage(msg))
+    
+      updateMemberSessionStorage(sessionId, memberId, msg)
   }
 
   // This function ends the session and kills all running scripts.
