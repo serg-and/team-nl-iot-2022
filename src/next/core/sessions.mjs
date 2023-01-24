@@ -147,5 +147,4 @@ async function appendValueToOutput(script_output_id, value) {
     })
   
   if (error) console.error(error)
-
 }
