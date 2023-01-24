@@ -42,6 +42,7 @@ List<OutputValue> initOutputValues(jsonValues) {
   //return the outputValues list
   return outputValues;
 }
+
 //function to start sending fake data
 Timer startSendingFakeData(int sessionId) {
   print('starting fake data for session session: ${sessionId}');
@@ -286,8 +287,8 @@ class _DeviceListState extends State<_DeviceList> {
   }
 
   void sendData(String data) {
-    print("Data sent");
-    print(data);
+    // print("Data sent");
+    // print(data);
 
     widget.memberIds.forEach((id) => socket?.emit(
         'data-point',
@@ -387,7 +388,7 @@ class _Output extends State<Output> {
     return DropDownBar(
         widget.output.script.name,
         HeartBeatData(
-          //outputName of the script
+            //outputName of the script
             outputName: widget.output.script.outputName,
             //values of the script
             values: values,
