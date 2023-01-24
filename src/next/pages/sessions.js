@@ -75,7 +75,7 @@ export default function Sessions() {
       .in('id', session.team_member_ids)
 
     function onDownload(member) {
-      const filename = slugify(`${member.name} - ${session.name}.json`)
+      const filename = slugify(`${member.name} - ${session.name}.csv`)
       downloadSessionMember(session.id, member.id, filename)
     }
 
@@ -121,5 +121,5 @@ export default function Sessions() {
 }
 
 function downloadSessionMember(sessionId, memberId, filename) {
-  location = `/api/download/${sessionId}_${memberId}.json?filename=${filename}`
+  location = `/api/download/${sessionId}_${memberId}.csv?filename=${filename}`
 }

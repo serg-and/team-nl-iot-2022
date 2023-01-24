@@ -109,17 +109,10 @@ export default function StartSessionPage() {
     const randAccValue = () => Math.random() * randFlipNegative()
 
     return JSON.stringify({
-      Timestamp: new Date().getTime(),
-      ArrayAcc: [
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()},
-        {x: randAccValue(), y: randAccValue(), z: randAccValue()}
-      ]
+      timestamp: new Date().getTime(),
+      gx: randAccValue(),
+      gy: randAccValue(),
+      gz: randAccValue(),
     })
   }
 

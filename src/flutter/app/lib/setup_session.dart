@@ -57,8 +57,8 @@ Timer? startSendingFakeData(int sessionId, List<int> memberIds) {
     return value;
   }
 
-  String getData() {
-    return jsonEncode({
+  Map<String, dynamic> fakeData() {
+    return {
       'Timestamp': DateTime.now().millisecondsSinceEpoch,
       'ArrayAcc': [
         {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
@@ -70,19 +70,50 @@ Timer? startSendingFakeData(int sessionId, List<int> memberIds) {
         {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()},
         {'x': randAccValue(), 'y': randAccValue(), 'z': randAccValue()}
       ]
-    });
+    };
   }
 
   //return a timer that runs periodically
   return Timer.periodic(Duration(milliseconds: 100), (Timer t) {
     //emit the data-point event with the heart rate and current timestamp
-    memberIds.forEach((id) => socket?.emit(
-        'data-point',
-        jsonEncode({
-          'member': id,
-          'data': getData(),
-        })));
+    memberIds.forEach((id) {
+      final fakeCleanData = cleanData(fakeData());
+
+      print(fakeCleanData);
+
+      socket?.emit(
+          'data-point',
+          jsonEncode({
+            'member': id,
+            'data': jsonEncode(fakeCleanData),
+          }));
+    });
   });
+}
+
+Map<String, dynamic> cleanData(Map<String, dynamic> data) {
+  Map<String, dynamic> cleanedData = {
+    'timestamp': data['Timestamp'],
+  };
+
+  // calculate the average acceleration values in the x, y and z axis
+  if (data.containsKey('ArrayAcc')) {
+    cleanedData['gx'] = 0;
+    cleanedData['gy'] = 0;
+    cleanedData['gz'] = 0;
+
+    data['ArrayAcc'].forEach((i) {
+      cleanedData['gx'] += i['x'];
+      cleanedData['gy'] += i['y'];
+      cleanedData['gz'] += i['z'];
+    });
+
+    cleanedData['gx'] /= data['ArrayAcc'].length;
+    cleanedData['gy'] /= data['ArrayAcc'].length;
+    cleanedData['gz'] /= data['ArrayAcc'].length;
+  }
+
+  return cleanedData;
 }
 
 // retrieve all script_outputs of given session
@@ -322,12 +353,15 @@ class _DeviceListState extends State<_DeviceList> {
   }
 
   void sendData(String data) {
+    final cleaned = cleanData(jsonDecode(data)['Body']);
+
     widget.memberIds.forEach((id) => socket?.emit(
-        'data-point',
-        jsonEncode({
-          'member': id,
-          'data': jsonEncode(jsonDecode(data)['Body']),
-        })));
+          'data-point',
+          jsonEncode({
+            'member': id,
+            'data': jsonEncode(cleaned),
+          }),
+        ));
   }
 
   Widget _accelerometerItem(DeviceModel deviceModel) {

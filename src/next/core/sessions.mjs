@@ -110,16 +110,17 @@ export async function startSession({ name, scriptIds, memberIds }) {
   })
 
   // Create a function to send a message to all scripts.
-  async function sendMessage(memberId, msg) {
+  function sendMessage(memberId, msg) {
+    let data
     // make sure message is a valid JSON string
     // otherwise abort
-    try { JSON.parse(msg) }
+    try { data = JSON.parse(msg) }
     catch { return }
 
     processesMemberMapping[memberId]
       .forEach(process => process.sendMessage(msg))
     
-    await updateMemberSessionStorage(sessionId, memberId, msg)
+    updateMemberSessionStorage(sessionId, memberId, data)
   }
 
   // This function ends the session and kills all running scripts.
