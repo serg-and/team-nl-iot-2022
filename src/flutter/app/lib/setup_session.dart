@@ -25,9 +25,7 @@ const int MAX_GRAPH_VALUES = 30;
 int index = 0;
 //variable for the fake data timer
 Timer? fakeDataTimer;
-//list to store subscriptions
-List<dynamic> subscriptions = [];
-//variable for the socket
+List<int> subscriptions = [];
 IO.Socket? socket;
 
 //function to initialize the output values
@@ -119,7 +117,6 @@ Future<void> createSession(
         (sessionId) async => {
               print('started session: ${sessionId}'),
               callback(await getOutputs(sessionId)),
-              fakeDataTimer = startSendingFakeData(sessionId),
             });
   });
   _socket.onDisconnect((_) => print('Connection Disconnection'));
@@ -171,7 +168,8 @@ class _LiveSessionState extends State<LiveSession> {
     fakeDataTimer?.cancel();
     // cancel all database subscriptions
     subscriptions.forEach((subscribtion) {
-      subscribtion.cancel();
+      Mds.unsubscribe(subscribtion);
+      // subscribtion.cancel();
     });
 
     // send signal to stop session
@@ -185,6 +183,11 @@ class _LiveSessionState extends State<LiveSession> {
   // navigates back to start session page
   void stopSession() {
     widget.stopSession();
+    subscriptions.forEach((element) {
+      print(element);
+      print("TEST");
+      Mds.unsubscribe(element);
+    });
   }
 
   @override
@@ -249,6 +252,8 @@ class _DeviceListState extends State<_DeviceList> {
   //variable for the device model
   late DeviceModel deviceModel;
 
+  List<int> subscriptions = [];
+
   @override
   void initState() {
     super.initState();
@@ -261,8 +266,8 @@ class _DeviceListState extends State<_DeviceList> {
       //creating a device model
       deviceModel =
           DeviceModel(element.name, Device(element.name, element.id).serial);
-      //subscribing to the Meas/Acc/104 topic
-      Mds.subscribe(
+
+      subscriptions.add(Mds.subscribe(
           Mds.createSubscriptionUri(
               Device(element.name, element.id).serial.toString(),
               "/Meas/Acc/104"),
@@ -271,10 +276,9 @@ class _DeviceListState extends State<_DeviceList> {
           (d, c) => {},
           (e, c) => {},
           (data) => sendData(data),
-          (e, c) => {});
+          (e, c) => {}));
 
-      //subscribing to the Meas/HR topic
-      Mds.subscribe(
+      subscriptions.add(Mds.subscribe(
           Mds.createSubscriptionUri(
               Device(element.name, element.id).serial.toString(), "/Meas/HR"),
           "{}",
@@ -282,7 +286,7 @@ class _DeviceListState extends State<_DeviceList> {
           (d, c) => {},
           (e, c) => {},
           (data) => sendData(data),
-          (e, c) => {});
+          (e, c) => {}));
     });
   }
 
@@ -294,7 +298,7 @@ class _DeviceListState extends State<_DeviceList> {
         'data-point',
         jsonEncode({
           'member': id,
-          'data': data,
+          'data': jsonEncode(jsonDecode(data)['Body']),
           // 'value': data,
           // 'timestamp': DateTime.now().millisecondsSinceEpoch
         })));
@@ -325,7 +329,7 @@ class _DeviceListState extends State<_DeviceList> {
                           return Container(
                               child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[_accelerometerItem(model)],
+                            children: [],
                           ));
                         },
                       ),
@@ -373,7 +377,7 @@ class _Output extends State<Output> {
           }
         });
     // add to subscritions so that subscription can be cancled on page dispaose
-    subscriptions.add(subscription);
+    // subscriptions.add(subscription);
   }
 
   @override
