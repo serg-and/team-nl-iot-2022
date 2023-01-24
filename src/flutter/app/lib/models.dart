@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:jiffy/jiffy.dart';
 
 // Model for the scripts that can be used to create data
@@ -60,9 +62,10 @@ class Coach {
   Coach(this.id, this.name);
 }
 
-class TeamMember {
+class TeamMember extends ChangeNotifier {
   int id;
   String name;
+  List<DiscoveredDevice> device = List.empty(growable: true);
 
   TeamMember.fromMap(Map<String, dynamic> map)
       : id = map['id'],

@@ -1,9 +1,14 @@
 import 'package:app/main.dart'; // Import main.dart file
 import 'package:flutter/material.dart'; // Import Material Design package
 import 'package:app/constants.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:provider/provider.dart';
+import 'bluetooth/ble/ble_logger.dart';
+import 'bluetooth/ble/ble_scanner.dart';
 import 'models.dart';
 
 List<Team> teams = [];
+List<DiscoveredDevice> pairedDevice = [];
 
 class PairSensorPage extends StatelessWidget {
   const PairSensorPage({super.key}); // Constructor for Settings class
@@ -56,70 +61,96 @@ class _CreateTeamState extends State<_CreateTeam> {
   }
 
   void unpairAll() {
-    print('unpair all sensors');
+    pairedDevice.removeAt(0);
   }
 
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DropdownButtonExample(
-          setTeam: (Team team) => setState(() => selected = team),
-        ),
-        Expanded(
-          child: (selected == null)
-              ? SizedBox.shrink()
-              : ListView(
-                  padding: EdgeInsets.only(
-                      bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
-                  children: [
-                    Column(
-                        children: selected!
-                                .teamMembers.isEmpty //Shows the teams
-                            ? [
-                                Text('Team has no team members')
-                              ] // Shows that there are no team members in the teams, the user have to create them
-                            : selected!.teamMembers
-                                .map((member) => TeamMemberWidget(
-                                    member, selected!, callback))
-                                .toList())
-                  ],
-                ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return pairedDevice.isEmpty
+        ? Column(
             children: [
-              ElevatedButton.icon(
-                onPressed: unpairAll,
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                icon: Icon(Icons.close),
-                label: Text(
-                  'Unpair All',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
+              DropdownButtonExample(
+                setTeam: (Team team) => setState(() => selected = team),
               ),
-              ElevatedButton.icon(
-                onPressed: onConfirm,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFF59509)),
-                icon: Icon(Icons.check),
-                label: Text(
-                  'Ok',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+              Expanded(
+                child: (selected == null)
+                    ? SizedBox.shrink()
+                    : ListView(
+                        padding: EdgeInsets.only(
+                            bottom: 128.0, left: 16.0, right: 16.0, top: 16.0),
+                        children: [
+                          Column(
+                              children: selected!
+                                      .teamMembers.isEmpty //Shows the teams
+                                  ? [
+                                      Text('Team has no team members')
+                                    ] // Shows that there are no team members in the teams, the user have to create them
+                                  : selected!.teamMembers
+                                      .map((member) => TeamMemberWidget(
+                                          member, selected!, callback))
+                                      .toList())
+                        ],
+                      ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: unpairAll,
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      icon: Icon(Icons.close),
+                      label: Text(
+                        'Unpair All',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: onConfirm,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFF59509)),
+                      icon: Icon(Icons.check),
+                      label: Text(
+                        'Ok',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-        ),
-      ],
-    );
+          )
+        : Column(children: [
+            Text("Device allready connected"),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: unpairAll,
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    icon: Icon(Icons.close),
+                    label: Text(
+                      'Unpair All',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]);
   }
 }
 
@@ -251,48 +282,77 @@ class _TeamMemberState extends State<TeamMemberWidget> {
         child: Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                child: Row(
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                         'name: ${widget.teamMember.name} \t\t\t ID: ${widget.teamMember.id}'),
-                    ElevatedButton(
-                      onPressed: () => showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Pair Sensor'),
-                              actions: [
-                                Column(children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('Sensor Name'),
-                                      ElevatedButton(
-                                          onPressed: () =>
-                                              print('pressed button'),
-                                          child: Text('pair'))
-                                    ],
-                                  ),
-                                ])
-                                // TextField(
-                                //   controller: myController,
-                                //   decoration: InputDecoration(
-                                //     border: OutlineInputBorder(),
-                                //     labelText: 'Team name',
-                                //   ),
-                                // ),
-                                // TextButton(
-                                //     onPressed: createTeam,
-                                //     child: const Text('Create'))
-                              ],
-                            );
-                          }),
-                      child: Text('Pair Sensor'),
+                    ChangeNotifierProvider<TeamMember?>(
+                      builder: (context, child) {
+                        return ElevatedButton(
+                          onPressed: () => showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Pair Sensor'),
+                                  actions: [
+                                    Column(children: [
+                                      Consumer3<BleScanner, BleScannerState?,
+                                              BleLogger>(
+                                          builder:
+                                              (_, bleScanner, bleScannerState,
+                                                      bleLogger, __) =>
+                                                  bleScannerState
+                                                              ?.connectedDevices
+                                                              .length !=
+                                                          0
+                                                      ? Column(children: [
+                                                          ...bleScanner
+                                                              .connected
+                                                              .map((device) =>
+                                                                  Row(
+                                                                      children: [
+                                                                        Text(device
+                                                                            .name),
+                                                                        ElevatedButton(
+                                                                            onPressed: () => pairedDevice.isEmpty
+                                                                                ? pairedDevice.add(device)
+                                                                                : print("Allready connected"),
+                                                                            child: Text('pair')),
+                                                                      ]))
+                                                        ])
+                                                      : Column(
+                                                          children: [
+                                                            Text(
+                                                                "No devices connected")
+                                                          ],
+                                                        )
+                                          // Row(children: [
+                                          //   Text(bleScannerState!
+                                          //       .connectedDevices.first.name),
+                                          // ])),
+                                          )
+                                    ])
+                                    // TextField(
+                                    //   controller: myController,
+                                    //   decoration: InputDecoration(
+                                    //     border: OutlineInputBorder(),
+                                    //     labelText: 'Team name',
+                                    //   ),
+                                    // ),
+                                    // TextButton(
+                                    //     onPressed: createTeam,
+                                    //     child: const Text('Create'))
+                                  ],
+                                );
+                              }),
+                          child: Text('Pair Sensor'),
+                        );
+                      },
+                      create: (context) => widget.teamMember,
                     )
-                  ],
-                ))));
+                  ]),
+            )));
   }
 }

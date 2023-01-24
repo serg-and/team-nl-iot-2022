@@ -95,15 +95,10 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
       child: FutureBuilder<List<int>>(
         future: ft,
         builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            return ListTile(
-              title: Text("Battery Level"),
-              subtitle: Text(snapshot.data!.first.toString()),
-            );
-          }
-
-          return CircularProgressIndicator();
+          return ListTile(
+            title: Text("Battery Level"),
+            subtitle: Text(snapshot.data!.first.toString()),
+          );
         },
       ),
     );
