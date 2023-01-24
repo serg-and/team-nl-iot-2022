@@ -13,5 +13,5 @@ When creating or uploading a script, a name must be associated with the file. A 
 
 ## Download script
 Link: **<a target="_blank" href="http://teamnl-t-iot-vm.westeurope.cloudapp.azure.com/sessions">team-nl-iot-2022.onrender.com/scripts/sessions</a>**<br><br>
-![Overzicht sessions](../images/features_page/overzicht_download_script.jpg)![Download script](../Images/features_page/download_script.jpg)
+![Overzicht sessions](../images/features_page/overzicht_download_script.jpg)![Download script](../images/features_page/download_script.jpg)
 At Sessions, the user can see an overview of the session that have ever been started. The sessions can be downloaded by the user. The file is saved as a json file.
