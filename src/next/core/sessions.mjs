@@ -1,6 +1,6 @@
-import { spawn } from 'child_process'
-import { createMemberSessionStorage, updateMemberSessionStorage } from './session_storage.mjs'
 import { supabaseService } from './supabase.mjs'
+import { startScript } from './runScripts.mjs'
+import { createMemberSessionStorage, updateMemberSessionStorage } from './session_storage.mjs'
 import { getFormattedDateTime } from './utils.mjs'
 
 const programs = {
@@ -56,49 +56,14 @@ export async function startSession({ name, scriptIds, memberIds }) {
 
   // Spawn a process for each of (members * scripts) to run it.
   const processes = scriptOutputs.map(output => {
-    const script_path = `storage/uploads/scripts/${output.script.id}.${output.script.language}`
-    const child = spawn(
-      programs[output.script.language],
-      [`core/script-entrypoints/${entrypoints[output.script.language]}`, script_path]
+    const scriptPath = `storage/uploads/scripts/${output.script.id}.${output.script.language}`
+    const { sendMessage, kill } = startScript(
+      scriptPath,
+      output.script.language,
+      (value) => appendValueToOutput(output.id, value)
     )
-
-    // Handle messages from the script.
-    child.stdout.on('data', data => {
-      try {
-        // Parse the data as JSON.
-        const parsed = JSON.parse(data)
-        if (parsed.type === 'save' && parsed.value && parsed.timestamp)
-          // Append the value to the script output in the database.
-          appendValueToOutput(output.id, { value: parsed.value, timestamp: parsed.timestamp })
-        if (parsed.type === 'error')
-          // Log the error message.
-          console.log(data.error)
-      } catch (err) {
-        // If the data could not be parsed as JSON, log the data as a string.
-        console.log(
-          'failed to handle message from scirpt -->\n',
-          'message: ', data.toString(), '\n',
-          'error: ', err
-        )
-      }
-    })
-
-    // Handle errors from the script.
-    child.stderr.on('data', data => {
-      console.log(`An error occured in script id:${output.script.id} name:"${output.script.name}",  error -->`)
-      console.log(data.toString())
-    })
-
-    return {
-      output: output,
-      // Create a function to send a message to the script.
-      // And update the sensor data storage
-      sendMessage: (msg) => {
-        child.stdin.write(`${msg}\n`)
-      },
-      // Create a function to kill the script.
-      kill: () => child.kill()
-    }
+    
+    return { output, sendMessage, kill }
   })
 
   // sort processes by member for performance reasons
