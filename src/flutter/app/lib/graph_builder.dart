@@ -26,8 +26,6 @@ class DataLineGraph extends StatelessWidget {
   final List<OutputValue> values;
   const DataLineGraph({super.key, required this.values});
 
-
-
 // class _HeartBeatDataGraphState extends State<HeartBeatDataGraph> {
   static List<Color> gradientColors = [
     const Color(0xffff0000),
@@ -144,7 +142,7 @@ class DataLineGraph extends StatelessWidget {
         ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
-            showTitles: true,
+            showTitles: false,
             reservedSize: 30,
             interval: 10,
             getTitlesWidget: bottomTitleWidgets,
@@ -191,8 +189,6 @@ class BarChartBuilder extends StatelessWidget {
   final Color leftBarColor = const Color(0xff53fdd7);
   final Color rightBarColor = const Color(0xffff5182);
   final double width = 7;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -281,11 +277,11 @@ class BarChartBuilder extends StatelessWidget {
   }
 
   Widget bottomTitles(double value, TitleMeta meta) {
-      const style = TextStyle(
-        color: Color(0xff7589a2),
-        fontWeight: FontWeight.bold,
-        fontSize: 14,
-      );
+    const style = TextStyle(
+      color: Color(0xff7589a2),
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    );
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -293,9 +289,9 @@ class BarChartBuilder extends StatelessWidget {
       child: Text('/ ${value}', style: style),
     );
   }
+
   List<BarChartGroupData> get barGroups => values
-      .map(
-          (value) => BarChartGroupData(
+      .map((value) => BarChartGroupData(
             x: value.timestamp,
             barRods: [
               BarChartRodData(
@@ -303,6 +299,6 @@ class BarChartBuilder extends StatelessWidget {
               )
             ],
             showingTooltipIndicators: [0],
-          )
-      ).toList();
+          ))
+      .toList();
 }

@@ -97,7 +97,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         builder: (context, snapshot) {
           return ListTile(
             title: Text("Battery Level"),
-            subtitle: Text(snapshot.data!.first.toString()),
+            subtitle: Text(snapshot.data?.first.toString() ?? ""),
           );
         },
       ),

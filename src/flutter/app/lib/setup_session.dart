@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:app/bluetooth/bluetooth_screen.dart';
 import 'package:app/bluetooth/models/device.dart';
@@ -25,6 +26,7 @@ const int MAX_GRAPH_VALUES = 30;
 int index = 0;
 //variable for the fake data timer
 Timer? fakeDataTimer;
+Timer? dataTimer;
 List<int> subscriptions = [];
 List dbSubscriptions = [];
 IO.Socket? socket;
@@ -221,9 +223,14 @@ class _LiveSessionState extends State<LiveSession> {
     // stop sending fake data before diposing of page
     fakeDataTimer?.cancel();
 
+    // stop other timer
+    dataTimer?.cancel();
+
     subscriptions.forEach((subscribtion) {
       Mds.unsubscribe(subscribtion);
     });
+
+    stopSession();
 
     // cancel all database subscriptions
     dbSubscriptions.forEach((subscribtion) {
@@ -238,18 +245,19 @@ class _LiveSessionState extends State<LiveSession> {
   }
 
   void onSessionStart(List<ScriptOutput> sessionOutputs) {
-    setState(() => outputs = sessionOutputs);
+    if (mounted) {
+      setState(() => outputs = sessionOutputs);
+    }
   }
 
   // stop the current session,
   // navigates back to start session page
   void stopSession() {
-    widget.stopSession();
     subscriptions.forEach((element) {
       print(element);
-      print("TEST");
       Mds.unsubscribe(element);
     });
+    widget.stopSession();
   }
 
   @override
@@ -314,6 +322,9 @@ class _DeviceListState extends State<_DeviceList> {
   //variable for the device model
   late DeviceModel deviceModel;
 
+  Queue accData = Queue<String>();
+  Queue hbData = Queue<String>();
+
   List<int> subscriptions = [];
 
   @override
@@ -337,7 +348,7 @@ class _DeviceListState extends State<_DeviceList> {
           //callbacks for success, error and data
           (d, c) => {},
           (e, c) => {},
-          (data) => sendData(data),
+          (data) => accData.add(data),
           (e, c) => {}));
 
       subscriptions.add(Mds.subscribe(
@@ -347,8 +358,18 @@ class _DeviceListState extends State<_DeviceList> {
           //callbacks for success, error and data
           (d, c) => {},
           (e, c) => {},
-          (data) => sendData(data),
+          (data) => hbData.add(data),
           (e, c) => {}));
+
+      dataTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+        if (accData.isNotEmpty) {
+          sendData(accData.removeFirst());
+        }
+
+        if (hbData.isNotEmpty) {
+          sendData(hbData.removeFirst());
+        }
+      });
     });
   }
 
@@ -425,7 +446,7 @@ class _Output extends State<Output> {
         .eq('id', widget.output.id)
         //when data is received, update the state
         .listen((List<Map<String, dynamic>> data) {
-          if (!data.isEmpty) {
+          if (!data.isEmpty && mounted) {
             setState(() {
               //get the last MAX_GRAPH_VALUES values
               final int start = data[0]['values'].length - MAX_GRAPH_VALUES;
