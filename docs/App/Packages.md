@@ -45,3 +45,13 @@ Version: 0.55.2
 use package, that overs a lot of customizability. It makes use of FlSpots as data point wich are
 like a 2D-Vector, this makes it very easy to implement. The package offers a wide range of different
 ways to visualize data. 
+
+## Smooth page indicator
+
+Version: 1.0.0+2
+
+The package "smooth_page_indicator" in Flutter is used to create a customizable and smooth page indicator that can be used to indicate the current page in a page view. It allows for a wide range of customization options, such as changing the shape and color of the indicators, and provides smooth animations when transitioning between pages.
+
+It's used for the onboarding pages.
+
+## Shared Preferences
