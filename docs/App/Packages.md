@@ -59,3 +59,13 @@ It's used for the onboarding pages.
 Version: 2.0.12
 
 The package "shared_preferences" in Flutter allows developers to easily save and retrieve key-value data in an app's local storage. This can be useful for storing small amounts of data such as user preferences, login credentials, or cached data that should persist even when the app is closed. The package provides a simple API for reading and writing data, and the saved data is persistent across app launches. It is easy to use and can be used for storing small set of data that needs to be persistent.
+
+<!-- TODO: Emre vult aan -->
+
+## Flutter Native Splash
+## ionicons
+## supabase_flutter
+## jiffy
+## filter_list
+## permission_handler
+## provider
