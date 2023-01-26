@@ -230,8 +230,6 @@ class _LiveSessionState extends State<LiveSession> {
       Mds.unsubscribe(subscribtion);
     });
 
-    stopSession();
-
     // cancel all database subscriptions
     dbSubscriptions.forEach((subscribtion) {
       subscribtion.cancel();
@@ -257,7 +255,9 @@ class _LiveSessionState extends State<LiveSession> {
       print(element);
       Mds.unsubscribe(element);
     });
-    widget.stopSession();
+    if (mounted) {
+      widget.stopSession();
+    }
   }
 
   @override
@@ -361,7 +361,7 @@ class _DeviceListState extends State<_DeviceList> {
           (data) => hbData.add(data),
           (e, c) => {}));
 
-      dataTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      dataTimer = Timer.periodic(Duration(milliseconds: 10), (timer) {
         if (accData.isNotEmpty) {
           sendData(accData.removeFirst());
         }
