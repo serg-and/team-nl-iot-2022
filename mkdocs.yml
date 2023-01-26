@@ -41,6 +41,7 @@ nav:
       - features/web-application.md
       - features/writing-scripts.md
     - Technical Documentation:
+      - technical-overview.md
       - running-the-project.md
       - devops.md
       - database.md
