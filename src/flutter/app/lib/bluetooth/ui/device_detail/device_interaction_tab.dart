@@ -134,19 +134,19 @@ class _DeviceInteractionTabState extends State<_DeviceInteractionTab> {
                         onPressed: !widget.viewModel.deviceConnected
                             ? widget.viewModel.connect
                             : null,
-                        child: const Text("Connect"),
+                        child: const Text("Connect", style: TextStyle(color: Colors.white)),
                       ),
                       ElevatedButton(
                         onPressed: widget.viewModel.deviceConnected
                             ? widget.viewModel.disconnect
                             : null,
-                        child: const Text("Disconnect"),
+                        child: const Text("Disconnect", style: TextStyle(color: Colors.white)),
                       ),
                       ElevatedButton(
                         onPressed: widget.viewModel.deviceConnected
                             ? discoverServices
                             : null,
-                        child: const Text("Discover Services"),
+                        child: const Text("Discover Services", style: TextStyle(color: Colors.white),),
                       ),
                     ],
                   ),

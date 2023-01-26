@@ -45,11 +45,13 @@ class _DeviceDetail extends StatelessWidget {
                   Tab(
                     icon: Icon(
                       Icons.bluetooth_connected,
+                      color: Colors.white,
                     ),
                   ),
                   Tab(
                     icon: Icon(
                       Icons.find_in_page_sharp,
+                      color: Colors.white,
                     ),
                   ),
                 ],

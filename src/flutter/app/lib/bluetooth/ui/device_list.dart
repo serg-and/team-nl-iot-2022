@@ -82,7 +82,7 @@ class _DeviceListState extends State<_DeviceList> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Scan for devices'),
+          title: const Text('Scan for devices', style: TextStyle(color: Colors.white)),
           centerTitle: true,
           backgroundColor: Color(0xFFF59509), // S
         ),
@@ -99,7 +99,7 @@ class _DeviceListState extends State<_DeviceList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                        child: const Text('Scan'),
+                        child: const Text('Scan', style: TextStyle(color: Colors.white)),
                         onPressed: !widget.scannerState.scanIsInProgress
                             ? _startScanning
                             : null,
@@ -134,7 +134,7 @@ class _DeviceListState extends State<_DeviceList> {
                         ),
                       ),
                       ElevatedButton(
-                        child: const Text('Stop'),
+                        child: const Text('Stop', style: TextStyle(color: Colors.white)),
                         onPressed: widget.scannerState.scanIsInProgress
                             ? widget.stopScan
                             : null,
@@ -253,7 +253,7 @@ class FilterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sensors to connect"),
+        title: const Text("Sensors to connect", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.orange,
       ),
       body: SafeArea(

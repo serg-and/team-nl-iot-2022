@@ -61,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        'Resgister',
+        'Register',
         showOptions: false,
       ),
       body: Form(

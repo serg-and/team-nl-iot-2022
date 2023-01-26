@@ -31,7 +31,7 @@ class Settings extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: signOut,
-              child: Text('Log Out'),
+              child: Text('Log Out', style: TextStyle(color: Colors.white)),
             )
           ],
         ),

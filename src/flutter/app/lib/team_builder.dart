@@ -131,7 +131,7 @@ class _CreateTeamButtonState extends State<_CreateTeamButton> {
         width: 50,
         height: 50,
         child: ElevatedButton(
-          child: Icon(size: 20.0, Icons.add),
+          child: Icon(size: 20.0, Icons.add, color: Colors.white),
           onPressed: () => {
             showDialog(
                 context: context,
@@ -260,7 +260,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                                           );
                                         })
                                   },
-                              child: Icon(size: 20.0, Icons.add)),
+                              child: Icon(size: 20.0, Icons.add, color: Colors.white)),
                         ),
                         SizedBox(
                             width: 50,
@@ -295,6 +295,7 @@ class _TeamOverViewState extends State<TeamOverView> {
                                 child: Icon(
                                   size: 20.0,
                                   Icons.remove,
+                                    color: Colors.white
                                 )))
                       ])
                     ]),
@@ -390,6 +391,7 @@ class _TeamMemberState extends State<TeamMemberWidget> {
                               child: Icon(
                                 size: 10.0,
                                 Icons.remove,
+                                  color: Colors.white
                               )))
                     ]))));
   }

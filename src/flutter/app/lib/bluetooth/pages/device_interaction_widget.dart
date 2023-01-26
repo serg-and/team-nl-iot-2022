@@ -112,7 +112,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
             ? Text(deviceModel.accelerometerData)
             : Text(""),
         trailing: Switch(
-          activeColor: Colors.deepOrange,
+          activeColor: Colors.orange,
           value: deviceModel.accelerometerSubscribed,
           onChanged: (value) => {_onAccelerometerButtonPressed(deviceModel)},
         ),
@@ -127,7 +127,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         subtitle:
             deviceModel.hrSubscribed ? Text(deviceModel.hrData) : Text(""),
         trailing: Switch(
-          activeColor: Colors.deepOrange,
+          activeColor: Colors.orange,
           value: deviceModel.hrSubscribed,
           onChanged: (value) => {_onHrButtonPressed(deviceModel)},
         ),
@@ -140,7 +140,7 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
       child: ListTile(
         title: Text("Led"),
         trailing: Switch(
-          activeColor: Colors.deepOrange,
+          activeColor: Colors.orange,
           value: deviceModel.ledStatus,
           onChanged: (b) => {deviceModel.switchLed()},
         ),
@@ -154,9 +154,9 @@ class _DeviceInteractionWidgetState extends State<DeviceInteractionWidget> {
         title: Text("Temperature"),
         subtitle: Text(deviceModel.temperature),
         trailing: ElevatedButton(
-          child: Text("Get"),
+          child: Text("Get", style: TextStyle(color: Colors.white)),
           onPressed: () => deviceModel.getTemperature(),
-          style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
+          style: ElevatedButton.styleFrom(primary: Colors.orange),
         ),
       ),
     );

@@ -91,7 +91,12 @@ class MyApp extends StatelessWidget {
       home: showHome
           ? Routing()
           : OnBoardingPage(), // If showHome is true, display the Routing widget, otherwise display the OnBoardingPage
-      theme: ThemeData(primarySwatch: Colors.deepOrange),
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+            foregroundColor: Colors.white //here you can give the text color
+        ),
+        primarySwatch: Colors.orange,
+      ),
       debugShowCheckedModeBanner: false, // Don't show the debug banner
     );
   }
@@ -113,13 +118,14 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title ?? 'TeamNL'), // Set the app bar's title to 'TeamNL'
+      title: Text(title ?? 'TeamNL', style: TextStyle(color: Colors.white)), // Set the app bar's title to 'TeamNL'
       centerTitle: true,
       backgroundColor:
           Color(0xFFF59509), // Set the background color to a hex color code
       actions: [
         if (showOptions)
           PopupMenuButton(
+            color: Colors.white,
               itemBuilder: (ctx) => [
                     const PopupMenuItem(
                         value: "Settings", child: Text("Settings"))

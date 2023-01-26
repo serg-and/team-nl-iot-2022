@@ -289,8 +289,8 @@ class _LiveSessionState extends State<LiveSession> {
                 child: ElevatedButton(
                   onPressed: stopSession,
                   style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  child: Text('Stop session'),
+                      ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                  child: Text('Stop session', style: TextStyle(color: Colors.white),),
                 ),
               ),
             ),

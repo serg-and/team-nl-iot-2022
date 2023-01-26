@@ -100,7 +100,7 @@ class _CreateTeamState extends State<_CreateTeam> {
                       onPressed: unpairAll,
                       style:
                           ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                      icon: Icon(Icons.close),
+                      icon: Icon(Icons.close, color: Colors.white),
                       label: Text(
                         'Unpair All',
                         style: TextStyle(
@@ -113,7 +113,7 @@ class _CreateTeamState extends State<_CreateTeam> {
                       onPressed: onConfirm,
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFF59509)),
-                      icon: Icon(Icons.check),
+                      icon: Icon(Icons.check, color: Colors.white),
                       label: Text(
                         'Ok',
                         style: TextStyle(
@@ -347,7 +347,7 @@ class _TeamMemberState extends State<TeamMemberWidget> {
                                   ],
                                 );
                               }),
-                          child: Text('Pair Sensor'),
+                          child: Text('Pair Sensor', style: TextStyle(color: Colors.white),),
                         );
                       },
                       create: (context) => widget.teamMember,
