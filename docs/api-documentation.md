@@ -23,3 +23,15 @@ Body
 
 **Response `200`**<br>
 `ok`
+
+## download [Get]
+Download raw sensor data CSV for a session<br><br>
+**URI**<br>
+[GET]() /api/download/<session_id>_<member_id>.csv?filename=filename<br>
+
+**Example Request**<br>
+GET /api/download/43_21.csv?filename=session_data.csv
+
+**Response `200`**<br>
+...CSV file contents
+
