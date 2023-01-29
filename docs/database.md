@@ -6,6 +6,7 @@ Supabase was chosen because of the following reasons:
  - Supports realtime features, important for show data during sessions in realtime
  - Has support for Flutter and Nextjs (frameworks used in this project)
  - Easy authentication integration
+ - Built-in security features, such as SQL injection and DDOS protection
  - Automatad API documentation
  - Can be run both in the cloud and locally/self hosted
 
