@@ -3,7 +3,7 @@
 In this page shows all the packages used in the project, with a link to the documentation and why we
 use it.
 
-## Bluetooth "mdsflutter" and flutter_reactive_ble
+## Bluetooth mdsflutter and flutter_reactive_ble
 
 flutter_reactive_ble version: 5.03 mdsflutter version: own fork
 of [petri lipponen-movesense](https://github.com/petri-lipponen-movesense/mdsflutter)
@@ -37,7 +37,7 @@ dependency in your Flutter project's pubspec.yaml file and import it into your c
 use the custom widgets and helper classes provided by the package to build your Material
 Design-themed app.
 
-## Data visualization "Fl_chart"
+## Data visualization Fl_chart
 
 Version: 0.55.2
 
@@ -72,31 +72,31 @@ Version 0.2.1
 
 The package ["Ionicons"](https://pub.dev/packages/ionicons) is a Flutter package that provides access to the Ionicons icon library. Ionicons is a set of over 700 open-source icons that can be used in your Flutter app. You can use these icons to enhance the visual appearance of your app, add additional context to elements, or simply make your app look more polished. With this package, you can easily access the icons in the Ionicons library and incorporate them into your Flutter app.
 
-## supabase_flutter
+## Supabase Flutter
 
 Version 1.2.2
 
 The package ["Supabase Flutter"](https://pub.dev/packages/supabase_flutter) is a Flutter package that provides a simple and convenient way to interact with the Supabase API in your Flutter app. Supabase is a backend as a service (BaaS) platform that provides real-time databases, user authentication, and serverless functions. With the Supabase Flutter package, you can access Supabase functionality from within your Flutter app, making it easier to build apps that interact with a backend. This package can help simplify the process of integrating Supabase into your app, allowing you to focus on building your app's functionality instead of dealing with low-level API details.
 
-## jiffy
+## Jiffy
 
 Version 5.0.0
 
 The package ["jiffy"](https://pub.dev/packages/jiffy) is a Flutter package that provides a comprehensive DateTime library for Dart. It provides a number of useful functions for working with dates and times, such as parsing strings into dates, formatting dates into strings, performing date arithmetic, and more. Jiffy also supports multiple languages, making it easy to display dates and times in a way that is appropriate for the user's locale. With Jiffy, you can easily perform common date and time operations in your Flutter app, without having to write your own code or use multiple libraries.
 
-## filter_list
+## Filter List
 
 Version 1.0.2
 
 The package ["filter_list"](https://pub.dev/packages/filter_list) is a Flutter package that provides a simple and efficient way to filter a list of items. With this package, you can quickly and easily filter a list of items based on user input, making it easy to implement search functionality in your app. The package provides a widget that you can use to filter a list of items, and it automatically updates the list in real-time as the user types. This package can help you implement search functionality in your app quickly and easily, without having to write a lot of custom code.
 
-## permission_handler
+## Permission Handler
 
 Version 10.2.0
 
 The package ["permission_handler"](https://pub.dev/packages/permission_handler) is a Flutter package that provides a simple and convenient way to handle runtime permissions in your Flutter app. With this package, you can request permissions, check their status, and handle the results of the request, all from within your Flutter code. The package provides a simple and consistent API for working with permissions, making it easy to implement this functionality in your app. This package can help you ensure that your app is able to request the permissions it needs, while also making it easy to handle the results of those requests.
 
-## provider
+## Provider
 
 Version 6.0.4
 
