@@ -60,12 +60,44 @@ Version: 2.0.12
 
 The package "shared_preferences" in Flutter allows developers to easily save and retrieve key-value data in an app's local storage. This can be useful for storing small amounts of data such as user preferences, login credentials, or cached data that should persist even when the app is closed. The package provides a simple API for reading and writing data, and the saved data is persistent across app launches. It is easy to use and can be used for storing small set of data that needs to be persistent.
 
-<!-- TODO: Emre vult aan -->
-
 ## Flutter Native Splash
-## ionicons
+
+Version 2.2.15
+
+The package "Flutter Native Splash" is a Flutter package that allows you to add native splash screens to your Flutter apps for both iOS and Android. This package provides a seamless transition between your app's loading screen and the first Flutter screen, providing a better user experience.
+
+## 
+
+Version 0.2.1
+
+The package "Ionicons" is a Flutter package that provides access to the Ionicons icon library. Ionicons is a set of over 700 open-source icons that can be used in your Flutter app. You can use these icons to enhance the visual appearance of your app, add additional context to elements, or simply make your app look more polished. With this package, you can easily access the icons in the Ionicons library and incorporate them into your Flutter app.
+
 ## supabase_flutter
+
+Version 1.2.2
+
+The package "Supabase Flutter" is a Flutter package that provides a simple and convenient way to interact with the Supabase API in your Flutter app. Supabase is a backend as a service (BaaS) platform that provides real-time databases, user authentication, and serverless functions. With the Supabase Flutter package, you can access Supabase functionality from within your Flutter app, making it easier to build apps that interact with a backend. This package can help simplify the process of integrating Supabase into your app, allowing you to focus on building your app's functionality instead of dealing with low-level API details.
+
 ## jiffy
+
+Version 5.0.0
+
+The package "jiffy" is a Flutter package that provides a comprehensive DateTime library for Dart. It provides a number of useful functions for working with dates and times, such as parsing strings into dates, formatting dates into strings, performing date arithmetic, and more. Jiffy also supports multiple languages, making it easy to display dates and times in a way that is appropriate for the user's locale. With Jiffy, you can easily perform common date and time operations in your Flutter app, without having to write your own code or use multiple libraries.
+
 ## filter_list
+
+Version 1.0.2
+
+The package "filter_list" is a Flutter package that provides a simple and efficient way to filter a list of items. With this package, you can quickly and easily filter a list of items based on user input, making it easy to implement search functionality in your app. The package provides a widget that you can use to filter a list of items, and it automatically updates the list in real-time as the user types. This package can help you implement search functionality in your app quickly and easily, without having to write a lot of custom code.
+
 ## permission_handler
+
+Version 10.2.0
+
+The package "permission_handler" is a Flutter package that provides a simple and convenient way to handle runtime permissions in your Flutter app. With this package, you can request permissions, check their status, and handle the results of the request, all from within your Flutter code. The package provides a simple and consistent API for working with permissions, making it easy to implement this functionality in your app. This package can help you ensure that your app is able to request the permissions it needs, while also making it easy to handle the results of those requests.
+
 ## provider
+
+Version 6.0.4
+
+The package "provider" is a Flutter package that provides a simple and efficient way to manage state in your Flutter app. It provides a way to store and manage app state in a central location, making it easier to build and maintain your app. With provider, you can easily access and update the state from anywhere in your app, and you can use a single provider or a combination of providers to manage different parts of your state. This package can help you manage your state in a way that is simple, efficient, and scalable, making it easier to build and maintain your Flutter app.
